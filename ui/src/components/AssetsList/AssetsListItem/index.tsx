@@ -1,37 +1,30 @@
-import { useState } from "react";
-import { ChevronIcon } from "../../common/icons/ChevronIcon";
-import { DataIcon } from "../../common/icons/DataIcon";
-import { DIRECTION } from "../../common/icons/types";
 import * as s from "./styles";
-import { AssetsListCategoryProps, SubItem } from "./types";
+import { AssetsListCategoryProps } from "./types";
 
 export const AssetsListCategory = (props: AssetsListCategoryProps) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+  // const [isExpanded, setIsExpanded] = useState(false);
 
   const handleGroupClick = () => {
-    setIsExpanded(!isExpanded);
+    // setIsExpanded(!isExpanded);
+    props.onSelect(props.id);
   };
 
-  const handleGroupItemClick = (groupId: string, item: SubItem) => {
-    props.onSelect(groupId, item);
-  };
+  // const handleGroupItemClick = (groupId: string, item: SubItem) => {
+  // props.onSelect(groupId, item);
+  // };
 
   return (
     <s.ListItem>
-      <s.Category isExpanded={isExpanded} onClick={handleGroupClick}>
-        <ChevronIcon
+      <s.Category onClick={handleGroupClick}>
+        {/* <ChevronIcon
           direction={isExpanded ? DIRECTION.DOWN : DIRECTION.RIGHT}
           color={isExpanded ? "#dadada" : "#9b9b9b"}
-        />
-        <props.icon size={16} color={isExpanded ? "#dadada" : "#9b9b9b"} />
+        /> */}
+        <props.icon size={16} color={"#9b9b9b"} />
         {props.label}
-        {
-          <s.InsightCount isExpanded={isExpanded}>
-            {props.items.length}
-          </s.InsightCount>
-        }
+        {<s.InsightCount>{props.items.length}</s.InsightCount>}
       </s.Category>
-      {isExpanded ? (
+      {/* {isExpanded ? (
         props.items.length > 0 ? (
           <s.SubItemsList>
             {props.items.map((item) => (
@@ -51,7 +44,7 @@ export const AssetsListCategory = (props: AssetsListCategoryProps) => {
             instrumentation!
           </s.NoDataText>
         )
-      ) : null}
+      ) : null} */}
     </s.ListItem>
   );
 };

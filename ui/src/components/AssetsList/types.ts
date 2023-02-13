@@ -1,12 +1,12 @@
 import { IconProps } from "../common/icons/types";
-import { SubItem } from "./AssetsListItem/types";
+import { CategoryItem } from "./AssetsListItem/types";
 
 export type AssetsListProps = {
   groups: {
     id: string;
     icon: React.ComponentType<IconProps>;
     label: string;
-    items: SubItem[];
+    items: CategoryItem[];
   }[];
-  onSelect: (groupId: string, itemId: SubItem) => void;
+  onSelect: (categoryId: string) => void;
 };

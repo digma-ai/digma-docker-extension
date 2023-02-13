@@ -9,7 +9,7 @@ export const Details = (props: DetailsProps) => {
     props.onBackButtonClick();
   };
 
-  const categoryInfo = getCategoryInfo(props.groupId);
+  const categoryInfo = getCategoryInfo(props.categoryId);
 
   if (!categoryInfo) {
     return <></>;
@@ -22,25 +22,29 @@ export const Details = (props: DetailsProps) => {
           <ChevronIcon direction={DIRECTION.LEFT} color={"#dadada"} />
         </s.BackButton>
         <categoryInfo.icon color={"#9c9c9c"} />
-        <span>
-          {categoryInfo?.label} / {props.itemId}
-        </span>
+        <span>{categoryInfo?.label}</span>
         <s.ItemsCount>{props.items.length}</s.ItemsCount>
       </s.Header>
-      <s.List>
-        {props.items.map((item) => (
-          <s.ListItem key={item.id}>
-            <s.Link href="#">{item.label}</s.Link>
-            <s.InsightIconsContainer>
-              {item.insights.map((insight) => (
-                <s.InsightIconContainer key={insight}>
-                  {getInsightIcon(insight)}
-                </s.InsightIconContainer>
-              ))}
-            </s.InsightIconsContainer>
-          </s.ListItem>
-        ))}
-      </s.List>
+      {props.items.length > 0 ? (
+        <s.List>
+          {props.items.map((item) => (
+            <s.ListItem key={item.id}>
+              <s.Link href="#">{item.label}</s.Link>
+              <s.InsightIconsContainer>
+                {item.insights.map((insight) => (
+                  <s.InsightIconContainer key={insight}>
+                    {getInsightIcon(insight)}
+                  </s.InsightIconContainer>
+                ))}
+              </s.InsightIconsContainer>
+            </s.ListItem>
+          ))}
+        </s.List>
+      ) : (
+        <s.NoDataText>
+          Not seeing your data here? Maybe you’re missing some instrumentation!
+        </s.NoDataText>
+      )}
     </s.Container>
   );
 };

@@ -1,5 +1,12 @@
 {
-    "gopls": {
-        "ui.semanticTokens": true
-    }
+  "gopls": {
+    "ui.semanticTokens": true
+  },
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": true
+  },
+  "[javascript][typescript][typescriptreact][json][jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }

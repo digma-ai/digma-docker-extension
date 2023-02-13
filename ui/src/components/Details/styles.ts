@@ -51,6 +51,15 @@ export const Link = styled.a`
   line-height: 14px;
 `;
 
+export const NoDataText = styled.span`
+  padding: 10px;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  color: #9b9b9b;
+  text-align: center;
+`;
+
 export const InsightIconsContainer = styled.span`
   display: flex;
   gap: 2px;

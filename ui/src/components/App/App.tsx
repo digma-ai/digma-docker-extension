@@ -11,8 +11,6 @@ import { Details } from "../Details";
 import { GlobalStyle } from "./styles";
 import { INSIGHT_TYPES } from "./types";
 
-import { SubItem } from "../AssetsList/AssetsListItem/types";
-
 // Note: This line relies on Docker Desktop's presence as a host application.
 // If you're running this React app in a browser, it won't work properly.
 // const client = createDockerDesktopClient();
@@ -36,10 +34,9 @@ const getInsightInfo = (type: string): JSX.Element | undefined => {
 };
 
 export function App() {
-  const [selectedItem, setSelectedItem] = useState<{
-    groupId: string;
-    item: SubItem;
-  } | null>(null);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
+    null
+  );
   // const [response, setResponse] = React.useState<string>();
   // const ddClient = useDockerDesktopClient();
 
@@ -49,15 +46,16 @@ export function App() {
   // };
 
   const handleBackButtonClick = () => {
-    setSelectedItem(null);
+    setSelectedCategoryId(null);
   };
 
-  const handleSelect = (groupId: string, item: SubItem) => {
-    setSelectedItem({
-      groupId,
-      item,
-    });
+  const handleSelect = (categoryId: string) => {
+    setSelectedCategoryId(categoryId);
   };
+
+  const selectedCategory = data.categories.find(
+    (x) => x.id === selectedCategoryId
+  );
 
   return (
     <>
@@ -89,15 +87,14 @@ export function App() {
       </Stack> */}
       {/* <CssBaseline /> */}
       <GlobalStyle />
-      {selectedItem ? (
+      {selectedCategory ? (
         <Details
           onBackButtonClick={handleBackButtonClick}
-          groupId={selectedItem.groupId}
-          itemId={selectedItem.item.id}
-          items={selectedItem.item.items}
+          categoryId={selectedCategory.id}
+          items={selectedCategory.items}
         />
       ) : (
-        <AssetsList groups={data.groups} onSelect={handleSelect} />
+        <AssetsList groups={data.categories} onSelect={handleSelect} />
       )}
     </>
   );
