@@ -1,101 +1,106 @@
-// import Button from '@mui/material/Button';
-// import { createDockerDesktopClient } from '@docker/extension-api-client';
-// import { CssBaseline, Stack, TextField, Typography } from '@mui/material';
-import { useState } from "react";
-import { data } from "../../data";
-import { AssetsList } from "../AssetsList";
-import { ScalesIcon } from "../common/icons/ScalesIcon";
-import { SnailIcon } from "../common/icons/SnailIcon";
-import { SpotIcon } from "../common/icons/SpotIcon";
-import { Details } from "../Details";
-import { GlobalStyle } from "./styles";
-import { INSIGHT_TYPES } from "./types";
-
+import { createDockerDesktopClient } from "@docker/extension-api-client";
+import { useEffect, useState } from "react";
+import { ThemeProvider } from "styled-components";
+import { Mode } from "../../globals";
+import { Assets } from "../Assets";
+import { GetAssetsResponse } from "../Assets/types";
+import * as s from "./styles";
 // Note: This line relies on Docker Desktop's presence as a host application.
 // If you're running this React app in a browser, it won't work properly.
-// const client = createDockerDesktopClient();
+const client = createDockerDesktopClient();
 
-// function useDockerDesktopClient() {
-// return client;
-// }
+function useDockerDesktopClient() {
+  return client;
+}
 
-const getInsightInfo = (type: string): JSX.Element | undefined => {
-  const insightInfoMap: Record<string, JSX.Element> = {
-    [INSIGHT_TYPES.HotSpot]: <SpotIcon size={20} />,
+const REFRESH_INTERVAL = 10 * 1000; // in milliseconds
 
-    [INSIGHT_TYPES.SlowEndpoint]: <SnailIcon size={20} />,
+const isMode = (mode: unknown): mode is Mode => {
+  return (
+    typeof mode === "string" &&
+    ["light", "dark", "dark-jetbrains"].includes(mode)
+  );
+};
 
-    [INSIGHT_TYPES.SpanScaling]: <ScalesIcon size={20} />,
+const getMode = (): Mode => {
+  if (!isMode(window.theme)) {
+    const bodyEl = document.getElementsByTagName("body");
+    const vscodeTheme =
+      bodyEl[0].dataset.vscodeThemeKind === "vscode-light" ? "light" : "dark";
+    return vscodeTheme;
+  }
 
-    [INSIGHT_TYPES.SpanScalingRootCause]: <ScalesIcon size={20} />,
-  };
-
-  return insightInfoMap[type];
+  return window.theme;
 };
 
 export function App() {
-  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
-    null
-  );
-  // const [response, setResponse] = React.useState<string>();
-  // const ddClient = useDockerDesktopClient();
+  const [mode, setMode] = useState(getMode());
+  const [mainFont, setMainFont] = useState("");
+  const [codeFont, setCodeFont] = useState("");
+  const ddClient = useDockerDesktopClient();
+  const [assets, setAssets] = useState<GetAssetsResponse>();
+  const [environments, setEnvironments] = useState<string[]>([]);
+  const [selectedEnvironment, setSelectedEnvironment] = useState<string>();
 
-  // const fetchAndDisplayResponse = async () => {
-  //   const result = await ddClient.extension.vm?.service?.get('/hello');
-  //   setResponse(JSON.stringify(result));
-  // };
+  const fetchEnvironments = async () => {
+    const environments = (await ddClient.extension.vm?.service?.get(
+      "/environments"
+    )) as string[];
 
-  const handleBackButtonClick = () => {
-    setSelectedCategoryId(null);
+    setEnvironments(environments);
   };
 
-  const handleSelect = (categoryId: string) => {
-    setSelectedCategoryId(categoryId);
+  const fetchAssets = async (environment: string) => {
+    const assets = (await ddClient.extension.vm?.service?.post(
+      `/environments/${environment}/assets`,
+      { serviceNames: [] }
+    )) as GetAssetsResponse;
+    setAssets(assets);
   };
 
-  const selectedCategory = data.categories.find(
-    (x) => x.id === selectedCategoryId
-  );
+  useEffect(() => {
+    if (!selectedEnvironment && environments.length > 0) {
+      setSelectedEnvironment(environments[0]);
+    }
+  }, [environments]);
+
+  useEffect(() => {
+    if (selectedEnvironment) {
+      fetchAssets(selectedEnvironment);
+    }
+  }, [selectedEnvironment]);
+
+  useEffect(() => {
+    fetchEnvironments();
+    const refreshInterval = setInterval(() => {
+      fetchEnvironments();
+    }, REFRESH_INTERVAL);
+
+    return () => {
+      clearInterval(refreshInterval);
+    };
+  }, []);
+
+  const handleEnvironmentClick = (environment: string) => {
+    setSelectedEnvironment(environment);
+  };
 
   return (
-    <>
-      {/* <Typography variant="h3">Docker extension demo</Typography>
-      <Typography variant="body1" color="text.secondary" sx={{ mt: 2 }}>
-        This is a basic page rendered with MUI, using Docker's theme. Read the
-        MUI documentation to learn more. Using MUI in a conventional way and
-        avoiding custom styling will help make sure your extension continues to
-        look great as Docker's theme evolves.
-      </Typography>
-      <Typography variant="body1" color="text.secondary" sx={{ mt: 2 }}>
-        Pressing the below button will trigger a request to the backend. Its
-        response will appear in the textarea.
-      </Typography>
-      <Stack direction="row" alignItems="start" spacing={2} sx={{ mt: 4 }}>
-        <Button variant="contained" onClick={fetchAndDisplayResponse}>
-          Call backend
-        </Button>
-
-        <TextField
-          label="Backend response"
-          sx={{ width: 480 }}
-          disabled
-          multiline
-          variant="outlined"
-          minRows={5}
-          value={response ?? ''}
-        />
-      </Stack> */}
-      {/* <CssBaseline /> */}
-      <GlobalStyle />
-      {selectedCategory ? (
-        <Details
-          onBackButtonClick={handleBackButtonClick}
-          categoryId={selectedCategory.id}
-          items={selectedCategory.items}
-        />
-      ) : (
-        <AssetsList groups={data.categories} onSelect={handleSelect} />
-      )}
-    </>
+    <ThemeProvider theme={{ mode, mainFont, codeFont }}>
+      <s.GlobalStyle />
+      <s.EnvironmentsContainer>
+        <span>Environments:</span>
+        <s.EnvironmentsList>
+          {environments.map((environment) => (
+            <s.EnvironmentLink
+              onClick={() => handleEnvironmentClick(environment)}
+            >
+              {environment}
+            </s.EnvironmentLink>
+          ))}
+        </s.EnvironmentsList>
+      </s.EnvironmentsContainer>
+      <Assets data={assets} />
+    </ThemeProvider>
   );
 }

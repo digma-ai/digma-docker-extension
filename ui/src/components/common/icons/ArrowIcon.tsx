@@ -3,19 +3,16 @@ import { useIconProps } from "./hooks";
 import { DIRECTION, RotatableIconProps } from "./types";
 
 const directionRotateMap: { [key in DIRECTION]: string } = {
-  [DIRECTION.DOWN]: "0",
-  [DIRECTION.LEFT]: "90",
-  [DIRECTION.UP]: "180",
-  [DIRECTION.RIGHT]: "270"
+  [DIRECTION.UP]: "0",
+  [DIRECTION.LEFT]: "0",
+  [DIRECTION.RIGHT]: "0",
+  [DIRECTION.DOWN]: "90"
 };
 
-const ChevronIconComponent = (props: RotatableIconProps) => {
+const ArrowIconComponent = (props: RotatableIconProps) => {
   const { size, color } = useIconProps(props);
-
   const transform = {
-    transform: `rotate(${
-      directionRotateMap[props.direction || DIRECTION.DOWN]
-    })`
+    transform: `rotate(${directionRotateMap[props.direction || DIRECTION.UP]})`
   };
 
   return (
@@ -24,17 +21,18 @@ const ChevronIconComponent = (props: RotatableIconProps) => {
       width={size}
       height={size}
       fill="none"
-      viewBox="0 0 12 12"
+      viewBox="0 0 32 32"
       {...transform}
     >
       <path
         stroke={color}
         strokeLinecap="round"
         strokeLinejoin="round"
-        d="M9.75 4.5 6 8.25 2.25 4.5"
+        strokeWidth="2"
+        d="M8 24 24 8M11 8h13v13"
       />
     </svg>
   );
 };
 
-export const ChevronIcon = React.memo(ChevronIconComponent);
+export const ArrowIcon = React.memo(ArrowIconComponent);
