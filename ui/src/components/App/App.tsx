@@ -46,7 +46,7 @@ export function App() {
     const environments = (await ddClient.extension.vm?.service?.get(
       "/environments"
     )) as string[];
-
+    console.log("Environments have been fetched:", environments);
     setEnvironments(environments);
   };
 
@@ -55,6 +55,10 @@ export function App() {
       `/environments/${environment}/assets`,
       { serviceNames: [] }
     )) as GetAssetsResponse;
+    console.log(
+      `Assets for "${environment}" environment have been fetched:`,
+      assets
+    );
     setAssets(assets);
   };
 
@@ -65,10 +69,10 @@ export function App() {
   }, [environments]);
 
   useEffect(() => {
-    if (selectedEnvironment) {
+    if (selectedEnvironment && environments.length > 0) {
       fetchAssets(selectedEnvironment);
     }
-  }, [selectedEnvironment]);
+  }, [environments, selectedEnvironment]);
 
   useEffect(() => {
     fetchEnvironments();
@@ -84,6 +88,8 @@ export function App() {
   const handleEnvironmentClick = (environment: string) => {
     setSelectedEnvironment(environment);
   };
+
+  console.log("State:", { environments, assets, selectedEnvironment });
 
   return (
     <ThemeProvider theme={{ mode, mainFont, codeFont }}>
