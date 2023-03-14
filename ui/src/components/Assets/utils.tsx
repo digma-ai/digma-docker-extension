@@ -4,6 +4,7 @@ import { BottleneckIcon } from "../common/icons/BottleneckIcon";
 import { CodeMarkerPinIcon } from "../common/icons/CodeMarkerPinIcon";
 import { DatabaseIcon } from "../common/icons/DatabaseIcon";
 import { EndpointIcon } from "../common/icons/EndpointIcon";
+import { HTTPClientIcon } from "../common/icons/HTTPClientIcon";
 import { MeterHighIcon } from "../common/icons/MeterHighIcon";
 import { MeterLowIcon } from "../common/icons/MeterLowIcon";
 import { ScalesIcon } from "../common/icons/ScalesIcon";
@@ -32,49 +33,49 @@ export const getInsightInfo = (
   > = {
     [INSIGHT_TYPES.Errors]: {
       icon: WarningCircleIcon,
-      label: "Errors"
+      label: "Errors",
     },
     [INSIGHT_TYPES.HotSpot]: {
       icon: SpotIcon,
-      label: "Error Hotspot"
+      label: "Error Hotspot",
     },
     [INSIGHT_TYPES.SlowEndpoint]: {
       icon: SnailIcon,
-      label: "Slow Endpoint"
+      label: "Slow Endpoint",
     },
     [INSIGHT_TYPES.LowUsage]: {
       icon: MeterLowIcon,
-      label: "Endpoint Low Traffic"
+      label: "Endpoint Low Traffic",
     },
     [INSIGHT_TYPES.HighUsage]: {
       icon: MeterHighIcon,
 
-      label: "Endpoint High Traffic"
+      label: "Endpoint High Traffic",
     },
     [INSIGHT_TYPES.SlowestSpans]: {
       icon: BottleneckIcon,
-      label: "Span Bottleneck"
+      label: "Span Bottleneck",
     },
     [INSIGHT_TYPES.EndpointSpaNPlusOne]: {
       icon: SQLDatabaseIcon,
-      label: "Suspected N-Plus-1"
+      label: "Suspected N-Plus-1",
     },
     [INSIGHT_TYPES.SpaNPlusOne]: {
       icon: SQLDatabaseIcon,
-      label: "Suspected N-Plus-1"
+      label: "Suspected N-Plus-1",
     },
     [INSIGHT_TYPES.SpanEndpointBottleneck]: {
       icon: BottleneckIcon,
-      label: "Bottleneck"
+      label: "Bottleneck",
     },
     [INSIGHT_TYPES.SpanScaling]: {
       icon: ScalesIcon,
-      label: "Scaling Issue Found"
+      label: "Scaling Issue Found",
     },
     [INSIGHT_TYPES.SpanScalingRootCause]: {
       icon: ScalesIcon,
-      label: "Scaling Issue Root Cause Found"
-    }
+      label: "Scaling Issue Root Cause Found",
+    },
   };
 
   return insightInfoMap[type];
@@ -124,23 +125,27 @@ export const getAssetTypeInfo = (
   > = {
     Endpoint: {
       label: "Endpoints",
-      icon: EndpointIcon
+      icon: EndpointIcon,
+    },
+    EndpointClient: {
+      label: "HTTP Clients",
+      icon: HTTPClientIcon,
     },
     Consumer: {
       label: "Consumers",
-      icon: UserIcon
+      icon: UserIcon,
     },
     DatabaseQueries: {
       label: "Database queries",
-      icon: DatabaseIcon
+      icon: DatabaseIcon,
     },
     CodeLocation: {
       label: "Code locations",
-      icon: CodeMarkerPinIcon
+      icon: CodeMarkerPinIcon,
     },
     Other: {
-      label: "Other"
-    }
+      label: "Other",
+    },
   };
 
   return assetTypeInfoMap[assetTypeId];

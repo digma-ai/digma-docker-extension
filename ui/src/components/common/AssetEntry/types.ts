@@ -1,9 +1,6 @@
-import { Duration, Insight } from "../../Assets/types";
+import { ExtendedAssetEntryWithServices } from "../../Assets/AssetList/types";
 
 export interface AssetEntryProps {
-  name: string;
-  services: string[];
-  performance?: Duration;
-  lastSeenDateTime: string;
-  insights: Insight[];
+  entry: ExtendedAssetEntryWithServices;
+  onAssetLinkClick: (entry: ExtendedAssetEntryWithServices) => void;
 }

@@ -1,3 +1,5 @@
+import { Mode } from "../../globals";
+
 export enum INSIGHT_TYPES {
   SpanUsageStatus = "SpanUsageStatus",
   TopErrorFlows = "TopErrorFlows",
@@ -18,4 +20,8 @@ export enum INSIGHT_TYPES {
   SpanScaling = "SpanScaling",
   SpanScalingRootCause = "SpanScalingRootCause",
   SpanDurationBreakdown = "SpanDurationBreakdown",
+}
+
+export interface AppProps {
+  theme?: Mode;
 }

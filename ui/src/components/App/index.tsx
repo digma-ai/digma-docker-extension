@@ -3,8 +3,9 @@ import { useEffect, useState } from "react";
 import { ThemeProvider } from "styled-components";
 import { Mode } from "../../globals";
 import { Assets } from "../Assets";
-import { GetAssetsResponse } from "../Assets/types";
+import { AssetsData, GetAssetsResponse } from "../Assets/types";
 import * as s from "./styles";
+import { AppProps } from "./types";
 // Note: This line relies on Docker Desktop's presence as a host application.
 // If you're running this React app in a browser, it won't work properly.
 const client = createDockerDesktopClient();
@@ -15,12 +16,10 @@ function useDockerDesktopClient() {
 
 const REFRESH_INTERVAL = 10 * 1000; // in milliseconds
 
-const isMode = (mode: unknown): mode is Mode => {
-  return (
-    typeof mode === "string" &&
-    ["light", "dark", "dark-jetbrains"].includes(mode)
-  );
-};
+export const THEMES = ["light", "dark", "dark-jetbrains"];
+
+const isMode = (mode: unknown): mode is Mode =>
+  typeof mode === "string" && THEMES.includes(mode);
 
 const getMode = (): Mode => {
   if (!isMode(window.theme)) {
@@ -33,12 +32,12 @@ const getMode = (): Mode => {
   return window.theme;
 };
 
-export function App() {
+export const App = (props: AppProps) => {
   const [mode, setMode] = useState(getMode());
   const [mainFont, setMainFont] = useState("");
   const [codeFont, setCodeFont] = useState("");
   const ddClient = useDockerDesktopClient();
-  const [assets, setAssets] = useState<GetAssetsResponse>();
+  const [assets, setAssets] = useState<AssetsData>();
   const [environments, setEnvironments] = useState<string[]>([]);
   const [selectedEnvironment, setSelectedEnvironment] = useState<string>();
 
@@ -59,8 +58,17 @@ export function App() {
       `Assets for "${environment}" environment have been fetched:`,
       assets
     );
-    setAssets(assets);
+    setAssets({
+      serviceAssetsEntries: assets.serviceAssetsEntries,
+    });
   };
+
+  useEffect(() => {
+    if (!props.theme) {
+      return;
+    }
+    setMode(props.theme);
+  }, [props.theme]);
 
   useEffect(() => {
     if (!selectedEnvironment && environments.length > 0) {
@@ -109,4 +117,4 @@ export function App() {
       <Assets data={assets} />
     </ThemeProvider>
   );
-}
+};

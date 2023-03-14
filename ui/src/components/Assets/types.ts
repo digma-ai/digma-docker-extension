@@ -1,3 +1,5 @@
+import { Duration } from "../../globals";
+
 export enum INSIGHT_TYPES {
   SpanUsageStatus = "SpanUsageStatus",
   TopErrorFlows = "TopErrorFlows",
@@ -20,10 +22,6 @@ export enum INSIGHT_TYPES {
   SpanDurationBreakdown = "SpanDurationBreakdown",
 }
 
-export interface AssetsProps {
-  data: GetAssetsResponse | undefined;
-}
-
 export interface ExtendedAssetEntry extends AssetEntry {
   id: string;
 }
@@ -32,12 +30,6 @@ export interface GroupedAssetEntries {
   [key: string]: {
     [key: string]: ExtendedAssetEntry[];
   };
-}
-
-export interface Duration {
-  value: number;
-  unit: string;
-  raw: number;
 }
 
 export interface Insight {
@@ -86,9 +78,7 @@ export interface AssetEntry {
   firstDataSeenTime: string;
 }
 
-export interface GetAssetsResponse {
-  accountId: string;
-  environment: string;
+export interface AssetsData {
   serviceAssetsEntries: {
     itemType: string;
     assetEntries: AssetEntry[];
@@ -96,4 +86,13 @@ export interface GetAssetsResponse {
     environment: string;
     serviceName: string;
   }[];
+}
+
+export interface AssetsProps {
+  data?: AssetsData;
+}
+
+export interface GetAssetsResponse extends AssetsData {
+  accountId: string;
+  environment: string;
 }

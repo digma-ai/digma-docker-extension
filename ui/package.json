@@ -8,6 +8,7 @@
     "@docker/extension-api-client": "^0.3.4",
     "@emotion/react": "11.10.4",
     "@emotion/styled": "11.10.4",
+    "@floating-ui/react": "^0.21.1",
     "@mui/material": "5.10.8",
     "date-fns": "^2.29.3",
     "moment": "^2.29.4",
