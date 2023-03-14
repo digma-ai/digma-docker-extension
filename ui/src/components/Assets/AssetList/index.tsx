@@ -39,8 +39,8 @@ const sortEntries = (
 
         return (
           (sorting.isDesc
-            ? aCriticalInsights - bCriticalInsights
-            : bCriticalInsights - aCriticalInsights) || sortByName(a, b)
+            ? bCriticalInsights - aCriticalInsights
+            : aCriticalInsights - bCriticalInsights) || sortByName(a, b)
         );
       });
     case "Performance":
@@ -57,7 +57,7 @@ const sortEntries = (
         }
 
         if (!aDuration) {
-          return sorting.isDesc ? -1 : 1;
+          return sorting.isDesc ? 1 : -1;
         }
 
         if (!bDuration) {
@@ -70,7 +70,9 @@ const sortEntries = (
         );
       });
     case "Name":
-      return entries.sort(sortByName);
+      return entries.sort((a, b) =>
+        sorting.isDesc ? sortByName(b, a) : sortByName(a, b)
+      );
     default:
       return entries;
   }
