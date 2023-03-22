@@ -59,12 +59,6 @@ export const GoToButton = styled(Button)`
     theme.palette.mode === "light" ? "#086dd7" : "#3391ee"};
 `;
 
-// export const GoToButtonText = styled(Typography)`
-//   font-weight: 500;
-//   color: ${({ theme }) =>
-//     theme.palette.mode === "light" ? "#086dd7" : "#fff"};
-// `;
-
 export const MainContainer = styled.main`
   display: flex;
   flex-grow: 1;
