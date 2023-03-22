@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from "react";
 import { groupBy } from "../../utils/groupBy";
 import { AssetList } from "./AssetList";
 import { AssetTypeList } from "./AssetTypeList";
-import * as s from "./styles";
 import {
   AssetEntry,
   AssetsData,
@@ -88,5 +87,5 @@ export const Assets = (props: AssetsProps) => {
     );
   }, [data, selectedAssetTypeId]);
 
-  return <s.Container>{renderContent}</s.Container>;
+  return <>{renderContent}</>;
 };

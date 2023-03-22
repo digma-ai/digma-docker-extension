@@ -1,11 +1,18 @@
 import { createDockerDesktopClient } from "@docker/extension-api-client";
+import ExtensionIcon from "@mui/icons-material/Extension";
+import { useTheme } from "@mui/material";
+import Divider from "@mui/material/Divider";
+import Typography from "@mui/material/Typography";
 import { useEffect, useState } from "react";
-import { ThemeProvider } from "styled-components";
-import { Mode } from "../../globals";
 import { Assets } from "../Assets";
 import { AssetsData, GetAssetsResponse } from "../Assets/types";
+import { DigmaLogoIcon } from "../common/icons/DigmaLogoIcon";
+import { IntellijLogoIcon } from "../common/icons/IntellijLogoIcon";
+import { StackIcon } from "../common/icons/StackIcon";
+import { VSCodeLogoIcon } from "../common/icons/VSCodeLogoIcon";
+import { GettingStarted } from "../GettingStarted";
 import * as s from "./styles";
-import { AppProps } from "./types";
+
 // Note: This line relies on Docker Desktop's presence as a host application.
 // If you're running this React app in a browser, it won't work properly.
 const client = createDockerDesktopClient();
@@ -16,30 +23,14 @@ function useDockerDesktopClient() {
 
 const REFRESH_INTERVAL = 10 * 1000; // in milliseconds
 
-export const THEMES = ["light", "dark", "dark-jetbrains"];
-
-const isMode = (mode: unknown): mode is Mode =>
-  typeof mode === "string" && THEMES.includes(mode);
-
-const getMode = (): Mode => {
-  if (!isMode(window.theme)) {
-    const bodyEl = document.getElementsByTagName("body");
-    const vscodeTheme =
-      bodyEl[0].dataset.vscodeThemeKind === "vscode-light" ? "light" : "dark";
-    return vscodeTheme;
-  }
-
-  return window.theme;
-};
-
-export const App = (props: AppProps) => {
-  const [mode, setMode] = useState(getMode());
-  const [mainFont, setMainFont] = useState("");
-  const [codeFont, setCodeFont] = useState("");
-  const ddClient = useDockerDesktopClient();
+export const App = () => {
   const [assets, setAssets] = useState<AssetsData>();
   const [environments, setEnvironments] = useState<string[]>([]);
   const [selectedEnvironment, setSelectedEnvironment] = useState<string>();
+  const [isGettingStartedPage, setIsGettingStartedPage] = useState(true);
+
+  const ddClient = useDockerDesktopClient();
+  const theme = useTheme();
 
   const fetchEnvironments = async () => {
     const environments = (await ddClient.extension.vm?.service?.get(
@@ -62,13 +53,6 @@ export const App = (props: AppProps) => {
       serviceAssetsEntries: assets.serviceAssetsEntries,
     });
   };
-
-  useEffect(() => {
-    if (!props.theme) {
-      return;
-    }
-    setMode(props.theme);
-  }, [props.theme]);
 
   useEffect(() => {
     if (!selectedEnvironment && environments.length > 0) {
@@ -99,22 +83,96 @@ export const App = (props: AppProps) => {
 
   console.log("State:", { environments, assets, selectedEnvironment });
 
+  const handleGoToButtonClick = () => {
+    setIsGettingStartedPage(!isGettingStartedPage);
+  };
+
+  const handleVSCodeLinkClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    ddClient.host.openExternal(
+      "https://marketplace.visualstudio.com/items?itemName=digma.digma"
+    );
+  };
+
+  const handleIntellijLinkClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    ddClient.host.openExternal(
+      "https://plugins.jetbrains.com/plugin/19470-digma-continuous-feedback"
+    );
+  };
+
   return (
-    <ThemeProvider theme={{ mode, mainFont, codeFont }}>
-      <s.GlobalStyle />
-      <s.EnvironmentsContainer>
-        <span>Environments:</span>
-        <s.EnvironmentsList>
-          {environments.map((environment) => (
-            <s.EnvironmentLink
-              onClick={() => handleEnvironmentClick(environment)}
-            >
-              {environment}
-            </s.EnvironmentLink>
-          ))}
-        </s.EnvironmentsList>
-      </s.EnvironmentsContainer>
-      <Assets data={assets} />
-    </ThemeProvider>
+    <>
+      <s.GlobalStyles />
+      <s.Container>
+        <s.Header>
+          <DigmaLogoIcon size={52} />
+          <s.TitleContainer>
+            <Typography variant={"h3"} component={"h1"}>
+              Digma
+            </Typography>
+            <Typography variant={"body1"} color={"text.secondary"}>
+              Getting Started with Digma
+            </Typography>
+          </s.TitleContainer>
+          <s.GoToButton onClick={handleGoToButtonClick}>
+            <s.GoToButtonText variant={"body1"}>
+              {isGettingStartedPage ? "Go To Assets page" : "Getting Started"}
+            </s.GoToButtonText>
+            {isGettingStartedPage ? (
+              <StackIcon
+                size={24}
+                color={theme.palette.mode === "light" ? "#086dd7" : "#fff"}
+              />
+            ) : (
+              <ExtensionIcon
+                sx={{
+                  width: 24,
+                  height: 24,
+                }}
+                htmlColor={theme.palette.mode === "light" ? "#086dd7" : "#fff"}
+              />
+            )}
+          </s.GoToButton>
+        </s.Header>
+        <Divider />
+        <s.MainContainer>
+          {isGettingStartedPage ? (
+            <GettingStarted />
+          ) : (
+            <>
+              <s.EnvironmentsContainer>
+                <Typography variant={"h4"} component={"h2"}>
+                  Environments
+                </Typography>
+                <s.EnvironmentsList>
+                  {environments.map((environment) => (
+                    <s.Link onClick={() => handleEnvironmentClick(environment)}>
+                      {environment}
+                    </s.Link>
+                  ))}
+                </s.EnvironmentsList>
+              </s.EnvironmentsContainer>
+              <Assets data={assets} />
+            </>
+          )}
+        </s.MainContainer>
+        <s.Footer>
+          <s.FooterText variant="body1">
+            Install the Digma Plugin to see more code data in the IDE
+          </s.FooterText>
+          <s.LinksContainer>
+            <s.Link onClick={handleVSCodeLinkClick}>
+              <VSCodeLogoIcon size={20} />
+              VSCode
+            </s.Link>
+            <s.Link onClick={handleIntellijLinkClick}>
+              <IntellijLogoIcon size={20} />
+              IntelliJ
+            </s.Link>
+          </s.LinksContainer>
+        </s.Footer>
+      </s.Container>
+    </>
   );
 };

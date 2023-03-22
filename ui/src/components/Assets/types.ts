@@ -1,5 +1,3 @@
-import { Duration } from "../../globals";
-
 export enum INSIGHT_TYPES {
   SpanUsageStatus = "SpanUsageStatus",
   TopErrorFlows = "TopErrorFlows",
@@ -41,6 +39,12 @@ export interface Insight {
     subtitle: string;
     description: string;
   };
+}
+
+export interface Duration {
+  value: number;
+  unit: string;
+  raw: number;
 }
 
 export interface DurationPercentiles {
