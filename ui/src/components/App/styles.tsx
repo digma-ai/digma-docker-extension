@@ -1,3 +1,4 @@
+import Button from "@mui/material/Button";
 import MuiGlobalStyles from "@mui/material/GlobalStyles";
 import MuiLink from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
@@ -49,22 +50,20 @@ export const TitleContainer = styled.div`
   height: 52px;
 `;
 
-export const GoToButton = styled.button`
-  background: none;
-  border: none;
+export const GoToButton = styled(Button)`
   display: flex;
   align-items: center;
-  gap: 24px;
   margin-left: auto;
-  cursor: pointer;
-  padding: 0;
+  font-weight: 500;
+  background: ${({ theme }) =>
+    theme.palette.mode === "light" ? "#086dd7" : "#3391ee"};
 `;
 
-export const GoToButtonText = styled(Typography)`
-  font-weight: 500;
-  color: ${({ theme }) =>
-    theme.palette.mode === "light" ? "#086dd7" : "#fff"};
-`;
+// export const GoToButtonText = styled(Typography)`
+//   font-weight: 500;
+//   color: ${({ theme }) =>
+//     theme.palette.mode === "light" ? "#086dd7" : "#fff"};
+// `;
 
 export const MainContainer = styled.main`
   display: flex;

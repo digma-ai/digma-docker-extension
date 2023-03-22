@@ -17,16 +17,16 @@ export const Code = styled(TextField)`
     line-height: 20px;
     letter-spacing: 0.02em;
     color: ${({ theme }) =>
-      theme.palette.mode === "light" ? "#393f49" : "#adbecb"};
+      theme.palette.mode === "light" ? "#17191e" : "#fff"};
     background: ${({ theme }) =>
-      theme.palette.mode === "light" ? "#e1e2e6" : "#27343e"};
+      theme.palette.mode === "light" ? "#fff" : "#27343e"};
     border-color: ${({ theme }) =>
-      theme.palette.mode === "light" ? "#c4c8d1" : "#364754"};
-    padding: 10px 50px 10px 8px;
+      theme.palette.mode === "light" ? "#efeff2" : "#465c6e"};
+    padding: 11px 42px 11px 8px;
   }
 
   & .MuiInputBase-multiline {
-    padding: 8px 56px 8px 8px;
+    padding: 8px 42px 8px 8px;
   }
 
   & .MuiInputBase-input {
@@ -35,24 +35,25 @@ export const Code = styled(TextField)`
   }
 `;
 
-export const FloatingCopyButton = styled(Button)`
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  min-width: 40px;
-  height: 40px;
-  padding: 0;
-  background: ${({ theme }) =>
-    theme.palette.mode === "light" ? "#086dd7" : "#3391ee"};
-`;
-
 export const CopyButton = styled(Button)`
   position: absolute;
-  right: 0;
-  min-width: 40px;
-  height: 100%;
-  background: ${({ theme }) =>
-    theme.palette.mode === "light" ? "#086dd7" : "#3391ee"};
+  top: 9px;
+  right: 11px;
+  min-width: 24px;
+  height: 24px;
+  color: ${({ theme }) =>
+    theme.palette.mode === "light" ? "#086dd7" : "#55a4f1"};
   padding: 0;
-  border-radius: 0px 4px 4px 0px;
+  background: transparent;
+
+  &:hover {
+    color: ${({ theme }) =>
+      theme.palette.mode === "light" ? "#55a4F1" : "#fff"};
+    background: transparent;
+  }
+`;
+
+export const FloatingCopyButton = styled(CopyButton)`
+  top: 8px;
+  right: 8px;
 `;

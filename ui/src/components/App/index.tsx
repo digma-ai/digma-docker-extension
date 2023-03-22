@@ -115,24 +115,23 @@ export const App = () => {
               Getting Started with Digma
             </Typography>
           </s.TitleContainer>
-          <s.GoToButton onClick={handleGoToButtonClick}>
-            <s.GoToButtonText variant={"body1"}>
-              {isGettingStartedPage ? "Go To Assets page" : "Getting Started"}
-            </s.GoToButtonText>
-            {isGettingStartedPage ? (
-              <StackIcon
-                size={24}
-                color={theme.palette.mode === "light" ? "#086dd7" : "#fff"}
-              />
-            ) : (
-              <ExtensionIcon
-                sx={{
-                  width: 24,
-                  height: 24,
-                }}
-                htmlColor={theme.palette.mode === "light" ? "#086dd7" : "#fff"}
-              />
-            )}
+          <s.GoToButton
+            variant={"contained"}
+            onClick={handleGoToButtonClick}
+            endIcon={
+              isGettingStartedPage ? (
+                <StackIcon size={16} color={"#fff"} />
+              ) : (
+                <ExtensionIcon
+                  sx={{
+                    width: 16,
+                    height: 16,
+                  }}
+                />
+              )
+            }
+          >
+            {isGettingStartedPage ? "Go To Assets page" : "Getting Started"}
           </s.GoToButton>
         </s.Header>
         <Divider />
@@ -163,12 +162,12 @@ export const App = () => {
           </s.FooterText>
           <s.LinksContainer>
             <s.Link onClick={handleVSCodeLinkClick}>
-              <VSCodeLogoIcon size={20} />
               VSCode
+              <VSCodeLogoIcon size={20} />
             </s.Link>
             <s.Link onClick={handleIntellijLinkClick}>
-              <IntellijLogoIcon size={20} />
               IntelliJ
+              <IntellijLogoIcon size={20} />
             </s.Link>
           </s.LinksContainer>
         </s.Footer>

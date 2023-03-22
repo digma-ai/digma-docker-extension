@@ -21,14 +21,11 @@ export const CodeSnippet = (props: CodeSnippetProps) => {
         }}
       />
       {props.multiline ? (
-        <s.FloatingCopyButton
-          variant={"contained"}
-          onClick={handleCopyButtonClick}
-        >
+        <s.FloatingCopyButton onClick={handleCopyButtonClick}>
           <FileCopyIcon />
         </s.FloatingCopyButton>
       ) : (
-        <s.CopyButton variant={"contained"} onClick={handleCopyButtonClick}>
+        <s.CopyButton onClick={handleCopyButtonClick}>
           <FileCopyIcon />
         </s.CopyButton>
       )}

@@ -21,7 +21,7 @@ export const Tabs = styled(MuiTabs)`
 
   & .MuiTabs-indicator {
     background: ${({ theme }) =>
-      theme.palette.mode === "light" ? "#086dd7" : "#55a4f1"};
+      theme.palette.mode === "light" ? "#086dd7" : "#3391ee"};
     height: 3px;
   }
 `;
