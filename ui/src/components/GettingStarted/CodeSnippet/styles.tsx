@@ -26,12 +26,12 @@ export const Code = styled(TextField)`
   }
 
   & .MuiInputBase-multiline {
-    padding: 8px 42px 8px 8px;
+    padding: 8px;
   }
 
   & .MuiInputBase-input {
     padding: 0;
-    min-height: 24;
+    min-height: 24px;
   }
 `;
 

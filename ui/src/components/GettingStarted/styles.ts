@@ -1,3 +1,4 @@
+import MuiLink from "@mui/material/Link";
 import MuiTab from "@mui/material/Tab";
 import MuiTabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
@@ -17,6 +18,10 @@ export const SectionTitleContainer = styled.div`
 
 export const SectionText = styled(Typography)`
   margin-top: 8px;
+`;
+
+export const Link = styled(MuiLink)`
+  cursor: pointer;
 `;
 
 export const Tabs = styled(MuiTabs)`
