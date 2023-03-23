@@ -3,6 +3,7 @@ import ExtensionIcon from "@mui/icons-material/Extension";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import { useEffect, useState } from "react";
+import { usePrevious } from "../../hooks/usePrevious";
 import { Assets } from "../Assets";
 import { AssetsData, GetAssetsResponse } from "../Assets/types";
 import { DigmaLogoIcon } from "../common/icons/DigmaLogoIcon";
@@ -24,9 +25,16 @@ const REFRESH_INTERVAL = 10 * 1000; // in milliseconds
 
 export const App = () => {
   const [assets, setAssets] = useState<AssetsData>();
+  const previousAssets = usePrevious(assets);
   const [environments, setEnvironments] = useState<string[]>([]);
   const [selectedEnvironment, setSelectedEnvironment] = useState<string>();
-  const [isGettingStartedPage, setIsGettingStartedPage] = useState(true);
+  const [isGettingStartedPage, setIsGettingStartedPage] = useState(
+    Boolean(
+      !assets ||
+        assets.serviceAssetsEntries.map((x) => x.assetEntries).flat().length ===
+          0
+    )
+  );
 
   const ddClient = useDockerDesktopClient();
 
@@ -63,6 +71,18 @@ export const App = () => {
       fetchAssets(selectedEnvironment);
     }
   }, [environments, selectedEnvironment]);
+
+  useEffect(() => {
+    if (
+      (!previousAssets ||
+        previousAssets.serviceAssetsEntries.map((x) => x.assetEntries).flat()
+          .length === 0) &&
+      assets &&
+      assets.serviceAssetsEntries.map((x) => x.assetEntries).flat().length > 0
+    ) {
+      setIsGettingStartedPage(false);
+    }
+  }, [assets]);
 
   useEffect(() => {
     fetchEnvironments();

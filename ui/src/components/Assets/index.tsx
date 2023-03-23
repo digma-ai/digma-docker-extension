@@ -46,17 +46,11 @@ export const Assets = (props: AssetsProps) => {
   const [selectedAssetTypeId, setSelectedAssetTypeId] = useState<string | null>(
     null
   );
-  const [data, setData] = useState<GroupedAssetEntries>();
 
   const theme = useTheme();
 
-  useEffect(() => {
-    if (!props.data) {
-      return;
-    }
-
-    const groupedAssetEntries = groupEntries(props.data);
-    setData(groupedAssetEntries);
+  const data = useMemo(() => {
+    return props.data ? groupEntries(props.data) : undefined;
   }, [props.data]);
 
   useEffect(() => {
@@ -86,7 +80,12 @@ export const Assets = (props: AssetsProps) => {
   };
 
   const renderContent = useMemo((): JSX.Element => {
-    if (!data || props.environments.length === 0) {
+    if (
+      !data ||
+      !props.data ||
+      props.data.serviceAssetsEntries.map((x) => x.assetEntries).flat()
+        .length === 0
+    ) {
       return (
         <s.NoDataContainer>
           <s.NoDataContent>
@@ -154,7 +153,7 @@ export const Assets = (props: AssetsProps) => {
         )}
       </>
     );
-  }, [data, props.environments, selectedAssetTypeId]);
+  }, [data, props.data, props.environments, selectedAssetTypeId]);
 
   return (
     <s.Container>
