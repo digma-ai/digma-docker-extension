@@ -17,7 +17,7 @@ export DEPLOYMENT_ENV=LOCAL_DOCKER
 docker run -d -v “/$(pwd)/otel:/otel” --env JAVA_TOOL_OPTIONS --env OTEL_SERVICE_NAME --env DEPLOYMENT_ENV {-- APPEND PARAMS AND REPO/IMAGE --}`;
 
 const sampleAppCommands = `docker run -d -p 9753:9753 --name petshop-sample digmaai/petshop-app:latest
-docker run -rm digmaai/petshop-app-tester:latest`;
+docker run --rm digmaai/petshop-app-tester:latest`;
 
 export const GettingStarted = (props: GettingStartedProps) => {
   const [selectedTab, setSelectedTab] = useState(0);
