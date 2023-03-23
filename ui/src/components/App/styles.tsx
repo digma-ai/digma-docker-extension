@@ -15,18 +15,6 @@ export const GlobalStyles = () => (
   />
 );
 
-export const EnvironmentsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 8px;
-  gap: 8px;
-`;
-
-export const EnvironmentsList = styled.div`
-  display: flex;
-  gap: 24px;
-`;
-
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -51,8 +39,6 @@ export const TitleContainer = styled.div`
 `;
 
 export const GoToButton = styled(Button)`
-  display: flex;
-  align-items: center;
   margin-left: auto;
   font-weight: 500;
   background: ${({ theme }) =>

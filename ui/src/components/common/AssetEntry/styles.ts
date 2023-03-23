@@ -1,13 +1,15 @@
+import Paper from "@mui/material/Paper";
 import styled from "styled-components";
 
-export const Container = styled.div`
+export const Container = styled(Paper)`
   display: flex;
   flex-direction: column;
   gap: 8px;
   padding: 8px;
-  background: #383838;
-  border-radius: 4px;
-  color: #9b9b9b;
+  background: ${({ theme }) =>
+    theme.palette.mode === "light" ? "#fff" : "#27343e"};
+  border: 1px solid
+    ${({ theme }) => (theme.palette.mode === "light" ? "#efeff2" : "#465c6e")};
 `;
 
 export const Header = styled.div`
@@ -45,8 +47,11 @@ export const InsightIconsContainer = styled.div`
 `;
 
 export const InsightIconContainer = styled(OpenTelemetryIconContainer)`
-  background: #2e2e2e;
+  background: ${({ theme }) =>
+    theme.palette.mode === "light" ? "none" : "#36414e"};
   border-radius: 4px;
+  border: ${({ theme }) =>
+    theme.palette.mode === "light" ? "1px solid #efeff2" : "none"};
 `;
 
 export const StatsContainer = styled.div`
@@ -82,7 +87,8 @@ export const ServicesContainer = styled.div`
 
 export const ServiceName = styled.div`
   padding: 4px 6px;
-  background: #2e2e2e;
+  background: ${({ theme }) =>
+    theme.palette.mode === "light" ? "#f0f0f0" : "#3d4753"};
   border-radius: 23px;
   width: fit-content;
   line-height: 8px;
@@ -91,7 +97,8 @@ export const ServiceName = styled.div`
 export const ValueContainer = styled.div`
   display: flex;
   align-items: flex-end;
-  color: #c6c6c6;
+  color: ${({ theme }) =>
+    theme.palette.mode === "light" ? "#49494d" : "#c6c6c6"};
   gap: 2px;
   font-size: 12px;
   line-height: 14px;
@@ -102,5 +109,6 @@ export const Suffix = styled.span`
   font-weight: 500;
   font-size: 11px;
   line-height: 14px;
-  color: #565757;
+  color: ${({ theme }) =>
+    theme.palette.mode === "light" ? "#49494d" : "#9b9b9b"};
 `;

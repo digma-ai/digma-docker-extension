@@ -23,7 +23,7 @@ export const AssetEntry = (props: AssetEntryProps) => {
   const lastSeenDateTime = props.entry.lastSpanInstanceInfo.startTime;
 
   return (
-    <s.Container>
+    <s.Container elevation={0}>
       <s.Header>
         <s.OpenTelemetryIconContainer>
           <OpenTelemetryLogoIcon />

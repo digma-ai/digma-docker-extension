@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const ListItem = styled.li`
   display: flex;
   flex-direction: column;
-  background: #3d3f41;
+  /* background: #3d3f41; */
 `;
 
 export const AssetType = styled.span`
@@ -16,8 +16,13 @@ export const AssetType = styled.span`
   font-weight: 500;
   letter-spacing: -0.1px;
   user-select: none;
-  background: #383838;
+  /* background: #383838; */
   border-radius: 4px;
+`;
+
+export const Label = styled.span<{ isSelected: boolean }>`
+  color: ${({ isSelected, theme }) =>
+    isSelected ? theme.palette.primary.main : theme.palette.text.primary};
 `;
 
 export const EntryCount = styled.span`

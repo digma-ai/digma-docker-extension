@@ -13,8 +13,8 @@ const ASSET_TYPE_IDS = [
 ];
 
 export const AssetTypeList = (props: AssetListProps) => {
-  const handleAssetTypeClick = (categoryId: string) => {
-    props.onAssetTypeSelect(categoryId);
+  const handleAssetTypeClick = (assetTypeId: string) => {
+    props.onAssetTypeSelect(assetTypeId);
   };
 
   return (
@@ -27,6 +27,7 @@ export const AssetTypeList = (props: AssetListProps) => {
 
         return (
           <AssetTypeListItem
+            isSelected={assetTypeId === props.selectedAssetTypeId}
             id={assetTypeId}
             key={assetTypeId}
             icon={assetTypeInfo?.icon}

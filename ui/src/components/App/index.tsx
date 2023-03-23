@@ -75,7 +75,7 @@ export const App = () => {
     };
   }, []);
 
-  const handleEnvironmentClick = (environment: string) => {
+  const handleEnvironmentSelect = (environment: string) => {
     setSelectedEnvironment(environment);
   };
 
@@ -96,13 +96,6 @@ export const App = () => {
     e.preventDefault();
     ddClient.host.openExternal(
       "https://plugins.jetbrains.com/plugin/19470-digma-continuous-feedback"
-    );
-  };
-
-  const handleSampleAppLinkClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-    ddClient.host.openExternal(
-      "https://github.com/digma-ai/otel-sample-app-java"
     );
   };
 
@@ -144,21 +137,12 @@ export const App = () => {
           {isGettingStartedPage ? (
             <GettingStarted client={ddClient} />
           ) : (
-            <>
-              <s.EnvironmentsContainer>
-                <Typography variant={"h4"} component={"h2"}>
-                  Environments
-                </Typography>
-                <s.EnvironmentsList>
-                  {environments.map((environment) => (
-                    <s.Link onClick={() => handleEnvironmentClick(environment)}>
-                      {environment}
-                    </s.Link>
-                  ))}
-                </s.EnvironmentsList>
-              </s.EnvironmentsContainer>
-              <Assets data={assets} />
-            </>
+            <Assets
+              environments={environments}
+              onEnvironmentSelect={handleEnvironmentSelect}
+              data={assets}
+              onGettingStartedButtonClick={handleGoToButtonClick}
+            />
           )}
         </s.MainContainer>
         <s.Footer>

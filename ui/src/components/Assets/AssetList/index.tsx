@@ -6,7 +6,6 @@ import { Menu } from "../../common/Menu";
 import { Popover } from "../../common/Popover";
 import { PopoverContent } from "../../common/Popover/PopoverContent";
 import { PopoverTrigger } from "../../common/Popover/PopoverTrigger";
-import { getAssetTypeInfo } from "../utils";
 import * as s from "./styles";
 import {
   AssetListProps,
@@ -103,9 +102,9 @@ export const AssetList = (props: AssetListProps) => {
   });
   const [isSortingMenuOpen, setIsSortingMenuOpen] = useState(false);
 
-  const handleBackButtonClick = () => {
-    props.onBackButtonClick();
-  };
+  // const handleBackButtonClick = () => {
+  // props.onBackButtonClick();
+  // };
 
   const handleAssetLinkClick = (entry: ExtendedAssetEntryWithServices) => {
     props.onAssetLinkClick(entry);
@@ -130,7 +129,7 @@ export const AssetList = (props: AssetListProps) => {
     handleSortingMenuToggle();
   };
 
-  const assetTypeInfo = getAssetTypeInfo(props.assetTypeId);
+  // const assetTypeInfo = getAssetTypeInfo(props.assetTypeId);
 
   const entries: ExtendedAssetEntryWithServices[] = useMemo(
     () =>
@@ -157,7 +156,7 @@ export const AssetList = (props: AssetListProps) => {
 
   return (
     <s.Container>
-      <s.Header>
+      {/* <s.Header>
         <s.BackButton onClick={handleBackButtonClick}>
           <ChevronIcon direction={DIRECTION.LEFT} color={"#dadada"} />
         </s.BackButton>
@@ -166,7 +165,7 @@ export const AssetList = (props: AssetListProps) => {
         <s.ItemsCount>
           {Object.values(props.entries).flat().length}
         </s.ItemsCount>
-      </s.Header>
+      </s.Header> */}
       <s.Toolbar>
         <Popover
           open={isSortingMenuOpen}

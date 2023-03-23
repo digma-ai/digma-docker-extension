@@ -3,7 +3,8 @@ import styled from "styled-components";
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  background: #2e2e2e;
+  background: ${({ theme }) =>
+    theme.palette.mode === "light" ? "#fff" : "#27343e"};
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.12);
   border-radius: 2px;
 `;
@@ -12,7 +13,7 @@ export const Header = styled.div`
   padding: 2px 8px;
   font-size: 10px;
   line-height: 14px;
-  color: #7c7c94;
+  /* color: #7c7c94; */
 `;
 
 export const List = styled.ul`
@@ -29,6 +30,6 @@ export const ListItem = styled.li`
   padding: 6px 8px;
   font-size: 10px;
   line-height: 12px;
-  color: #9b9b9b;
+  /* color: #9b9b9b; */
   cursor: pointer;
 `;
