@@ -1,3 +1,5 @@
+import { DockerDesktopClient } from "@docker/extension-api-client-types/dist/v1";
+
 export interface GettingStartedProps {
-  handleSampleAppLinkClick: (e: React.MouseEvent<HTMLAnchorElement>) => void;
+  client: DockerDesktopClient;
 }

@@ -1,6 +1,5 @@
 import { createDockerDesktopClient } from "@docker/extension-api-client";
 import ExtensionIcon from "@mui/icons-material/Extension";
-import { useTheme } from "@mui/material";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import { useEffect, useState } from "react";
@@ -30,7 +29,6 @@ export const App = () => {
   const [isGettingStartedPage, setIsGettingStartedPage] = useState(true);
 
   const ddClient = useDockerDesktopClient();
-  const theme = useTheme();
 
   const fetchEnvironments = async () => {
     const environments = (await ddClient.extension.vm?.service?.get(
@@ -144,9 +142,7 @@ export const App = () => {
         <Divider />
         <s.MainContainer>
           {isGettingStartedPage ? (
-            <GettingStarted
-              handleSampleAppLinkClick={handleSampleAppLinkClick}
-            />
+            <GettingStarted client={ddClient} />
           ) : (
             <>
               <s.EnvironmentsContainer>
