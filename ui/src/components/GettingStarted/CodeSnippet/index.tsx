@@ -14,7 +14,7 @@ export const CodeSnippet = (props: CodeSnippetProps) => {
         variant={"outlined"}
         value={props.text}
         multiline={props.multiline}
-        minRows={12}
+        minRows={1}
         maxRows={12}
         inputProps={{
           readOnly: true,

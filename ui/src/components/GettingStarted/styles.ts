@@ -13,7 +13,10 @@ export const SectionTitleContainer = styled.div`
   margin-bottom: 24px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+`;
+
+export const SectionText = styled(Typography)`
+  margin-top: 8px;
 `;
 
 export const Tabs = styled(MuiTabs)`

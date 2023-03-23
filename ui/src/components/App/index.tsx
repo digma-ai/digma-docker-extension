@@ -9,7 +9,7 @@ import { AssetsData, GetAssetsResponse } from "../Assets/types";
 import { DigmaLogoIcon } from "../common/icons/DigmaLogoIcon";
 import { IntellijLogoIcon } from "../common/icons/IntellijLogoIcon";
 import { StackIcon } from "../common/icons/StackIcon";
-import { VSCodeLogoIcon } from "../common/icons/VSCodeLogoIcon";
+// import { VSCodeLogoIcon } from "../common/icons/VSCodeLogoIcon";
 import { GettingStarted } from "../GettingStarted";
 import * as s from "./styles";
 
@@ -101,6 +101,13 @@ export const App = () => {
     );
   };
 
+  const handleSampleAppLinkClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    ddClient.host.openExternal(
+      "https://github.com/digma-ai/otel-sample-app-java"
+    );
+  };
+
   return (
     <>
       <s.GlobalStyles />
@@ -137,7 +144,9 @@ export const App = () => {
         <Divider />
         <s.MainContainer>
           {isGettingStartedPage ? (
-            <GettingStarted />
+            <GettingStarted
+              handleSampleAppLinkClick={handleSampleAppLinkClick}
+            />
           ) : (
             <>
               <s.EnvironmentsContainer>
@@ -161,10 +170,10 @@ export const App = () => {
             Install the Digma Plugin to see more code data in the IDE
           </s.FooterText>
           <s.LinksContainer>
-            <s.Link onClick={handleVSCodeLinkClick}>
+            {/* <s.Link onClick={handleVSCodeLinkClick}>
               VSCode
               <VSCodeLogoIcon size={20} />
-            </s.Link>
+            </s.Link> */}
             <s.Link onClick={handleIntellijLinkClick}>
               IntelliJ
               <IntellijLogoIcon size={20} />
