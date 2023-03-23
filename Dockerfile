@@ -1,14 +1,11 @@
-FROM golang:1.19-alpine AS builder
+FROM --platform=$BUILDPLATFORM node:18.12-alpine3.16 AS builder
 ENV CGO_ENABLED=0
 WORKDIR /backend
-COPY backend/go.* .
-RUN --mount=type=cache,target=/go/pkg/mod \
-    --mount=type=cache,target=/root/.cache/go-build \
-    go mod download
+COPY backend/package*.json .
+RUN --mount=type=cache,target=/usr/src/app/.npm \
+    npm set cache /usr/src/app/.npm && \
+    npm ci
 COPY backend/. .
-RUN --mount=type=cache,target=/go/pkg/mod \
-    --mount=type=cache,target=/root/.cache/go-build \
-    go build -trimpath -ldflags="-s -w" -o bin/service
 
 FROM --platform=$BUILDPLATFORM node:18.12-alpine3.16 AS client-builder
 WORKDIR /ui
@@ -22,7 +19,7 @@ RUN --mount=type=cache,target=/usr/src/app/.npm \
 COPY ui /ui
 RUN npm run build
 
-FROM alpine
+FROM --platform=$BUILDPLATFORM node:18.12-alpine3.16
 LABEL org.opencontainers.image.title="Digma Continuous Feedback" \
     org.opencontainers.image.description="Your code observability data" \
     org.opencontainers.image.vendor="Digma Inc." \
@@ -33,9 +30,9 @@ LABEL org.opencontainers.image.title="Digma Continuous Feedback" \
     com.docker.extension.additional-urls="" \
     com.docker.extension.changelog=""
 
-COPY --from=builder /backend/bin/service /
+COPY --from=builder /backend backend
 COPY docker-compose.yaml .
 COPY metadata.json .
-COPY docker.svg .
+COPY digma.svg .
 COPY --from=client-builder /ui/build ui
-CMD /service -socket /run/guest-services/backend.sock
+CMD ["node", "backend/server.js", "/run/guest-services/backend.sock"]
