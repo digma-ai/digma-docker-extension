@@ -4,6 +4,7 @@ import Typography from "@mui/material/Typography";
 import { useMemo, useState } from "react";
 import { groupBy } from "../../utils/groupBy";
 import { StackIcon } from "../common/icons/StackIcon";
+import { Loader } from "../common/Loader";
 import { AssetList } from "./AssetList";
 import { AssetTypeList } from "./AssetTypeList";
 import { Menu } from "./Menu";
@@ -106,35 +107,49 @@ export const Assets = (props: AssetsProps) => {
       return (
         <s.NoDataContainer>
           <s.NoDataContent>
-            <s.Circle>
-              <StackIcon
-                size={32}
-                color={theme.palette.mode === "light" ? "#677285" : "#adbecb"}
-              />
-            </s.Circle>
-            <s.NoDataTextContainer>
-              <Typography variant="subtitle1">No Data</Typography>
-              <s.NoDataText>
-                Please follow the instructions on the "Getting started" page to
-                collect data from your containers. Then, just make some API
-                calls or generate any activity to see the assets behavior on
-                this page
-              </s.NoDataText>
-            </s.NoDataTextContainer>
-            <s.GettingStartedButton
-              onClick={onGettingStartedButtonClick}
-              variant={"contained"}
-              endIcon={
-                <ExtensionIcon
-                  sx={{
-                    width: 16,
-                    height: 16,
-                  }}
-                />
-              }
-            >
-              Getting started
-            </s.GettingStartedButton>
+            {props.environments.length === 0 ? (
+              <>
+                <s.Circle>
+                  <StackIcon
+                    size={32}
+                    color={
+                      theme.palette.mode === "light" ? "#677285" : "#adbecb"
+                    }
+                  />
+                </s.Circle>
+                <s.NoDataTextContainer>
+                  <Typography variant="subtitle1">No Data</Typography>
+                  <s.NoDataText>
+                    Please follow the instructions on the "Getting started" page
+                    to collect data from your containers. Then, just make some
+                    API calls or generate any activity to see the assets
+                    behavior on this page
+                  </s.NoDataText>
+                </s.NoDataTextContainer>
+
+                <s.GettingStartedButton
+                  onClick={onGettingStartedButtonClick}
+                  variant={"contained"}
+                  endIcon={
+                    <ExtensionIcon
+                      sx={{
+                        width: 16,
+                        height: 16,
+                      }}
+                    />
+                  }
+                >
+                  Getting started
+                </s.GettingStartedButton>
+              </>
+            ) : (
+              <>
+                <Loader status={"pending"} size={86} />
+                <Typography variant="subtitle1">
+                  Processing Insights...
+                </Typography>
+              </>
+            )}
           </s.NoDataContent>
         </s.NoDataContainer>
       );
@@ -157,7 +172,14 @@ export const Assets = (props: AssetsProps) => {
         )}
       </>
     );
-  }, [data, assetsCount, props.data, selectedAssetTypeId, sorting]);
+  }, [
+    data,
+    assetsCount,
+    props.data,
+    props.environments,
+    selectedAssetTypeId,
+    sorting,
+  ]);
 
   return (
     <s.Container>

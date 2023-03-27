@@ -23,7 +23,7 @@ export const MenuButton = styled(Button)`
 
 export const Menu = styled(MuiMenu)`
   & .MuiPaper-root {
-    min-width: 202px;
+    width: 202px;
     padding: 4px;
   }
 `;

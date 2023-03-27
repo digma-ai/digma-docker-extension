@@ -1,4 +1,5 @@
 import { useTheme } from "@mui/material";
+import Typography from "@mui/material/Typography";
 import { ChevronIcon } from "../../common/icons/ChevronIcon";
 import { DIRECTION } from "../../common/icons/types";
 import * as s from "./styles";
@@ -27,7 +28,7 @@ export const ToolbarMenuButton = (props: ToolbarMenuButtonProps) => {
       onClick={props.onClick}
       title={label}
     >
-      <s.Label>{label}</s.Label>
+      <Typography noWrap={true}>{label}</Typography>
     </s.Button>
   );
 };

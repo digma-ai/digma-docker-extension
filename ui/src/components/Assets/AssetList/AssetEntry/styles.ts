@@ -46,9 +46,6 @@ export const Name = styled(Typography)`
   font-weight: 500;
   font-size: 16px;
   line-height: 19px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
 `;
 
 export const InsightIconsContainer = styled.div`
