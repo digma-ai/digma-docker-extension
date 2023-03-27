@@ -1,12 +1,14 @@
 import ExtensionIcon from "@mui/icons-material/Extension";
 import { useTheme } from "@mui/material";
 import Typography from "@mui/material/Typography";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { groupBy } from "../../utils/groupBy";
 import { StackIcon } from "../common/icons/StackIcon";
 import { AssetList } from "./AssetList";
 import { AssetTypeList } from "./AssetTypeList";
+import { Menu } from "./Menu";
 import * as s from "./styles";
+import { ToolbarMenuButton } from "./ToolbarMenuButton";
 import {
   AssetEntry,
   AssetsData,
@@ -14,6 +16,13 @@ import {
   ExtendedAssetEntry,
   GroupedAssetEntries,
 } from "./types";
+
+const SORTING_CRITERION = [
+  "Critical insights",
+  "Performance",
+  "Latest",
+  "Name",
+];
 
 const groupEntries = (data: AssetsData): GroupedAssetEntries => {
   const assetEntries: ExtendedAssetEntry[] = data.serviceAssetsEntries
@@ -43,9 +52,15 @@ const groupEntries = (data: AssetsData): GroupedAssetEntries => {
 };
 
 export const Assets = (props: AssetsProps) => {
-  const [selectedAssetTypeId, setSelectedAssetTypeId] = useState<string | null>(
-    null
-  );
+  const [selectedAssetTypeId, setSelectedAssetTypeId] =
+    useState<string>("Endpoint");
+  const [sorting, setSorting] = useState<{
+    criterion: string;
+    isDesc: boolean;
+  }>({
+    criterion: "Critical insights",
+    isDesc: true,
+  });
 
   const theme = useTheme();
 
@@ -53,15 +68,12 @@ export const Assets = (props: AssetsProps) => {
     return props.data ? groupEntries(props.data) : undefined;
   }, [props.data]);
 
-  useEffect(() => {
-    if (data && !selectedAssetTypeId) {
-      setSelectedAssetTypeId("Endpoint");
-    }
-  }, [data]);
-
-  const handleBackButtonClick = () => {
-    setSelectedAssetTypeId(null);
-  };
+  const assetsCount = useMemo(() => {
+    return (
+      props.data?.serviceAssetsEntries.map((x) => x.assetEntries).flat()
+        .length || 0
+    );
+  }, [props.data]);
 
   const handleAssetTypeSelect = (assetTypeId: string) => {
     setSelectedAssetTypeId(assetTypeId);
@@ -71,21 +83,26 @@ export const Assets = (props: AssetsProps) => {
     // TODO
   };
 
+  const handleSortingMenuItemSelect = (value: string) => {
+    if (sorting.criterion === value) {
+      setSorting({
+        ...sorting,
+        isDesc: !sorting.isDesc,
+      });
+    } else {
+      setSorting({
+        criterion: value,
+        isDesc: false,
+      });
+    }
+  };
+
   const onGettingStartedButtonClick = () => {
     props.onGettingStartedButtonClick();
   };
 
-  const handleEnvironmentLinkClick = (environment: string) => {
-    props.onEnvironmentSelect(environment);
-  };
-
   const renderContent = useMemo((): JSX.Element => {
-    if (
-      !data ||
-      !props.data ||
-      props.data.serviceAssetsEntries.map((x) => x.assetEntries).flat()
-        .length === 0
-    ) {
+    if (!data || !props.data || assetsCount === 0) {
       return (
         <s.NoDataContainer>
           <s.NoDataContent>
@@ -97,7 +114,7 @@ export const Assets = (props: AssetsProps) => {
             </s.Circle>
             <s.NoDataTextContainer>
               <Typography variant="subtitle1">No Data</Typography>
-              <s.NoDataText variant="body1">
+              <s.NoDataText>
                 Please follow the instructions on the "Getting started" page to
                 collect data from your containers. Then, just make some API
                 calls or generate any activity to see the assets behavior on
@@ -125,19 +142,6 @@ export const Assets = (props: AssetsProps) => {
 
     return (
       <>
-        <s.EnvironmentsContainer>
-          <Typography variant={"subtitle1"}>Environments</Typography>
-          <s.EnvironmentsList>
-            {props.environments.map((environment) => (
-              <s.Link
-                key={environment}
-                onClick={() => handleEnvironmentLinkClick(environment)}
-              >
-                {environment}
-              </s.Link>
-            ))}
-          </s.EnvironmentsList>
-        </s.EnvironmentsContainer>
         <AssetTypeList
           selectedAssetTypeId={selectedAssetTypeId}
           data={data}
@@ -145,22 +149,29 @@ export const Assets = (props: AssetsProps) => {
         />
         {selectedAssetTypeId && data[selectedAssetTypeId] && (
           <AssetList
-            onBackButtonClick={handleBackButtonClick}
             onAssetLinkClick={handleAssetLinkClick}
             assetTypeId={selectedAssetTypeId}
             entries={data[selectedAssetTypeId]}
+            sorting={sorting}
           />
         )}
       </>
     );
-  }, [data, props.data, props.environments, selectedAssetTypeId]);
+  }, [data, assetsCount, props.data, selectedAssetTypeId, sorting]);
 
   return (
     <s.Container>
       <s.Header>
         <Typography variant={"h4"} component={"h2"}>
-          Assets
+          Assets ({assetsCount})
         </Typography>
+        <Menu
+          value={sorting.criterion}
+          title={"Sort by"}
+          items={SORTING_CRITERION}
+          onSelect={handleSortingMenuItemSelect}
+          button={ToolbarMenuButton}
+        />
       </s.Header>
       {renderContent}
     </s.Container>

@@ -1,7 +1,5 @@
 import Button from "@mui/material/Button";
 import MuiGlobalStyles from "@mui/material/GlobalStyles";
-import MuiLink from "@mui/material/Link";
-import Typography from "@mui/material/Typography";
 import styled from "styled-components";
 import "../../../assets/styles.css";
 
@@ -15,22 +13,6 @@ export const GlobalStyles = () => (
   />
 );
 
-export const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-`;
-
-export const Header = styled.header`
-  display: flex;
-  height: 112px;
-  align-items: center;
-  gap: 16px;
-  padding: 0 40px;
-  top: 0;
-  flex-shrink: 0;
-`;
-
 export const TitleContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -38,42 +20,12 @@ export const TitleContainer = styled.div`
   height: 52px;
 `;
 
-export const GoToButton = styled(Button)`
+export const NavigationButton = styled(Button)`
   margin-left: auto;
   font-weight: 500;
+`;
+
+export const GoToAssetsPageButton = styled(NavigationButton)`
   background: ${({ theme }) =>
     theme.palette.mode === "light" ? "#086dd7" : "#3391ee"};
-`;
-
-export const MainContainer = styled.main`
-  display: flex;
-  flex-grow: 1;
-  padding: 40px;
-  flex-direction: column;
-`;
-
-export const Footer = styled.footer`
-  bottom: 0;
-  display: flex;
-  padding: 0 40px;
-  height: 60px;
-  gap: 20px;
-  flex-shrink: 0;
-`;
-
-export const FooterText = styled(Typography)`
-  color: #70787d;
-`;
-
-export const LinksContainer = styled.div`
-  display: flex;
-  gap: 28px;
-`;
-
-export const Link = styled(MuiLink)`
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  height: fit-content;
-  cursor: pointer;
 `;

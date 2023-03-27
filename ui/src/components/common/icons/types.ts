@@ -2,7 +2,7 @@ export enum DIRECTION {
   LEFT = "LEFT",
   UP = "UP",
   RIGHT = "RIGHT",
-  DOWN = "DOWN"
+  DOWN = "DOWN",
 }
 
 export interface IconProps {

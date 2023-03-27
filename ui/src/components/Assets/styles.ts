@@ -1,5 +1,4 @@
 import Button from "@mui/material/Button";
-import MuiLink from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import styled from "styled-components";
 
@@ -52,28 +51,13 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  overflow: auto;
 `;
 
 export const Header = styled.div`
   display: flex;
-  margin-bottom: 24px;
-`;
-
-export const EnvironmentsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-`;
-
-export const EnvironmentsList = styled.div`
-  display: flex;
-  gap: 24px;
-`;
-
-export const Link = styled(MuiLink)`
-  display: flex;
-  gap: 8px;
+  justify-content: space-between;
   align-items: center;
-  height: fit-content;
-  cursor: pointer;
+  height: 96px;
+  flex-shrink: 0;
 `;

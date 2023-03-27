@@ -1,32 +1,23 @@
 import styled from "styled-components";
 
-export const ListItem = styled.li`
-  display: flex;
-  flex-direction: column;
-  /* background: #3d3f41; */
-`;
-
-export const AssetType = styled.span`
+export const Container = styled.span`
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 4px;
-  padding: 8px 12px 8px 8px;
   font-size: 14px;
   line-height: 20px;
-  font-weight: 500;
-  letter-spacing: -0.1px;
+  letter-spacing: 0.02em;
   user-select: none;
-  /* background: #383838; */
   border-radius: 4px;
 `;
 
-export const Label = styled.span<{ isSelected: boolean }>`
-  color: ${({ isSelected, theme }) =>
-    isSelected ? theme.palette.primary.main : theme.palette.text.primary};
-`;
-
-export const EntryCount = styled.span`
+export const EntryCount = styled.span<{ isSelected: boolean }>`
   margin-left: auto;
-  font-weight: 400;
-  color: #9b9b9b;
+  color: ${({ isSelected, theme }) =>
+    isSelected
+      ? theme.palette.mode === "light"
+        ? theme.palette.primary.main
+        : theme.palette.text.primary
+      : "#b3b3b3"};
 `;

@@ -13,30 +13,41 @@ const ASSET_TYPE_IDS = [
 ];
 
 export const AssetTypeList = (props: AssetListProps) => {
-  const handleAssetTypeClick = (assetTypeId: string) => {
-    props.onAssetTypeSelect(assetTypeId);
+  const handleAssetTypeChange = (
+    e: React.SyntheticEvent<Element, Event>,
+    value: number
+  ) => {
+    props.onAssetTypeSelect(ASSET_TYPE_IDS[value]);
   };
 
   return (
-    <s.List>
-      {ASSET_TYPE_IDS.map((assetTypeId) => {
+    <s.Tabs
+      value={ASSET_TYPE_IDS.indexOf(props.selectedAssetTypeId)}
+      onChange={handleAssetTypeChange}
+      variant={"scrollable"}
+      scrollButtons={"auto"}
+    >
+      {ASSET_TYPE_IDS.map((assetTypeId, i) => {
         const assetTypeInfo = getAssetTypeInfo(assetTypeId);
         const entryCount = props.data[assetTypeId]
           ? Object.values(props.data[assetTypeId]).flat().length
           : 0;
 
         return (
-          <AssetTypeListItem
-            isSelected={assetTypeId === props.selectedAssetTypeId}
-            id={assetTypeId}
+          <s.Tab
             key={assetTypeId}
-            icon={assetTypeInfo?.icon}
-            entryCount={entryCount}
-            label={assetTypeInfo?.label}
-            onAssetTypeClick={handleAssetTypeClick}
+            label={
+              <AssetTypeListItem
+                id={assetTypeId}
+                icon={assetTypeInfo?.icon}
+                entryCount={entryCount}
+                label={assetTypeInfo?.label}
+                isSelected={assetTypeId === props.selectedAssetTypeId}
+              />
+            }
           />
         );
       })}
-    </s.List>
+    </s.Tabs>
   );
 };
