@@ -1,15 +1,14 @@
 import { createDockerDesktopClient } from "@docker/extension-api-client";
 import ExtensionIcon from "@mui/icons-material/Extension";
-import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import { useEffect, useState } from "react";
 import { usePrevious } from "../../hooks/usePrevious";
 import { Assets } from "../Assets";
+import { Menu } from "../Assets/Menu";
 import { AssetsData, GetAssetsResponse } from "../Assets/types";
 import { DigmaLogoIcon } from "../common/icons/DigmaLogoIcon";
-import { IntellijLogoIcon } from "../common/icons/IntellijLogoIcon";
 import { StackIcon } from "../common/icons/StackIcon";
-// import { VSCodeLogoIcon } from "../common/icons/VSCodeLogoIcon";
+import { Page } from "../common/Page/Index";
 import { GettingStarted } from "../GettingStarted";
 import * as s from "./styles";
 
@@ -28,13 +27,7 @@ export const App = () => {
   const previousAssets = usePrevious(assets);
   const [environments, setEnvironments] = useState<string[]>([]);
   const [selectedEnvironment, setSelectedEnvironment] = useState<string>();
-  const [isGettingStartedPage, setIsGettingStartedPage] = useState(
-    Boolean(
-      !assets ||
-        assets.serviceAssetsEntries.map((x) => x.assetEntries).flat().length ===
-          0
-    )
-  );
+  const [isGettingStartedPage, setIsGettingStartedPage] = useState(true);
 
   const ddClient = useDockerDesktopClient();
 
@@ -105,82 +98,72 @@ export const App = () => {
     setIsGettingStartedPage(!isGettingStartedPage);
   };
 
-  const handleVSCodeLinkClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-    ddClient.host.openExternal(
-      "https://marketplace.visualstudio.com/items?itemName=digma.digma"
-    );
-  };
-
-  const handleIntellijLinkClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-    ddClient.host.openExternal(
-      "https://plugins.jetbrains.com/plugin/19470-digma-continuous-feedback"
-    );
-  };
-
   return (
     <>
       <s.GlobalStyles />
-      <s.Container>
-        <s.Header>
-          <DigmaLogoIcon size={52} />
-          <s.TitleContainer>
-            <Typography variant={"h3"} component={"h1"}>
-              Digma
-            </Typography>
-            <Typography variant={"body1"} color={"text.secondary"}>
-              Getting Started with Digma
-            </Typography>
-          </s.TitleContainer>
-          <s.GoToButton
-            variant={"contained"}
-            onClick={handleGoToButtonClick}
-            endIcon={
-              isGettingStartedPage ? (
-                <StackIcon size={16} color={"#fff"} />
-              ) : (
-                <ExtensionIcon
-                  sx={{
-                    width: 16,
-                    height: 16,
-                  }}
+      {isGettingStartedPage ? (
+        <Page
+          header={
+            <>
+              <DigmaLogoIcon size={52} />
+              <s.TitleContainer>
+                <Typography variant={"h3"} component={"h1"}>
+                  Digma
+                </Typography>
+                <Typography color={"text.secondary"}>
+                  Getting Started with Digma
+                </Typography>
+              </s.TitleContainer>
+              <s.GoToAssetsPageButton
+                variant={"contained"}
+                onClick={handleGoToButtonClick}
+                endIcon={<StackIcon size={16} color={"#fff"} />}
+              >
+                Go To Assets page
+              </s.GoToAssetsPageButton>
+            </>
+          }
+          main={<GettingStarted client={ddClient} />}
+          dockerClient={ddClient}
+        />
+      ) : (
+        <Page
+          header={
+            <>
+              {selectedEnvironment && (
+                <Menu
+                  title={"Environments"}
+                  icon={<DigmaLogoIcon size={24} />}
+                  value={selectedEnvironment}
+                  items={environments}
+                  onSelect={handleEnvironmentSelect}
                 />
-              )
-            }
-          >
-            {isGettingStartedPage ? "Go To Assets page" : "Getting Started"}
-          </s.GoToButton>
-        </s.Header>
-        <Divider />
-        <s.MainContainer>
-          {isGettingStartedPage ? (
-            <GettingStarted client={ddClient} />
-          ) : (
+              )}
+              <s.NavigationButton
+                variant="outlined"
+                onClick={handleGoToButtonClick}
+                endIcon={
+                  <ExtensionIcon
+                    sx={{
+                      width: 16,
+                      height: 16,
+                    }}
+                  />
+                }
+              >
+                Getting Started
+              </s.NavigationButton>
+            </>
+          }
+          main={
             <Assets
-              environments={environments}
-              onEnvironmentSelect={handleEnvironmentSelect}
               data={assets}
               onGettingStartedButtonClick={handleGoToButtonClick}
             />
-          )}
-        </s.MainContainer>
-        <s.Footer>
-          <s.FooterText variant="body1">
-            Install the Digma Plugin to see more code data in the IDE
-          </s.FooterText>
-          <s.LinksContainer>
-            {/* <s.Link onClick={handleVSCodeLinkClick}>
-              VSCode
-              <VSCodeLogoIcon size={20} />
-            </s.Link> */}
-            <s.Link onClick={handleIntellijLinkClick}>
-              IntelliJ
-              <IntellijLogoIcon size={20} />
-            </s.Link>
-          </s.LinksContainer>
-        </s.Footer>
-      </s.Container>
+          }
+          dockerClient={ddClient}
+        />
+      )}
     </>
   );
 };

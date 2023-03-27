@@ -1,24 +1,11 @@
-import { useMemo, useState } from "react";
-import { AssetEntry as AssetEntryComponent } from "../../common/AssetEntry";
-import { ChevronIcon } from "../../common/icons/ChevronIcon";
-import { DIRECTION } from "../../common/icons/types";
-import { Menu } from "../../common/Menu";
-import { Popover } from "../../common/Popover";
-import { PopoverContent } from "../../common/Popover/PopoverContent";
-import { PopoverTrigger } from "../../common/Popover/PopoverTrigger";
+import { useMemo } from "react";
+import { AssetEntry as AssetEntryComponent } from "./AssetEntry";
 import * as s from "./styles";
 import {
   AssetListProps,
   ExtendedAssetEntryWithServices,
   Sorting,
 } from "./types";
-
-const SORTING_CRITERION = [
-  "Critical insights",
-  "Performance",
-  "Latest",
-  "Name",
-];
 
 const sortEntries = (
   entries: ExtendedAssetEntryWithServices[],
@@ -93,43 +80,9 @@ const sortEntries = (
 };
 
 export const AssetList = (props: AssetListProps) => {
-  const [sorting, setSorting] = useState<{
-    criterion: string;
-    isDesc: boolean;
-  }>({
-    criterion: "Critical insights",
-    isDesc: true,
-  });
-  const [isSortingMenuOpen, setIsSortingMenuOpen] = useState(false);
-
-  // const handleBackButtonClick = () => {
-  // props.onBackButtonClick();
-  // };
-
   const handleAssetLinkClick = (entry: ExtendedAssetEntryWithServices) => {
     props.onAssetLinkClick(entry);
   };
-
-  const handleSortingMenuToggle = () => {
-    setIsSortingMenuOpen(!isSortingMenuOpen);
-  };
-
-  const handleSortingMenuItemSelect = (value: string) => {
-    if (sorting.criterion === value) {
-      setSorting({
-        ...sorting,
-        isDesc: !sorting.isDesc,
-      });
-    } else {
-      setSorting({
-        criterion: value,
-        isDesc: false,
-      });
-    }
-    handleSortingMenuToggle();
-  };
-
-  // const assetTypeInfo = getAssetTypeInfo(props.assetTypeId);
 
   const entries: ExtendedAssetEntryWithServices[] = useMemo(
     () =>
@@ -150,58 +103,21 @@ export const AssetList = (props: AssetListProps) => {
   );
 
   const sortedEntries = useMemo(
-    () => sortEntries(entries, sorting),
-    [entries, sorting]
+    () => sortEntries(entries, props.sorting),
+    [entries, props.sorting]
   );
 
   return (
     <s.Container>
-      {/* <s.Header>
-        <s.BackButton onClick={handleBackButtonClick}>
-          <ChevronIcon direction={DIRECTION.LEFT} color={"#dadada"} />
-        </s.BackButton>
-        {assetTypeInfo?.icon && <assetTypeInfo.icon color={"#9c9c9c"} />}
-        <span>{assetTypeInfo?.label || props.assetTypeId}</span>
-        <s.ItemsCount>
-          {Object.values(props.entries).flat().length}
-        </s.ItemsCount>
-      </s.Header> */}
-      <s.Toolbar>
-        <Popover
-          open={isSortingMenuOpen}
-          onOpenChange={setIsSortingMenuOpen}
-          placement={"bottom-start"}
-        >
-          <PopoverTrigger onClick={handleSortingMenuToggle}>
-            <s.SortingMenuContainer>
-              <span>Sort by</span>
-              <s.SortingLabel>{sorting.criterion}</s.SortingLabel>
-              <ChevronIcon
-                direction={isSortingMenuOpen ? DIRECTION.UP : DIRECTION.DOWN}
-                color={"#dadada"}
-              />
-            </s.SortingMenuContainer>
-          </PopoverTrigger>
-          <PopoverContent className="Popover">
-            <Menu
-              title={"Sort by"}
-              items={SORTING_CRITERION.map((x) => ({ value: x, label: x }))}
-              onSelect={handleSortingMenuItemSelect}
-            />
-          </PopoverContent>
-        </Popover>
-      </s.Toolbar>
       {sortedEntries.length > 0 ? (
         <s.List>
-          {sortedEntries.map((entry) => {
-            return (
-              <AssetEntryComponent
-                key={`${entry.id}-${entry.serviceName}`}
-                entry={entry}
-                onAssetLinkClick={handleAssetLinkClick}
-              />
-            );
-          })}
+          {sortedEntries.map((entry) => (
+            <AssetEntryComponent
+              key={`${entry.id}-${entry.serviceName}`}
+              entry={entry}
+              onAssetLinkClick={handleAssetLinkClick}
+            />
+          ))}
         </s.List>
       ) : (
         <s.NoDataText>

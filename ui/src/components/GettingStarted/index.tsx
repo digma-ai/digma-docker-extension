@@ -44,14 +44,14 @@ export const GettingStarted = (props: GettingStartedProps) => {
         <Typography variant={"h4"} component={"h2"}>
           Collecting data from your containers
         </Typography>
-        <s.SectionText variant={"body1"} color={"text.secondary"}>
+        <s.SectionText color={"text.secondary"}>
           Add the following commands/parameters when running a docker container
           to collect data from it
         </s.SectionText>
       </s.SectionTitleContainer>
       <s.Tabs value={selectedTab} onChange={handleTabChange}>
         <s.Tab label={"Java"} />
-        <s.Tab disabled={true} label={"Python"} />
+        <s.Tab disabled={true} label={"Python (Coming soon)"} />
       </s.Tabs>
       <div>
         <CodeSnippet text={dockerInstrumentationCommands} multiline={true} />
@@ -62,7 +62,7 @@ export const GettingStarted = (props: GettingStartedProps) => {
           </Typography>
         </s.SectionTitleContainer>
         <CodeSnippet text={sampleAppCommands} multiline={true} />
-        <s.SectionText variant={"body1"} color={"text.secondary"}>
+        <s.SectionText color={"text.secondary"}>
           To see complete code insights you can clone the sample repo{" "}
           <s.Link onClick={handleJavaSampleAppLinkClick}>here</s.Link> and
           install the Digma plugin into your IDE using the link below

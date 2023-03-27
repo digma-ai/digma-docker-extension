@@ -1,7 +1,7 @@
 import { useTheme } from "styled-components";
-import { timeAgo } from "../../../utils/timeAgo";
-import { getInsightIcon, getInsightInfo } from "../../Assets/utils";
-import { OpenTelemetryLogoIcon } from "../icons/OpenTelemetryLogoIcon";
+import { timeAgo } from "../../../../utils/timeAgo";
+import { OpenTelemetryLogoIcon } from "../../../common/icons/OpenTelemetryLogoIcon";
+import { getInsightIcon, getInsightInfo } from "../../utils";
 import * as s from "./styles";
 import { AssetEntryProps } from "./types";
 
@@ -26,18 +26,19 @@ export const AssetEntry = (props: AssetEntryProps) => {
     <s.Container elevation={0}>
       <s.Header>
         <s.OpenTelemetryIconContainer>
-          <OpenTelemetryLogoIcon />
+          <OpenTelemetryLogoIcon size={20} />
         </s.OpenTelemetryIconContainer>
-        <s.Link onClick={() => handleLinkClick()} title={name}>
+        {/* <s.Link onClick={() => handleLinkClick()} title={name}>
           {name}
-        </s.Link>
+        </s.Link> */}
+        <s.Name title={name}>{name}</s.Name>
         <s.InsightIconsContainer>
           {props.entry.insights.map((insight) => (
             <s.InsightIconContainer
               key={insight.type}
               title={getInsightInfo(insight.type)?.label || insight.type}
             >
-              {getInsightIcon(insight, theme, 20)}
+              {getInsightIcon(insight, theme, 24)}
             </s.InsightIconContainer>
           ))}
         </s.InsightIconsContainer>
