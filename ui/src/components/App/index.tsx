@@ -8,7 +8,7 @@ import { Menu } from "../Assets/Menu";
 import { AssetsData, GetAssetsResponse } from "../Assets/types";
 import { DigmaLogoIcon } from "../common/icons/DigmaLogoIcon";
 import { StackIcon } from "../common/icons/StackIcon";
-import { Page } from "../common/Page/Index";
+import { Page } from "../common/Page";
 import { GettingStarted } from "../GettingStarted";
 import * as s from "./styles";
 
@@ -114,13 +114,17 @@ export const App = () => {
                   Getting Started with Digma
                 </Typography>
               </s.TitleContainer>
-              <s.GoToAssetsPageButton
-                variant={"contained"}
-                onClick={handleGoToButtonClick}
-                endIcon={<StackIcon size={16} color={"#fff"} />}
-              >
-                Go To Assets page
-              </s.GoToAssetsPageButton>
+              <s.NavigationButtonContainer>
+                <s.Badge variant={"dot"} invisible={environments.length === 0}>
+                  <s.GoToAssetsPageButton
+                    variant={"contained"}
+                    onClick={handleGoToButtonClick}
+                    endIcon={<StackIcon size={16} color={"#fff"} />}
+                  >
+                    Go To Assets page
+                  </s.GoToAssetsPageButton>
+                </s.Badge>
+              </s.NavigationButtonContainer>
             </>
           }
           main={<GettingStarted client={ddClient} />}
@@ -139,26 +143,29 @@ export const App = () => {
                   onSelect={handleEnvironmentSelect}
                 />
               )}
-              <s.NavigationButton
-                variant="outlined"
-                onClick={handleGoToButtonClick}
-                endIcon={
-                  <ExtensionIcon
-                    sx={{
-                      width: 16,
-                      height: 16,
-                    }}
-                  />
-                }
-              >
-                Getting Started
-              </s.NavigationButton>
+              <s.NavigationButtonContainer>
+                <s.NavigationButton
+                  variant="outlined"
+                  onClick={handleGoToButtonClick}
+                  endIcon={
+                    <ExtensionIcon
+                      sx={{
+                        width: 16,
+                        height: 16,
+                      }}
+                    />
+                  }
+                >
+                  Getting Started
+                </s.NavigationButton>
+              </s.NavigationButtonContainer>
             </>
           }
           main={
             <Assets
               data={assets}
               onGettingStartedButtonClick={handleGoToButtonClick}
+              environments={environments}
             />
           }
           dockerClient={ddClient}

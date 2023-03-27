@@ -1,4 +1,5 @@
 import { useTheme } from "@mui/material";
+import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import { ChevronIcon } from "../../common/icons/ChevronIcon";
 import { DIRECTION } from "../../common/icons/types";
@@ -52,8 +53,12 @@ export const Menu = (props: MenuProps) => {
       <s.Menu anchorEl={anchorEl} open={isOpen} onClose={handleMenuClose}>
         <s.Title>{props.title}</s.Title>
         {props.items.map((item) => (
-          <s.MenuItem key={item} onClick={() => handleMenuItemClick(item)}>
-            {item}
+          <s.MenuItem
+            key={item}
+            onClick={() => handleMenuItemClick(item)}
+            title={item}
+          >
+            <Typography noWrap={true}>{item}</Typography>
             {/* <OpenTelemetryLogoIcon size={16} /> */}
           </s.MenuItem>
         ))}
