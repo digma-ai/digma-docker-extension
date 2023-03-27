@@ -31,7 +31,7 @@ export const AssetEntry = (props: AssetEntryProps) => {
         {/* <s.Link onClick={() => handleLinkClick()} title={name}>
           {name}
         </s.Link> */}
-        <s.Name>{name}</s.Name>
+        <s.Name title={name}>{name}</s.Name>
         <s.InsightIconsContainer>
           {props.entry.insights.map((insight) => (
             <s.InsightIconContainer

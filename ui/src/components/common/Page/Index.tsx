@@ -34,26 +34,30 @@ export const Page = (props: PageProps) => {
       <s.Footer>
         <s.IDEInfoContainer>
           <s.FooterText>
-            Install the Digma Plugin to see more code data in the IDE
+            <s.IntellijIconContainer>
+              <IntellijLogoIcon size={20} />
+            </s.IntellijIconContainer>
+            Install the Digma Plugin to see more code data in the{" "}
+            <s.Link onClick={handleIntellijLinkClick}>IDE</s.Link>
           </s.FooterText>
-          <s.LinksContainer>
-            {/* <s.Link onClick={handleVSCodeLinkClick}>
+          {/* <s.LinksContainer>
+            <s.Link onClick={handleVSCodeLinkClick}>
             VSCode
             <VSCodeLogoIcon size={20} />
-          </s.Link> */}
+          </s.Link>
             <s.IDELink onClick={handleIntellijLinkClick}>
               IntelliJ
               <IntellijLogoIcon size={20} />
             </s.IDELink>
-          </s.LinksContainer>
+          </s.LinksContainer> */}
         </s.IDEInfoContainer>
         <s.FooterText>
-          We want your feedback! Join our Slack{" "}
           <s.SlackIconContainer>
             <SlackLogoIcon size={40} />
           </s.SlackIconContainer>
-          channel <s.Link onClick={handleSlackChannelClick}>here</s.Link> to let
-          us know your thoughts, suggestions or report any issues
+          We want your feedback! Join our Slack channel{" "}
+          <s.Link onClick={handleSlackChannelClick}>here</s.Link> to let us know
+          your thoughts, suggestions or report any issues
         </s.FooterText>
       </s.Footer>
     </s.Container>

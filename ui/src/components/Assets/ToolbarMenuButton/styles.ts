@@ -6,7 +6,7 @@ export const Button = styled(MuiButton)`
   display: flex;
   gap: 10px;
   padding: 10px 20px 10px 16px;
-  width: 120px;
+  width: 170px;
   color: ${({ theme }) =>
     theme.palette.mode === "light" ? "#677285" : "#7794ab"};
   background: ${({ theme }) =>

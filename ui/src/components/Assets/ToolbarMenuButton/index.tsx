@@ -13,6 +13,8 @@ interface ToolbarMenuButtonProps {
 export const ToolbarMenuButton = (props: ToolbarMenuButtonProps) => {
   const theme = useTheme();
 
+  const label = props.value || props.title;
+
   return (
     <s.Button
       variant="outlined"
@@ -23,8 +25,9 @@ export const ToolbarMenuButton = (props: ToolbarMenuButtonProps) => {
         />
       }
       onClick={props.onClick}
+      title={label}
     >
-      <s.Label>{props.value || props.title}</s.Label>
+      <s.Label>{label}</s.Label>
     </s.Button>
   );
 };

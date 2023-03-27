@@ -63,7 +63,14 @@ export const IDELink = styled(Link)`
   height: fit-content;
 `;
 
+export const IntellijIconContainer = styled.span`
+  display: inline-block;
+  vertical-align: middle;
+  padding-right: 10px;
+`;
+
 export const SlackIconContainer = styled.span`
+  margin-left: -10px;
   display: inline-block;
   vertical-align: middle;
 `;
