@@ -38,7 +38,8 @@ export const Page = (props: PageProps) => {
               <IntellijLogoIcon size={20} />
             </s.IntellijIconContainer>
             Install the Digma Plugin to see more code data in the{" "}
-            <s.Link onClick={handleIntellijLinkClick}>IDE</s.Link>
+            <s.Link onClick={handleIntellijLinkClick}>IDE</s.Link> (Java only
+            for now)
           </s.FooterText>
           {/* <s.LinksContainer>
             <s.Link onClick={handleVSCodeLinkClick}>
