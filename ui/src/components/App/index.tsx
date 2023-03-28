@@ -8,6 +8,7 @@ import { Menu } from "../Assets/Menu";
 import { AssetsData, GetAssetsResponse } from "../Assets/types";
 import { DigmaLogoIcon } from "../common/icons/DigmaLogoIcon";
 import { StackIcon } from "../common/icons/StackIcon";
+import { Loader } from "../common/Loader";
 import { Page } from "../common/Page";
 import { GettingStarted } from "../GettingStarted";
 import * as s from "./styles";
@@ -22,12 +23,23 @@ function useDockerDesktopClient() {
 
 const REFRESH_INTERVAL = 10 * 1000; // in milliseconds
 
+const PAGES = {
+  GETTING_STARTED: "GETTING_STARTED",
+  ASSETS: "ASSETS",
+};
+
 export const App = () => {
   const [assets, setAssets] = useState<AssetsData>();
-  const previousAssets = usePrevious(assets);
-  const [environments, setEnvironments] = useState<string[]>([]);
+  const [environments, setEnvironments] = useState<string[]>();
+  const previousEnvironments = usePrevious(environments);
   const [selectedEnvironment, setSelectedEnvironment] = useState<string>();
-  const [isGettingStartedPage, setIsGettingStartedPage] = useState(true);
+  const [currentPage, setCurrentPage] = useState<string | undefined>();
+  const [isRedirectedToAssets, setIsRedirectedToAssets] = useState(false);
+
+  const isBadgeEnabled = ["true", null].includes(
+    localStorage.getItem("isBadgeEnabled")
+  );
+  const [isBadgeVisible, setIsBadgeVisible] = useState<boolean>(false);
 
   const ddClient = useDockerDesktopClient();
 
@@ -54,28 +66,53 @@ export const App = () => {
   };
 
   useEffect(() => {
-    if (!selectedEnvironment && environments.length > 0) {
+    if (!selectedEnvironment && environments && environments.length > 0) {
       setSelectedEnvironment(environments[0]);
     }
-  }, [environments]);
+  }, [selectedEnvironment, environments]);
 
   useEffect(() => {
-    if (selectedEnvironment && environments.length > 0) {
+    if (selectedEnvironment && environments && environments.length > 0) {
       fetchAssets(selectedEnvironment);
     }
-  }, [environments, selectedEnvironment]);
+  }, [selectedEnvironment, environments]);
 
+  // Redirect to "Getting started" page on startup if there are no environments yet
+  useEffect(() => {
+    if (!currentPage && environments && environments.length === 0) {
+      setCurrentPage(PAGES.GETTING_STARTED);
+    }
+  }, [currentPage, environments]);
+
+  // Redirect to corresponding page page on startup depending on assets availability
+  useEffect(() => {
+    if (!currentPage && assets) {
+      const areAssetsAvailable =
+        assets.serviceAssetsEntries.map((x) => x.assetEntries).flat().length >
+        0;
+      if (areAssetsAvailable) {
+        setCurrentPage(PAGES.ASSETS);
+        setIsRedirectedToAssets(true);
+      } else {
+        setCurrentPage(PAGES.GETTING_STARTED);
+      }
+    }
+  }, [assets, currentPage]);
+
+  // Show badge on "Go To Assets page" button
+  // when the first environments become available
   useEffect(() => {
     if (
-      (!previousAssets ||
-        previousAssets.serviceAssetsEntries.map((x) => x.assetEntries).flat()
-          .length === 0) &&
-      assets &&
-      assets.serviceAssetsEntries.map((x) => x.assetEntries).flat().length > 0
+      previousEnvironments &&
+      previousEnvironments.length === 0 &&
+      environments &&
+      environments.length > 0 &&
+      isBadgeEnabled &&
+      !isRedirectedToAssets
     ) {
-      setIsGettingStartedPage(false);
+      setIsBadgeVisible(true);
     }
-  }, [assets]);
+  }, [previousEnvironments, environments, isRedirectedToAssets]);
 
   useEffect(() => {
     fetchEnvironments();
@@ -92,16 +129,32 @@ export const App = () => {
     setSelectedEnvironment(environment);
   };
 
-  console.log("State:", { environments, assets, selectedEnvironment });
+  console.log("State:", {
+    environments,
+    assets,
+    selectedEnvironment,
+    currentPage,
+    isRedirectedToAssets,
+    isBadgeVisible,
+  });
 
-  const handleGoToButtonClick = () => {
-    setIsGettingStartedPage(!isGettingStartedPage);
+  const handleGoToAssetsPageButton = () => {
+    if (isBadgeEnabled && isBadgeVisible) {
+      localStorage.setItem("isBadgeEnabled", "false");
+      setIsBadgeVisible(false);
+    }
+
+    setCurrentPage(PAGES.ASSETS);
+  };
+
+  const handleGettingStartedButtonClick = () => {
+    setCurrentPage(PAGES.GETTING_STARTED);
   };
 
   return (
     <>
       <s.GlobalStyles />
-      {isGettingStartedPage ? (
+      {currentPage === PAGES.GETTING_STARTED && (
         <Page
           header={
             <>
@@ -115,10 +168,10 @@ export const App = () => {
                 </Typography>
               </s.TitleContainer>
               <s.NavigationButtonContainer>
-                <s.Badge variant={"dot"} invisible={environments.length === 0}>
+                <s.Badge variant={"dot"} invisible={!isBadgeVisible}>
                   <s.GoToAssetsPageButton
                     variant={"contained"}
-                    onClick={handleGoToButtonClick}
+                    onClick={handleGoToAssetsPageButton}
                     endIcon={<StackIcon size={16} color={"#fff"} />}
                   >
                     Go To Assets page
@@ -130,11 +183,12 @@ export const App = () => {
           main={<GettingStarted client={ddClient} />}
           dockerClient={ddClient}
         />
-      ) : (
+      )}
+      {currentPage === PAGES.ASSETS && (
         <Page
           header={
             <>
-              {selectedEnvironment && (
+              {selectedEnvironment && environments && (
                 <Menu
                   title={"Environments"}
                   icon={<DigmaLogoIcon size={24} />}
@@ -146,7 +200,7 @@ export const App = () => {
               <s.NavigationButtonContainer>
                 <s.NavigationButton
                   variant="outlined"
-                  onClick={handleGoToButtonClick}
+                  onClick={handleGettingStartedButtonClick}
                   endIcon={
                     <ExtensionIcon
                       sx={{
@@ -164,12 +218,18 @@ export const App = () => {
           main={
             <Assets
               data={assets}
-              onGettingStartedButtonClick={handleGoToButtonClick}
+              onGettingStartedButtonClick={handleGettingStartedButtonClick}
               environments={environments}
             />
           }
           dockerClient={ddClient}
         />
+      )}
+      {!currentPage && (
+        <s.LoaderContainer>
+          <Loader size={100} status={"pending"} />
+          <Typography>Initializing...</Typography>
+        </s.LoaderContainer>
       )}
     </>
   );

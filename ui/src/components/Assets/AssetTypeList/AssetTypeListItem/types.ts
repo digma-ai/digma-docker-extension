@@ -8,3 +8,8 @@ export interface AssetTypeListItemProps {
   entryCount: number;
   isSelected: boolean;
 }
+
+export interface ContainerProps {
+  isSelected: boolean;
+  hasEntries: boolean;
+}
