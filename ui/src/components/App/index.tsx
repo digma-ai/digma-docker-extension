@@ -100,19 +100,20 @@ export const App = () => {
   }, [assets, currentPage]);
 
   // Show badge on "Go To Assets page" button
-  // when the first environments become available
+  // when the are environments with no assets yet
   useEffect(() => {
-    if (
-      previousEnvironments &&
-      previousEnvironments.length === 0 &&
-      environments &&
-      environments.length > 0 &&
-      isBadgeEnabled &&
-      !isRedirectedToAssets
-    ) {
-      setIsBadgeVisible(true);
+    const assetsCount =
+      assets?.serviceAssetsEntries.map((x) => x.assetEntries).flat().length ||
+      0;
+
+    if (environments && environments.length > 0 && isBadgeEnabled) {
+      if (assetsCount === 0) {
+        setIsBadgeVisible(true);
+      } else {
+        setIsBadgeVisible(false);
+      }
     }
-  }, [previousEnvironments, environments, isRedirectedToAssets]);
+  }, [assets, environments, isRedirectedToAssets]);
 
   useEffect(() => {
     fetchEnvironments();
