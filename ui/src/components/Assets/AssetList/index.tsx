@@ -109,21 +109,15 @@ export const AssetList = (props: AssetListProps) => {
 
   return (
     <s.Container>
-      {sortedEntries.length > 0 ? (
-        <s.List>
-          {sortedEntries.map((entry) => (
-            <AssetEntryComponent
-              key={`${entry.id}-${entry.serviceName}`}
-              entry={entry}
-              onAssetLinkClick={handleAssetLinkClick}
-            />
-          ))}
-        </s.List>
-      ) : (
-        <s.NoDataText>
-          Not seeing your data here? Maybe you’re missing some instrumentation!
-        </s.NoDataText>
-      )}
+      <s.List>
+        {sortedEntries.map((entry) => (
+          <AssetEntryComponent
+            key={`${entry.id}-${entry.serviceName}`}
+            entry={entry}
+            onAssetLinkClick={handleAssetLinkClick}
+          />
+        ))}
+      </s.List>
     </s.Container>
   );
 };

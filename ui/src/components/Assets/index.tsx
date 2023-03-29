@@ -3,11 +3,13 @@ import { useTheme } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import { useMemo, useState } from "react";
 import { groupBy } from "../../utils/groupBy";
+import { CardsCircleIcon } from "../common/icons/CardsCircleIcon";
 import { StackIcon } from "../common/icons/StackIcon";
 import { Loader } from "../common/Loader";
 import { AssetList } from "./AssetList";
 import { AssetTypeList } from "./AssetTypeList";
 import { Menu } from "./Menu";
+import { NoData } from "./NoData";
 import * as s from "./styles";
 import { ToolbarMenuButton } from "./ToolbarMenuButton";
 import {
@@ -104,54 +106,42 @@ export const Assets = (props: AssetsProps) => {
 
   const renderContent = useMemo((): JSX.Element => {
     if (!data || !props.data || assetsCount === 0) {
-      return (
-        <s.NoDataContainer>
-          <s.NoDataContent>
-            {props.environments.length === 0 ? (
-              <>
-                <s.Circle>
-                  <StackIcon
-                    size={32}
-                    color={
-                      theme.palette.mode === "light" ? "#677285" : "#adbecb"
-                    }
-                  />
-                </s.Circle>
-                <s.NoDataTextContainer>
-                  <Typography variant="subtitle1">No Data</Typography>
-                  <s.NoDataText>
-                    Please follow the instructions on the "Getting started" page
-                    to collect data from your containers. Then, just make some
-                    API calls or generate any activity to see the assets
-                    behavior on this page
-                  </s.NoDataText>
-                </s.NoDataTextContainer>
-
-                <s.GettingStartedButton
-                  onClick={onGettingStartedButtonClick}
-                  variant={"contained"}
-                  endIcon={
-                    <ExtensionIcon
-                      sx={{
-                        width: 16,
-                        height: 16,
-                      }}
-                    />
-                  }
-                >
-                  Getting started
-                </s.GettingStartedButton>
-              </>
-            ) : (
-              <>
-                <Loader status={"pending"} size={86} />
-                <Typography variant="subtitle1">
-                  Processing Insights...
-                </Typography>
-              </>
-            )}
-          </s.NoDataContent>
-        </s.NoDataContainer>
+      return !props.environments || props.environments.length === 0 ? (
+        <NoData
+          icon={
+            <s.Circle>
+              <StackIcon
+                size={32}
+                color={theme.palette.mode === "light" ? "#677285" : "#adbecb"}
+              />
+            </s.Circle>
+          }
+          title={"No Data"}
+          description={
+            'Please follow the instructions on the "Getting started" page to collect data from your containers. Then, just make some API calls or generate any activity to see the assets behavior on this page'
+          }
+          additionalContent={
+            <s.GettingStartedButton
+              onClick={onGettingStartedButtonClick}
+              variant={"contained"}
+              endIcon={
+                <ExtensionIcon
+                  sx={{
+                    width: 16,
+                    height: 16,
+                  }}
+                />
+              }
+            >
+              Getting started
+            </s.GettingStartedButton>
+          }
+        />
+      ) : (
+        <NoData
+          icon={<Loader status={"pending"} size={86} />}
+          title={"Processing Insights..."}
+        />
       );
     }
 
@@ -162,12 +152,25 @@ export const Assets = (props: AssetsProps) => {
           data={data}
           onAssetTypeSelect={handleAssetTypeSelect}
         />
-        {selectedAssetTypeId && data[selectedAssetTypeId] && (
+        {data[selectedAssetTypeId] ? (
           <AssetList
             onAssetLinkClick={handleAssetLinkClick}
             assetTypeId={selectedAssetTypeId}
             entries={data[selectedAssetTypeId]}
             sorting={sorting}
+          />
+        ) : (
+          <NoData
+            icon={
+              <CardsCircleIcon
+                color={theme.palette.mode === "light" ? "#677285" : "#adbecb"}
+                size={96}
+              />
+            }
+            title={"No Data Yet"}
+            description={
+              "Just make some API calls or generate any activity to see this type of assets"
+            }
           />
         )}
       </>

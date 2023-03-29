@@ -1,6 +1,7 @@
 import styled from "styled-components";
+import { ContainerProps } from "./types";
 
-export const Container = styled.span`
+export const Container = styled.span<ContainerProps>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -10,9 +11,12 @@ export const Container = styled.span`
   letter-spacing: 0.02em;
   user-select: none;
   border-radius: 4px;
+
+  ${({ isSelected, hasEntries }) =>
+    !isSelected && !hasEntries ? "color: #b3b3b3;" : ""}
 `;
 
-export const EntryCount = styled.span<{ isSelected: boolean }>`
+export const EntryCount = styled.span<ContainerProps>`
   margin-left: auto;
   color: ${({ isSelected, theme }) =>
     isSelected

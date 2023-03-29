@@ -94,7 +94,7 @@ export interface AssetsData {
 
 export interface AssetsProps {
   data?: AssetsData;
-  environments: string[];
+  environments?: string[];
   onGettingStartedButtonClick: () => void;
 }
 
