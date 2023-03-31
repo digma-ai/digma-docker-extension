@@ -6,11 +6,11 @@ import { usePrevious } from "../../hooks/usePrevious";
 import { Assets } from "../Assets";
 import { Menu } from "../Assets/Menu";
 import { AssetsData, GetAssetsResponse } from "../Assets/types";
-import { DigmaLogoIcon } from "../common/icons/DigmaLogoIcon";
-import { StackIcon } from "../common/icons/StackIcon";
+import { GettingStarted } from "../GettingStarted";
 import { Loader } from "../common/Loader";
 import { Page } from "../common/Page";
-import { GettingStarted } from "../GettingStarted";
+import { DigmaLogoIcon } from "../common/icons/DigmaLogoIcon";
+import { StackIcon } from "../common/icons/StackIcon";
 import * as s from "./styles";
 
 // Note: This line relies on Docker Desktop's presence as a host application.
@@ -189,15 +189,15 @@ export const App = () => {
         <Page
           header={
             <>
-              {selectedEnvironment && environments && (
-                <Menu
-                  title={"Environments"}
-                  icon={<DigmaLogoIcon size={24} />}
-                  value={selectedEnvironment}
-                  items={environments}
-                  onSelect={handleEnvironmentSelect}
-                />
-              )}
+              <Menu
+                title={"Environments"}
+                placeholder={"No Environments"}
+                icon={<DigmaLogoIcon size={24} />}
+                value={selectedEnvironment}
+                items={environments}
+                onSelect={handleEnvironmentSelect}
+                disabled={!environments || environments.length === 0}
+              />
               <s.NavigationButtonContainer>
                 <s.NavigationButton
                   variant="outlined"
