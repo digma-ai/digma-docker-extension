@@ -5,8 +5,8 @@ import { DIRECTION } from "../../common/icons/types";
 import * as s from "./styles";
 
 interface ToolbarMenuButtonProps {
-  title: string;
-  value: string;
+  title?: string;
+  value?: string;
   onClick: (e: React.MouseEvent<HTMLElement>) => void;
   isMenuOpen: boolean;
 }
