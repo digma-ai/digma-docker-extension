@@ -1,4 +1,4 @@
-IMAGE?=digma-ai/digma-docker-extension
+IMAGE?=digmaai/digma-docker-extension
 TAG?=latest
 
 BUILDER=buildx-multi-arch

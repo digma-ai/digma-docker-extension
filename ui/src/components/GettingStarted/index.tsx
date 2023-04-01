@@ -10,11 +10,11 @@ https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/la
 curl --create-dirs -O -L --output-dir ./otel
 https://github.com/digma-ai/otel-java-instrumentation/releases/latest/download/digma-otel-agent-extension.jar
 
-export JAVA_TOOL_OPTIONS=-javaagent:/otel/javaagent.jar -Dotel.exporter.otlp.endpoint=http://localhost:5050 -Dotel.javaagent.extensions=/otel/digma-otel-agent-extension.jar
+export JAVA_TOOL_OPTIONS="-javaagent:/otel/javaagent.jar -Dotel.exporter.otlp.endpoint=http://localhost:5050 -Dotel.javaagent.extensions=/otel/digma-otel-agent-extension.jar"
 export OTEL_SERVICE_NAME={--ENTER YOUR SERVICE NAME HERE--}
 export DEPLOYMENT_ENV=LOCAL_DOCKER
 
-docker run -d -v “/$(pwd)/otel:/otel” --env JAVA_TOOL_OPTIONS --env OTEL_SERVICE_NAME --env DEPLOYMENT_ENV {-- APPEND PARAMS AND REPO/IMAGE --}`;
+docker run -d -v "/$(pwd)/otel:/otel" --env JAVA_TOOL_OPTIONS --env OTEL_SERVICE_NAME --env DEPLOYMENT_ENV {-- APPEND PARAMS AND REPO/IMAGE --}`;
 
 const sampleAppCommands = `docker run -d -p 9753:9753 --name petshop-sample digmaai/petshop-app:latest
 docker run --rm digmaai/petshop-app-tester:latest`;

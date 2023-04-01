@@ -30,13 +30,13 @@ You can use `docker` to build, install and push your extension. Also, we provide
 To build the extension, use `make build-extension` **or**:
 
 ```shell
-  docker buildx build -t digma-ai/digma-docker-extension:latest . --load
+  docker buildx build -t digmaai/digma-docker-extension:latest . --load
 ```
 
 To install the extension, use `make install-extension` **or**:
 
 ```shell
-  docker extension install digma-ai/digma-docker-extension:latest
+  docker extension install digmaai/digma-docker-extension:latest
 ```
 
 > If you want to automate this command, use the `-f` or `--force` flag to accept the warning message.
