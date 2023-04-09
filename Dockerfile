@@ -28,7 +28,7 @@ LABEL org.opencontainers.image.title="Digma Continuous Feedback" \
     com.docker.extension.detailed-description="<h3>Continuous Feedback for Code Clarity</h3><p>Digma collects data from applications running inside your containers and analyzes their runtime behavior.</p>" \
     com.docker.extension.publisher-url="https://digma.ai" \
     com.docker.extension.additional-urls="[{\"alt\": \"Digma IntelliJ Plugin\", \"title\":\"Jetbrain IDEA Plugin\", \"url\": \"https://plugins.jetbrains.com/plugin/19470-digma-continuous-feedback\"}]" \
-    com.docker.extension.changelog="<p>Extension changelog<ul><li>Updated 3rd party images versions</li><li>Fixed insight throttling issue</li></ul></p>" \
+    com.docker.extension.changelog="<p>Extension changelog<ul><li>Updated backend images version</li></ul></p>" \
     com.docker.desktop.extension.icon="https://media-public-1.s3.eu-west-1.amazonaws.com/digma.svg" \
     com.docker.extension.categories="cloud-development,testing-tools"
 
