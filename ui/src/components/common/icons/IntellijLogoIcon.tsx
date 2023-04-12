@@ -13,9 +13,9 @@ const IntellijLogoIconComponent = (props: IconProps) => {
       fill="none"
       viewBox="0 0 20 20"
     >
-      <g clipPath="url(#clip)">
+      <g clipPath="url(#intellij-logo-clip-1)">
         <path
-          fill="url(#grad1)"
+          fill="url(#intellij-logo-grad-1)"
           d="M3.16625 14.1062L0.224609 11.7833L1.95586 8.57709L4.55797 9.44787L3.16625 14.1062Z"
         />
         <path
@@ -23,11 +23,11 @@ const IntellijLogoIconComponent = (props: IconProps) => {
           d="M19.9996 5.33124L19.6393 16.9146L11.935 20L7.73926 17.2916L19.9996 5.33124Z"
         />
         <path
-          fill="url(#grad2)"
+          fill="url(#intellij-logo-grad-2)"
           d="M20.0004 5.33123L16.1879 9.04998L11.292 3.04373L13.7087 0.327087L20.0004 5.33123Z"
         />
         <path
-          fill="url(#grad3)"
+          fill="url(#intellij-logo-grad-3)"
           d="M7.73961 17.2916L1.6125 19.5063L2.89586 15.0125L4.55836 9.44789L0 7.92289L2.89586 0L9.44164 0.772891L16.1875 9.05L7.73961 17.2916Z"
         />
         <path fill="#000" d="M3.83984 3.75H16.3398V16.25H3.83984V3.75Z" />
@@ -38,7 +38,7 @@ const IntellijLogoIconComponent = (props: IconProps) => {
       </g>
       <defs>
         <linearGradient
-          id="grad1"
+          id="intellij-logo-grad-1"
           x1="160.7"
           x2="773.1"
           y1="290.7"
@@ -52,7 +52,7 @@ const IntellijLogoIconComponent = (props: IconProps) => {
           <stop offset=".6" stopColor="#087CFA" />
         </linearGradient>
         <linearGradient
-          id="grad2"
+          id="intellij-logo-grad-2"
           x1="651.9"
           x2="320.1"
           y1="1001.4"
@@ -71,7 +71,7 @@ const IntellijLogoIconComponent = (props: IconProps) => {
           <stop offset="1" stopColor="#087CFA" />
         </linearGradient>
         <linearGradient
-          id="grad3"
+          id="intellij-logo-grad-3"
           x1="462.2"
           x2="1609.5"
           y1="460.6"
@@ -87,7 +87,7 @@ const IntellijLogoIconComponent = (props: IconProps) => {
           <stop offset=".8" stopColor="#5A63D6" />
           <stop offset="1" stopColor="#087CFA" />
         </linearGradient>
-        <clipPath id="clip">
+        <clipPath id="intellij-logo-clip-1">
           <path fill="#fff" d="M0 0H20V20H0z" />
         </clipPath>
       </defs>

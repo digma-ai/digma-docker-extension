@@ -23,6 +23,7 @@ export const TitleContainer = styled.div`
 
 export const NavigationButtonContainer = styled.div`
   margin-left: auto;
+  display: flex;
 `;
 
 export const NavigationButton = styled(Button)`
@@ -50,4 +51,23 @@ export const LoaderContainer = styled.div`
   align-items: center;
   justify-content: center;
   height: 100vh;
+`;
+
+export const LinkButtonsContainer = styled.div`
+  display: flex;
+  gap: 8px;
+`;
+
+export const LinkButton = styled(Button)`
+  padding: 10px;
+`;
+
+export const LinkButtonTooltipTextContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const LinkButtonTooltipTitle = styled.span`
+  font-weight: 500;
+  padding-bottom: 14px;
 `;

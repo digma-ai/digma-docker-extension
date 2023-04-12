@@ -15,7 +15,7 @@ const StackIconComponent = (props: IconProps) => {
       {...props}
     >
       <mask
-        id="b"
+        id="stack-mask-1"
         width="18"
         height="16"
         x="3"
@@ -23,7 +23,7 @@ const StackIconComponent = (props: IconProps) => {
         maskUnits="userSpaceOnUse"
         style={{ maskType: "alpha" }}
       >
-        <g clipPath="url(#a)">
+        <g clipPath="url(#stack-clip-1)">
           <path
             fill="#000"
             fillRule="evenodd"
@@ -32,11 +32,11 @@ const StackIconComponent = (props: IconProps) => {
           />
         </g>
       </mask>
-      <g mask="url(#b)">
+      <g mask="url(#stack-mask-1)">
         <path fill={color} d="M0 0H24V24H0z" />
       </g>
       <defs>
-        <clipPath id="a">
+        <clipPath id="stack-clip-1">
           <path fill="#fff" d="M0 0H18V16H0z" transform="translate(3 4)" />
         </clipPath>
       </defs>
