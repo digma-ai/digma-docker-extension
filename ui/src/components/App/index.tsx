@@ -1,8 +1,9 @@
 import { createDockerDesktopClient } from "@docker/extension-api-client";
 import ExtensionIcon from "@mui/icons-material/Extension";
+import Divider from "@mui/material/Divider";
+import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-import { useEffect, useState } from "react";
-import { usePrevious } from "../../hooks/usePrevious";
+import { useCallback, useEffect, useState } from "react";
 import { Assets } from "../Assets";
 import { Menu } from "../Assets/Menu";
 import { AssetsData, GetAssetsResponse } from "../Assets/types";
@@ -10,6 +11,8 @@ import { GettingStarted } from "../GettingStarted";
 import { Loader } from "../common/Loader";
 import { Page } from "../common/Page";
 import { DigmaLogoIcon } from "../common/icons/DigmaLogoIcon";
+import { IntellijLogoIcon } from "../common/icons/IntellijLogoIcon";
+import { SlackLogoIcon } from "../common/icons/SlackLogoIcon";
 import { StackIcon } from "../common/icons/StackIcon";
 import * as s from "./styles";
 
@@ -31,7 +34,6 @@ const PAGES = {
 export const App = () => {
   const [assets, setAssets] = useState<AssetsData>();
   const [environments, setEnvironments] = useState<string[]>();
-  const previousEnvironments = usePrevious(environments);
   const [selectedEnvironment, setSelectedEnvironment] = useState<string>();
   const [currentPage, setCurrentPage] = useState<string | undefined>();
   const [isRedirectedToAssets, setIsRedirectedToAssets] = useState(false);
@@ -152,6 +154,54 @@ export const App = () => {
     setCurrentPage(PAGES.GETTING_STARTED);
   };
 
+  const renderLinkButtons = useCallback(() => {
+    const handleSlackButtonClick = () => {
+      client.host.openExternal(
+        "https://join.slack.com/t/continuous-feedback/shared_invite/zt-1hk5rbjow-yXOIxyyYOLSXpCZ4RXstgA"
+      );
+    };
+
+    const handleIntellijIDEAButtonClick = () => {
+      client.host.openExternal(
+        "https://plugins.jetbrains.com/plugin/19470-digma-continuous-feedback"
+      );
+    };
+
+    return (
+      <s.LinkButtonsContainer>
+        <Tooltip
+          key={"slack"}
+          title={
+            <s.LinkButtonTooltipTextContainer>
+              <s.LinkButtonTooltipTitle>
+                We want your feedback!
+              </s.LinkButtonTooltipTitle>
+              Join our Slack channel to let us know your thoughts, suggestions
+              or report any issues
+            </s.LinkButtonTooltipTextContainer>
+          }
+        >
+          <s.LinkButton variant={"outlined"} onClick={handleSlackButtonClick}>
+            <SlackLogoIcon size={16} />
+          </s.LinkButton>
+        </Tooltip>
+        <Tooltip
+          key={"intellij-idea"}
+          title={
+            "Install the Digma Plugin to see more code data in the IDE (Java only for now)"
+          }
+        >
+          <s.LinkButton
+            variant={"outlined"}
+            onClick={handleIntellijIDEAButtonClick}
+          >
+            <IntellijLogoIcon size={16} />
+          </s.LinkButton>
+        </Tooltip>
+      </s.LinkButtonsContainer>
+    );
+  }, []);
+
   return (
     <>
       <s.GlobalStyles />
@@ -169,6 +219,8 @@ export const App = () => {
                 </Typography>
               </s.TitleContainer>
               <s.NavigationButtonContainer>
+                {renderLinkButtons()}
+                <Divider orientation="vertical" flexItem />
                 <s.Badge variant={"dot"} invisible={!isBadgeVisible}>
                   <s.GoToAssetsPageButton
                     variant={"contained"}
@@ -182,7 +234,6 @@ export const App = () => {
             </>
           }
           main={<GettingStarted client={ddClient} />}
-          dockerClient={ddClient}
         />
       )}
       {currentPage === PAGES.ASSETS && (
@@ -199,6 +250,8 @@ export const App = () => {
                 disabled={!environments || environments.length === 0}
               />
               <s.NavigationButtonContainer>
+                {renderLinkButtons()}
+                <Divider orientation="vertical" flexItem />
                 <s.NavigationButton
                   variant="outlined"
                   onClick={handleGettingStartedButtonClick}
@@ -223,7 +276,6 @@ export const App = () => {
               environments={environments}
             />
           }
-          dockerClient={ddClient}
         />
       )}
       {!currentPage && (

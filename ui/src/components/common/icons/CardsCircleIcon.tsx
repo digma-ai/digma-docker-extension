@@ -19,24 +19,24 @@ const CardsCircleIconComponent = (props: IconProps) => {
       viewBox="0 0 103 97"
     >
       <circle cx="51" cy="48.5" r="48" fill={backgroundColor} />
-      <g filter="url(#filter_a)">
+      <g filter="url(#cards-circle-filter-1)">
         <rect width="80" height="27" x="18" y="19" fill={color} rx="4" />
       </g>
       <circle cx="25" cy="26" r="3" fill={backgroundColor} />
       <path stroke={backgroundColor} strokeLinecap="round" d="M31 26H93" />
-      <g filter="url(#filter_b)">
+      <g filter="url(#cards-circle-filter-2)">
         <rect width="80" height="27" x="11" y="36" fill={color} rx="4" />
       </g>
       <circle cx="18" cy="43" r="3" fill={backgroundColor} />
       <path stroke={backgroundColor} strokeLinecap="round" d="M24 43H86" />
-      <g filter="url(#filter_c)">
+      <g filter="url(#cards-circle-filter-3)">
         <rect width="80" height="27" x="3" y="55" fill={color} rx="4" />
       </g>
       <circle cx="10" cy="62" r="3" fill={backgroundColor} />
       <path stroke={backgroundColor} strokeLinecap="round" d="M16 62H78" />
       <defs>
         <filter
-          id="filter_a"
+          id="cards-circle-filter-1"
           width="88"
           height="35"
           x="15"
@@ -65,7 +65,7 @@ const CardsCircleIconComponent = (props: IconProps) => {
           />
         </filter>
         <filter
-          id="filter_b"
+          id="cards-circle-filter-2"
           width="88"
           height="35"
           x="8"
@@ -94,7 +94,7 @@ const CardsCircleIconComponent = (props: IconProps) => {
           />
         </filter>
         <filter
-          id="filter_c"
+          id="cards-circle-filter-3"
           width="88"
           height="35"
           x="0"
