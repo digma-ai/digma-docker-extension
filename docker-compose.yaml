@@ -3,14 +3,14 @@ services:
     image: ${DESKTOP_PLUGIN_IMAGE}
 
   rabbitmq:
-      image: rabbitmq:3.11.9-management-alpine
-      volumes:
-        - rabbitmq_data:/var/lib/rabbitmq/
-        - rabbitmq_log:/var/log/rabbitmq/
-      environment:
-        - RABBITMQ_DEFAULT_USER=admin
-        - RABBITMQ_DEFAULT_PASS=admin
-      restart: unless-stopped
+    image: rabbitmq:3.11.9-management-alpine
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq/
+      - rabbitmq_log:/var/log/rabbitmq/
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin
+    restart: unless-stopped
 
   postgres:
     image: postgres:15.2
@@ -24,7 +24,6 @@ services:
       - POSTGRES_PASSWORD=postgres
     restart: unless-stopped
     command: postgres -c 'max_connections=315' -c 'shared_buffers=256MB'
-
 
   redis:
     image: redis:7.0.9-alpine
@@ -49,6 +48,24 @@ services:
       - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${INFLUXDB_ADMIN_TOKEN:-dc61908e-05bc-411a-9fe2-e3356b8dc7c0}
       - INFLUXD_QUERY_CONCURRENCY=15
       - INFLUXD_QUERY_QUEUE_SIZE=200
+    restart: unless-stopped
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.44.0
+    ports:
+      - "17686:16686"
+      - "5317:4317"
+    command: |
+      --query.additional-headers "Access-Control-Allow-Origin: *"
+    volumes:
+      - "jaeger_data:/badger"
+    environment:
+      - SPAN_STORAGE_TYPE=badger
+      - COLLECTOR_OTLP_ENABLED=true
+      - BADGER_EPHEMERAL=false
+      - BADGER_DIRECTORY_VALUE=/badger/data
+      - BADGER_DIRECTORY_KEY=/badger/key
+      - BADGER_SPAN_STORE_TTL=336h0m0s
     restart: unless-stopped
 
   digma-collector-api:
@@ -93,6 +110,7 @@ services:
       - influxdb
       - postgres
     restart: unless-stopped
+
   digma-scheduler:
     image: digmatic/digma-scheduler:0.2.80
     environment:
@@ -109,6 +127,7 @@ services:
       - postgres
       - rabbitmq
     restart: unless-stopped
+
   digma-measurement-analysis:
     image: digmatic/digma-measurement-analysis:0.2.80
     environment:
@@ -124,6 +143,7 @@ services:
       - influxdb
       - postgres
       - rabbitmq
+      - jaeger
     restart: unless-stopped
 
   digma-insight-analysis:
@@ -141,6 +161,7 @@ services:
       - influxdb
       - postgres
       - rabbitmq
+      - jaeger
     restart: unless-stopped
 
 volumes:
@@ -150,7 +171,8 @@ volumes:
   redis_data:
   influxdb_data:
   influxdb_config:
-    
+  jaeger_data:
+
 networks:
   default:
     name: digma-network
