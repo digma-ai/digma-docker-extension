@@ -32,12 +32,12 @@ export const AssetEntry = (props: AssetEntryProps) => {
         <s.OpenTelemetryIconContainer>
           <OpenTelemetryLogoIcon size={20} />
         </s.OpenTelemetryIconContainer>
-        {/* <s.Link onClick={() => handleLinkClick()} title={name}>
+        <s.Link onClick={() => handleLinkClick()} title={name}>
           {name}
-        </s.Link> */}
-        <s.Name noWrap={true} title={name}>
+        </s.Link>
+        {/* <s.Name noWrap={true} title={name}>
           {name}
-        </s.Name>
+        </s.Name> */}
         <s.InsightIconsContainer>
           {sortedInsights.map((insight) => {
             const insightTypeInfo = getInsightTypeInfo(insight.type);

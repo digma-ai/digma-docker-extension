@@ -107,6 +107,8 @@ export const AssetList = (props: AssetListProps) => {
     [entries, props.sorting]
   );
 
+  console.log(sortedEntries);
+
   return (
     <s.Container>
       <s.List>

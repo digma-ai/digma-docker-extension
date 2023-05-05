@@ -18,6 +18,7 @@ class AnalyticsProvider {
       throw new Error(e);
     }
   }
+
   async getAssets(environment, serviceNames) {
     try {
       const response = await this.send(
@@ -27,6 +28,41 @@ class AnalyticsProvider {
         {
           environment,
           serviceNames,
+        }
+      );
+      return response;
+    } catch (e) {
+      console.log(e);
+      throw new Error(e);
+    }
+  }
+
+  async getGlobalInsights(environment) {
+    try {
+      const response = await this.send(
+        "POST",
+        `/CodeAnalytics/insights`,
+        undefined,
+        {
+          environment,
+        }
+      );
+      return response;
+    } catch (e) {
+      console.log(e);
+      throw new Error(e);
+    }
+  }
+
+  async getInsights(codeObjectIds, environment) {
+    try {
+      const response = await this.send(
+        "POST",
+        `/CodeAnalytics/codeObjects/insights`,
+        undefined,
+        {
+          codeObjectIds,
+          environment,
         }
       );
       return response;

@@ -1,0 +1,80 @@
+import MuiBreadcrumbs from "@mui/material/Breadcrumbs";
+import Typography, { TypographyProps } from "@mui/material/Typography";
+import styled from "styled-components";
+
+export const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+export const Header = styled.div`
+  display: flex;
+  height: 96px;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+export const Breadcrumbs = styled(MuiBreadcrumbs)`
+  &.MuiBreadcrumbs-root {
+    overflow: hidden;
+  }
+
+  & .MuiBreadcrumbs-separator {
+    margin: 0 8px;
+    color: ${({ theme }) => theme.palette.text.primary};
+  }
+
+  & .MuiBreadcrumbs-ol {
+    flex-wrap: nowrap;
+  }
+
+  & .MuiBreadcrumbs-li {
+    &:last-child {
+    }
+  }
+`;
+
+export const BreadcrumbContent = styled(Typography)<
+  TypographyProps<"h4", { component: "span" }>
+>`
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  color: ${({ theme }) => theme.palette.text.primary};
+
+  ${({ onClick }) =>
+    onClick
+      ? `
+    &:hover {
+      color: #1277db;
+    }
+    cursor: pointer;
+    `
+      : ""}
+
+  flex-shrink: 1;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
+
+export const InsightsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-bottom: 28px;
+`;
+
+export const Description = styled.span`
+  font-size: 12px;
+  line-height: 14px;
+  color: ${({ theme }) => {
+    switch (theme.palette.mode) {
+      case "light":
+        return "#828797";
+      case "dark":
+        return "#9b9b9b";
+    }
+  }};
+`;

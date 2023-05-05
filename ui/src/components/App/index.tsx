@@ -5,6 +5,7 @@ import Typography from "@mui/material/Typography";
 import { useCallback, useEffect, useState } from "react";
 import { ddClient } from "../../dockerDesktopClient";
 import { Assets } from "../Assets";
+import { AssetInsights } from "../Assets/AssetInsights";
 import { Menu } from "../Assets/Menu";
 import {
   AssetsData,
@@ -282,12 +283,20 @@ export const App = () => {
             </>
           }
           main={
-            <Assets
-              data={assets}
-              onGettingStartedButtonClick={handleGettingStartedButtonClick}
-              environments={environments}
-              onAssetSelect={handleAssetSelect}
-            />
+            selectedAsset && selectedEnvironment ? (
+              <AssetInsights
+                assetEntry={selectedAsset}
+                environment={selectedEnvironment}
+                onGoToAsset={handleGoToAsset}
+              />
+            ) : (
+              <Assets
+                data={assets}
+                onGettingStartedButtonClick={handleGettingStartedButtonClick}
+                environments={environments}
+                onAssetSelect={handleAssetSelect}
+              />
+            )
           }
         />
       )}
