@@ -1,7 +1,7 @@
-import { useTheme } from "styled-components";
+import { useTheme } from "@mui/material";
 import { timeAgo } from "../../../../utils/timeAgo";
 import { OpenTelemetryLogoIcon } from "../../../common/icons/OpenTelemetryLogoIcon";
-import { getInsightIcon, getInsightInfo } from "../../utils";
+import { getInsightImportanceColor, getInsightTypeInfo } from "../../utils";
 import * as s from "./styles";
 import { AssetEntryProps } from "./types";
 
@@ -22,6 +22,10 @@ export const AssetEntry = (props: AssetEntryProps) => {
 
   const lastSeenDateTime = props.entry.lastSpanInstanceInfo.startTime;
 
+  const sortedInsights = [...props.entry.insights].sort(
+    (a, b) => a.importance - b.importance
+  );
+
   return (
     <s.Container elevation={0}>
       <s.Header>
@@ -35,14 +39,24 @@ export const AssetEntry = (props: AssetEntryProps) => {
           {name}
         </s.Name>
         <s.InsightIconsContainer>
-          {props.entry.insights.map((insight) => (
-            <s.InsightIconContainer
-              key={insight.type}
-              title={getInsightInfo(insight.type)?.label || insight.type}
-            >
-              {getInsightIcon(insight, theme, 24)}
-            </s.InsightIconContainer>
-          ))}
+          {sortedInsights.map((insight) => {
+            const insightTypeInfo = getInsightTypeInfo(insight.type);
+            const insightIconColor = getInsightImportanceColor(
+              insight.importance,
+              theme
+            );
+
+            return (
+              <s.InsightIconContainer
+                key={insight.type}
+                title={insightTypeInfo?.label || insight.type}
+              >
+                {insightTypeInfo && (
+                  <insightTypeInfo.icon color={insightIconColor} size={20} />
+                )}
+              </s.InsightIconContainer>
+            );
+          })}
         </s.InsightIconsContainer>
       </s.Header>
       <s.StatsContainer>

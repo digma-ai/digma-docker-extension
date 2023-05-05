@@ -56,8 +56,6 @@ export const InsightIconsContainer = styled.div`
 `;
 
 export const InsightIconContainer = styled(OpenTelemetryIconContainer)`
-  width: 28px;
-  height: 100%;
   border-radius: 4px;
   background: ${({ theme }) =>
     theme.palette.mode === "light" ? "none" : "#36414e"};

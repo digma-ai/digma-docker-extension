@@ -1,7 +1,7 @@
 import { useTheme } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import { ChevronIcon } from "../../common/icons/ChevronIcon";
-import { DIRECTION } from "../../common/icons/types";
+import { Direction } from "../../common/icons/types";
 import * as s from "./styles";
 
 interface ToolbarMenuButtonProps {
@@ -18,10 +18,10 @@ export const ToolbarMenuButton = (props: ToolbarMenuButtonProps) => {
 
   return (
     <s.Button
-      variant="outlined"
+      variant={"outlined"}
       endIcon={
         <ChevronIcon
-          direction={props.isMenuOpen ? DIRECTION.UP : DIRECTION.DOWN}
+          direction={props.isMenuOpen ? Direction.UP : Direction.DOWN}
           color={theme.palette.mode === "light" ? "#8993a5" : "#677285"}
         />
       }

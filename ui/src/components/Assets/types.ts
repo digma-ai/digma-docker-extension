@@ -1,7 +1,7 @@
-export enum INSIGHT_TYPES {
-  SpanUsageStatus = "SpanUsageStatus",
+export enum InsightType {
   TopErrorFlows = "TopErrorFlows",
   SpanDurationChange = "SpanDurationChange",
+  SpanUsageStatus = "SpanUsageStatus",
   HotSpot = "HotSpot",
   Errors = "Errors",
   SlowEndpoint = "SlowEndpoint",
@@ -9,11 +9,10 @@ export enum INSIGHT_TYPES {
   NormalUsage = "NormalUsage",
   HighUsage = "HighUsage",
   SlowestSpans = "SlowestSpans",
-  EndpointSpaNPlusOne = "EndpointSpaNPlusOne",
+  EndpointSpanNPlusOne = "EndpointSpaNPlusOne",
   SpanUsages = "SpanUsages",
-  SpaNPlusOne = "SpaNPlusOne",
+  SpanNPlusOne = "SpaNPlusOne",
   SpanEndpointBottleneck = "SpanEndpointBottleneck",
-  SpanHighUsage = "SpanHighUsage",
   SpanDurations = "SpanDurations",
   SpanScaling = "SpanScaling",
   SpanScalingRootCause = "SpanScalingRootCause",
@@ -96,6 +95,7 @@ export interface AssetsProps {
   data?: AssetsData;
   environments?: string[];
   onGettingStartedButtonClick: () => void;
+  onAssetSelect: (entry: ExtendedAssetEntry) => void;
 }
 
 export interface GetAssetsResponse extends AssetsData {
