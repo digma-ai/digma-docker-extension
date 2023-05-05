@@ -7,7 +7,7 @@ export const NoData = (props: NoDataProps) => (
     <s.NoDataContent>
       {props.icon}
       <s.NoDataTextContainer>
-        <Typography variant="subtitle1">{props.title}</Typography>
+        <Typography variant={"subtitle1"}>{props.title}</Typography>
         <s.NoDataText>{props.description}</s.NoDataText>
       </s.NoDataTextContainer>
       {props.additionalContent}

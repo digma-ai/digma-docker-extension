@@ -23,6 +23,7 @@ export const Container = styled.div`
   flex-direction: column;
   flex-grow: 1;
   overflow: auto;
+  padding-bottom: 28px;
 `;
 
 export const Header = styled.div`

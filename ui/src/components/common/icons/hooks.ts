@@ -2,7 +2,7 @@ import { useTheme } from "@mui/material";
 import { useMemo } from "react";
 import { IconProps } from "./types";
 
-const DEFAULT_ICON_SIZE = 12;
+export const DEFAULT_ICON_SIZE = 12;
 
 export const useIconProps = (props: IconProps): IconProps => {
   const theme = useTheme();

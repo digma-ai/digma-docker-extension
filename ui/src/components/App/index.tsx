@@ -1,12 +1,16 @@
-import { createDockerDesktopClient } from "@docker/extension-api-client";
 import ExtensionIcon from "@mui/icons-material/Extension";
 import Divider from "@mui/material/Divider";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import { useCallback, useEffect, useState } from "react";
+import { ddClient } from "../../dockerDesktopClient";
 import { Assets } from "../Assets";
 import { Menu } from "../Assets/Menu";
-import { AssetsData, GetAssetsResponse } from "../Assets/types";
+import {
+  AssetsData,
+  ExtendedAssetEntry,
+  GetAssetsResponse,
+} from "../Assets/types";
 import { GettingStarted } from "../GettingStarted";
 import { Loader } from "../common/Loader";
 import { Page } from "../common/Page";
@@ -16,13 +20,10 @@ import { SlackLogoIcon } from "../common/icons/SlackLogoIcon";
 import { StackIcon } from "../common/icons/StackIcon";
 import * as s from "./styles";
 
-// Note: This line relies on Docker Desktop's presence as a host application.
-// If you're running this React app in a browser, it won't work properly.
-const client = createDockerDesktopClient();
-
-function useDockerDesktopClient() {
-  return client;
-}
+const SLACK_CHANNEL_URL =
+  "https://join.slack.com/t/continuous-feedback/shared_invite/zt-1hk5rbjow-yXOIxyyYOLSXpCZ4RXstgA";
+const JETBRAINS_PLUGIN_URL =
+  "https://plugins.jetbrains.com/plugin/19470-digma-continuous-feedback";
 
 const REFRESH_INTERVAL = 10 * 1000; // in milliseconds
 
@@ -37,13 +38,12 @@ export const App = () => {
   const [selectedEnvironment, setSelectedEnvironment] = useState<string>();
   const [currentPage, setCurrentPage] = useState<string | undefined>();
   const [isRedirectedToAssets, setIsRedirectedToAssets] = useState(false);
+  const [selectedAsset, setSelectedAsset] = useState<ExtendedAssetEntry>();
 
   const isBadgeEnabled = ["true", null].includes(
     localStorage.getItem("isBadgeEnabled")
   );
   const [isBadgeVisible, setIsBadgeVisible] = useState<boolean>(false);
-
-  const ddClient = useDockerDesktopClient();
 
   const fetchEnvironments = async () => {
     const environments = (await ddClient.extension.vm?.service?.get(
@@ -141,7 +141,17 @@ export const App = () => {
     isBadgeVisible,
   });
 
-  const handleGoToAssetsPageButton = () => {
+  const handleGoToAssetsPageButtonClick = () => {
+    goToAssetPage();
+  };
+
+  const handleGoToAsset = (asset: ExtendedAssetEntry) => {
+    goToAssetPage(asset);
+  };
+
+  const goToAssetPage = (asset?: ExtendedAssetEntry) => {
+    setSelectedAsset(undefined);
+
     if (isBadgeEnabled && isBadgeVisible) {
       localStorage.setItem("isBadgeEnabled", "false");
       setIsBadgeVisible(false);
@@ -154,19 +164,19 @@ export const App = () => {
     setCurrentPage(PAGES.GETTING_STARTED);
   };
 
+  const handleAssetSelect = async (entry: ExtendedAssetEntry) => {
+    setSelectedAsset(entry);
+  };
+
+  const handleSlackButtonClick = () => {
+    ddClient.host.openExternal(SLACK_CHANNEL_URL);
+  };
+
+  const openJetBrainsPluginPage = () => {
+    ddClient.host.openExternal(JETBRAINS_PLUGIN_URL);
+  };
+
   const renderLinkButtons = useCallback(() => {
-    const handleSlackButtonClick = () => {
-      client.host.openExternal(
-        "https://join.slack.com/t/continuous-feedback/shared_invite/zt-1hk5rbjow-yXOIxyyYOLSXpCZ4RXstgA"
-      );
-    };
-
-    const handleIntellijIDEAButtonClick = () => {
-      client.host.openExternal(
-        "https://plugins.jetbrains.com/plugin/19470-digma-continuous-feedback"
-      );
-    };
-
     return (
       <s.LinkButtonsContainer>
         <Tooltip
@@ -191,10 +201,7 @@ export const App = () => {
             "Install the Digma Plugin to see more code data in the IDE (Java only for now)"
           }
         >
-          <s.LinkButton
-            variant={"outlined"}
-            onClick={handleIntellijIDEAButtonClick}
-          >
+          <s.LinkButton variant={"outlined"} onClick={openJetBrainsPluginPage}>
             <IntellijLogoIcon size={16} />
           </s.LinkButton>
         </Tooltip>
@@ -220,11 +227,11 @@ export const App = () => {
               </s.TitleContainer>
               <s.NavigationButtonContainer>
                 {renderLinkButtons()}
-                <Divider orientation="vertical" flexItem />
+                <Divider orientation={"vertical"} flexItem />
                 <s.Badge variant={"dot"} invisible={!isBadgeVisible}>
                   <s.GoToAssetsPageButton
                     variant={"contained"}
-                    onClick={handleGoToAssetsPageButton}
+                    onClick={handleGoToAssetsPageButtonClick}
                     endIcon={<StackIcon size={16} color={"#fff"} />}
                   >
                     Go To Assets page
@@ -233,7 +240,12 @@ export const App = () => {
               </s.NavigationButtonContainer>
             </>
           }
-          main={<GettingStarted client={ddClient} />}
+          main={
+            <GettingStarted
+              client={ddClient}
+              onJetBrainsPluginLinkClick={openJetBrainsPluginPage}
+            />
+          }
         />
       )}
       {currentPage === PAGES.ASSETS && (
@@ -251,9 +263,9 @@ export const App = () => {
               />
               <s.NavigationButtonContainer>
                 {renderLinkButtons()}
-                <Divider orientation="vertical" flexItem />
+                <Divider orientation={"vertical"} flexItem />
                 <s.NavigationButton
-                  variant="outlined"
+                  variant={"outlined"}
                   onClick={handleGettingStartedButtonClick}
                   endIcon={
                     <ExtensionIcon
@@ -274,6 +286,7 @@ export const App = () => {
               data={assets}
               onGettingStartedButtonClick={handleGettingStartedButtonClick}
               environments={environments}
+              onAssetSelect={handleAssetSelect}
             />
           }
         />

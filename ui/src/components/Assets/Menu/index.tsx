@@ -2,7 +2,7 @@ import { useTheme } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import { ChevronIcon } from "../../common/icons/ChevronIcon";
-import { DIRECTION } from "../../common/icons/types";
+import { Direction } from "../../common/icons/types";
 import * as s from "./styles";
 import { MenuProps } from "./types";
 
@@ -45,7 +45,7 @@ export const Menu = (props: MenuProps) => {
           startIcon={props.icon}
           endIcon={
             <ChevronIcon
-              direction={isOpen ? DIRECTION.UP : DIRECTION.DOWN}
+              direction={isOpen ? Direction.UP : Direction.DOWN}
               color={theme.palette.mode === "light" ? "#8993a5" : "#677285"}
             />
           }

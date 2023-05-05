@@ -1,5 +1,6 @@
 import { MemoExoticComponent } from "react";
 import { DefaultTheme } from "styled-components";
+import { AlarmClockIcon } from "../common/icons/AlarmClockIcon";
 import { BottleneckIcon } from "../common/icons/BottleneckIcon";
 import { CodeMarkerPinIcon } from "../common/icons/CodeMarkerPinIcon";
 import { DatabaseIcon } from "../common/icons/DatabaseIcon";
@@ -7,16 +8,18 @@ import { EndpointIcon } from "../common/icons/EndpointIcon";
 import { HTTPClientIcon } from "../common/icons/HTTPClientIcon";
 import { MeterHighIcon } from "../common/icons/MeterHighIcon";
 import { MeterLowIcon } from "../common/icons/MeterLowIcon";
+import { MeterMediumIcon } from "../common/icons/MeterMediumIcon";
+import { SQLDatabaseIcon } from "../common/icons/SQLDatabaseIcon";
 import { ScalesIcon } from "../common/icons/ScalesIcon";
+import { SineIcon } from "../common/icons/SineIcon";
 import { SnailIcon } from "../common/icons/SnailIcon";
 import { SpotIcon } from "../common/icons/SpotIcon";
-import { SQLDatabaseIcon } from "../common/icons/SQLDatabaseIcon";
-import { IconProps } from "../common/icons/types";
 import { UserIcon } from "../common/icons/UserIcon";
 import { WarningCircleIcon } from "../common/icons/WarningCircleIcon";
-import { Insight, INSIGHT_TYPES } from "./types";
+import { IconProps } from "../common/icons/types";
+import { InsightType } from "./types";
 
-export const getInsightInfo = (
+export const getInsightTypeInfo = (
   type: string
 ):
   | {
@@ -31,81 +34,89 @@ export const getInsightInfo = (
       label: string;
     }
   > = {
-    [INSIGHT_TYPES.Errors]: {
+    [InsightType.Errors]: {
       icon: WarningCircleIcon,
       label: "Errors",
     },
-    [INSIGHT_TYPES.HotSpot]: {
+    [InsightType.HotSpot]: {
       icon: SpotIcon,
       label: "Error Hotspot",
     },
-    [INSIGHT_TYPES.SlowEndpoint]: {
+    [InsightType.SlowEndpoint]: {
       icon: SnailIcon,
       label: "Slow Endpoint",
     },
-    [INSIGHT_TYPES.LowUsage]: {
+    [InsightType.LowUsage]: {
       icon: MeterLowIcon,
       label: "Endpoint Low Traffic",
     },
-    [INSIGHT_TYPES.HighUsage]: {
+    [InsightType.NormalUsage]: {
+      icon: MeterMediumIcon,
+      label: "Endpoint Normal Level of Traffic",
+    },
+    [InsightType.HighUsage]: {
       icon: MeterHighIcon,
-
       label: "Endpoint High Traffic",
     },
-    [INSIGHT_TYPES.SlowestSpans]: {
+    [InsightType.SlowestSpans]: {
       icon: BottleneckIcon,
       label: "Span Bottleneck",
     },
-    [INSIGHT_TYPES.EndpointSpaNPlusOne]: {
+    [InsightType.EndpointSpanNPlusOne]: {
       icon: SQLDatabaseIcon,
       label: "Suspected N-Plus-1",
     },
-    [INSIGHT_TYPES.SpaNPlusOne]: {
+    [InsightType.SpanNPlusOne]: {
       icon: SQLDatabaseIcon,
       label: "Suspected N-Plus-1",
     },
-    [INSIGHT_TYPES.SpanEndpointBottleneck]: {
+    [InsightType.SpanEndpointBottleneck]: {
       icon: BottleneckIcon,
       label: "Bottleneck",
     },
-    [INSIGHT_TYPES.SpanScaling]: {
+    [InsightType.SpanScaling]: {
       icon: ScalesIcon,
       label: "Scaling Issue Found",
     },
-    [INSIGHT_TYPES.SpanScalingRootCause]: {
+    [InsightType.SpanScalingRootCause]: {
       icon: ScalesIcon,
       label: "Scaling Issue Root Cause Found",
+    },
+    [InsightType.SpanUsages]: {
+      icon: SineIcon,
+      label: "Top Usage",
+    },
+    [InsightType.SpanDurations]: {
+      icon: AlarmClockIcon,
+      label: "Duration",
+    },
+    [InsightType.SpanDurationBreakdown]: {
+      icon: AlarmClockIcon,
+      label: "Duration Breakdown",
     },
   };
 
   return insightInfoMap[type];
 };
 
-const getImportanceColor = (
+export const getInsightImportanceColor = (
   importance: number,
   theme: DefaultTheme
-): string => {
+): string | undefined => {
+  if (importance === 0) {
+    return undefined;
+  }
   if (importance < 3) {
     return theme.palette.mode === "light" ? "#f93967" : "#e00036";
   }
   if (importance < 5) {
     return theme.palette.mode === "light" ? "#e06c00" : "#ff810d";
   }
-  if (importance > 7) {
+  if (importance < 7) {
     return theme.palette.mode === "light" ? "#e8b500" : "#ffcb14";
   }
 
   return theme.palette.mode === "light" ? "#1dc693" : "#67d28b";
-};
-
-export const getInsightIcon = (
-  insight: Insight,
-  theme: DefaultTheme,
-  size?: number
-): JSX.Element => {
-  const insightInfo = getInsightInfo(insight.type);
-  const color = getImportanceColor(insight.importance, theme);
-  return insightInfo ? <insightInfo.icon color={color} size={size} /> : <></>;
 };
 
 export const getAssetTypeInfo = (

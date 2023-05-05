@@ -3,17 +3,16 @@ import { useTheme } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import { useMemo, useState } from "react";
 import { groupBy } from "../../utils/groupBy";
+import { Loader } from "../common/Loader";
 import { CardsCircleIcon } from "../common/icons/CardsCircleIcon";
 import { StackIcon } from "../common/icons/StackIcon";
-import { Loader } from "../common/Loader";
 import { AssetList } from "./AssetList";
 import { AssetTypeList } from "./AssetTypeList";
 import { Menu } from "./Menu";
 import { NoData } from "./NoData";
-import * as s from "./styles";
 import { ToolbarMenuButton } from "./ToolbarMenuButton";
+import * as s from "./styles";
 import {
-  AssetEntry,
   AssetsData,
   AssetsProps,
   ExtendedAssetEntry,
@@ -82,8 +81,8 @@ export const Assets = (props: AssetsProps) => {
     setSelectedAssetTypeId(assetTypeId);
   };
 
-  const handleAssetLinkClick = (entry: AssetEntry) => {
-    // TODO
+  const handleAssetLinkClick = (entry: ExtendedAssetEntry) => {
+    props.onAssetSelect(entry);
   };
 
   const handleSortingMenuItemSelect = (value: string) => {
