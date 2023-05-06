@@ -1,3 +1,4 @@
+import { roundTo } from "../../../../utils/roundTo";
 import { InsightCard } from "../InsightCard";
 import * as s from "./styles";
 import { TopUsageInsightProps } from "./types";
@@ -10,7 +11,7 @@ export const TopUsageInsight = (props: TopUsageInsightProps) => {
         <s.FlowList>
           {props.insight.flows.map((flow, i) => (
             <s.Flow key={i}>
-              {flow.percentage}% {flow.firstService.service}:
+              {roundTo(flow.percentage, 2)}% {flow.firstService.service}:
               {flow.firstService.span}
               {flow.intermediateSpan && <> -&gt; {flow.intermediateSpan}</>}
               {flow.lastService &&

@@ -1,7 +1,8 @@
 import ExtensionIcon from "@mui/icons-material/Extension";
 import { useTheme } from "@mui/material";
 import Typography from "@mui/material/Typography";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { usePrevious } from "../../hooks/usePrevious";
 import { groupBy } from "../../utils/groupBy";
 import { Loader } from "../common/Loader";
 import { CardsCircleIcon } from "../common/icons/CardsCircleIcon";
@@ -54,8 +55,11 @@ const groupEntries = (data: AssetsData): GroupedAssetEntries => {
 };
 
 export const Assets = (props: AssetsProps) => {
-  const [selectedAssetTypeId, setSelectedAssetTypeId] =
-    useState<string>("Endpoint");
+  const [selectedAssetTypeId, setSelectedAssetTypeId] = useState<string>(
+    props.assetNavigateTo?.assetType || "Endpoint"
+  );
+  const previousSelectedAssetTypeId = usePrevious(selectedAssetTypeId);
+
   const [sorting, setSorting] = useState<{
     criterion: string;
     isDesc: boolean;
@@ -63,6 +67,8 @@ export const Assets = (props: AssetsProps) => {
     criterion: "Critical insights",
     isDesc: true,
   });
+
+  const assetListRef = useRef<HTMLUListElement>(null);
 
   const theme = useTheme();
 
@@ -76,6 +82,22 @@ export const Assets = (props: AssetsProps) => {
         .length || 0
     );
   }, [props.data]);
+
+  useEffect(() => {
+    if (props.assetNavigateTo) {
+      setSelectedAssetTypeId(props.assetNavigateTo.assetType);
+    }
+  }, [props.assetNavigateTo]);
+
+  useEffect(() => {
+    if (
+      previousSelectedAssetTypeId &&
+      previousSelectedAssetTypeId !== selectedAssetTypeId &&
+      assetListRef.current
+    ) {
+      assetListRef.current.scrollTop = 0;
+    }
+  }, [selectedAssetTypeId, previousSelectedAssetTypeId]);
 
   const handleAssetTypeSelect = (assetTypeId: string) => {
     setSelectedAssetTypeId(assetTypeId);
@@ -153,10 +175,13 @@ export const Assets = (props: AssetsProps) => {
         />
         {data[selectedAssetTypeId] ? (
           <AssetList
+            ref={assetListRef}
             onAssetLinkClick={handleAssetLinkClick}
             assetTypeId={selectedAssetTypeId}
             entries={data[selectedAssetTypeId]}
             sorting={sorting}
+            assetNavigateTo={props.assetNavigateTo}
+            onAssetNavigate={props.onAssetNavigate}
           />
         ) : (
           <NoData

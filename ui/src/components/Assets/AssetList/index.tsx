@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { ForwardedRef, forwardRef, useEffect, useMemo, useRef } from "react";
 import { AssetEntry as AssetEntryComponent } from "./AssetEntry";
 import * as s from "./styles";
 import {
@@ -79,7 +79,10 @@ const sortEntries = (
   }
 };
 
-export const AssetList = (props: AssetListProps) => {
+const AssetListComponent = (
+  props: AssetListProps,
+  ref: ForwardedRef<HTMLUListElement>
+) => {
   const handleAssetLinkClick = (entry: ExtendedAssetEntryWithServices) => {
     props.onAssetLinkClick(entry);
   };
@@ -102,24 +105,54 @@ export const AssetList = (props: AssetListProps) => {
     [props.entries]
   );
 
+  const entriesRef = useRef<Record<string, HTMLDivElement | null>>({});
+
   const sortedEntries = useMemo(
     () => sortEntries(entries, props.sorting),
     [entries, props.sorting]
   );
 
+  useEffect(() => {
+    if (props.assetNavigateTo) {
+      const ref =
+        entriesRef.current[
+          `${props.assetNavigateTo.id}-${props.assetNavigateTo.serviceName}`
+        ];
+      if (ref && ref.parentElement) {
+        const distanceToScroll = ref.offsetTop - ref.parentElement.offsetTop;
+        ref.parentElement.scrollTo({
+          top: distanceToScroll,
+          behavior: "smooth",
+        });
+        props.onAssetNavigate();
+      }
+    }
+  }, []);
+
   console.log(sortedEntries);
 
   return (
-    <s.Container>
-      <s.List>
-        {sortedEntries.map((entry) => (
+    <s.List ref={ref}>
+      {sortedEntries.map((entry) => {
+        const id = `${entry.id}-${entry.serviceName}`;
+
+        return (
           <AssetEntryComponent
-            key={`${entry.id}-${entry.serviceName}`}
+            ref={(el) => {
+              if (el) {
+                entriesRef.current[id] = el;
+              } else {
+                delete entriesRef.current[id];
+              }
+            }}
+            id={id}
             entry={entry}
             onAssetLinkClick={handleAssetLinkClick}
           />
-        ))}
-      </s.List>
-    </s.Container>
+        );
+      })}
+    </s.List>
   );
 };
+
+export const AssetList = forwardRef(AssetListComponent);

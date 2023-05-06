@@ -1,5 +1,4 @@
 import MuiBreadcrumbs from "@mui/material/Breadcrumbs";
-import Typography, { TypographyProps } from "@mui/material/Typography";
 import styled from "styled-components";
 
 export const Container = styled.div`
@@ -30,18 +29,22 @@ export const Breadcrumbs = styled(MuiBreadcrumbs)`
   }
 
   & .MuiBreadcrumbs-li {
+    color: ${({ theme }) => theme.palette.text.primary};
+
     &:last-child {
+      overflow: hidden;
     }
   }
 `;
 
-export const BreadcrumbContent = styled(Typography)<
-  TypographyProps<"h4", { component: "span" }>
->`
+export const AssetTypeIconContainer = styled.span`
+  display: flex;
+  flex-shrink: 0;
+`;
+
+export const Breadcrumb = styled.span`
   display: flex;
   gap: 8px;
-  align-items: center;
-  color: ${({ theme }) => theme.palette.text.primary};
 
   ${({ onClick }) =>
     onClick
@@ -52,11 +55,6 @@ export const BreadcrumbContent = styled(Typography)<
     cursor: pointer;
     `
       : ""}
-
-  flex-shrink: 1;
-
-  text-overflow: ellipsis;
-  white-space: nowrap;
 `;
 
 export const InsightsContainer = styled.div`

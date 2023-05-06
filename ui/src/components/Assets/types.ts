@@ -96,6 +96,8 @@ export interface AssetsProps {
   environments?: string[];
   onGettingStartedButtonClick: () => void;
   onAssetSelect: (entry: ExtendedAssetEntry) => void;
+  onAssetNavigate: () => void;
+  assetNavigateTo?: ExtendedAssetEntry;
 }
 
 export interface GetAssetsResponse extends AssetsData {

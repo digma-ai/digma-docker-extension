@@ -20,7 +20,6 @@ import { SpanBottleneckInsight } from "./SpanBottleneckInsight";
 import { TopUsageInsight } from "./TopUsageInsight";
 import { TrafficInsight } from "./TrafficInsight";
 import * as s from "./styles";
-
 import {
   isCodeObjectErrorsInsight,
   isCodeObjectHotSpotInsight,
@@ -101,9 +100,6 @@ const renderInsightCard = (insight: CodeObjectInsight): JSX.Element => {
 };
 
 export const AssetInsights = (props: AssetInsightsProps) => {
-  const handleAssetsLinkClick = () => {
-    props.onGoToAsset(props.assetEntry);
-  };
   const [insights, setInsights] = useState<CodeObjectInsight[]>();
 
   const assetTypeInfo = getAssetTypeInfo(props.assetEntry.assetType);
@@ -111,6 +107,10 @@ export const AssetInsights = (props: AssetInsightsProps) => {
   const codeObjectId =
     props.assetEntry.endpointCodeObjectId ||
     props.assetEntry.span.spanCodeObjectId;
+
+  const handleAssetsLinkClick = () => {
+    props.onGoToAsset(props.assetEntry);
+  };
 
   const fetchInsights = async () => {
     const insights = (await ddClient.extension.vm?.service?.post("/insights", {
@@ -137,33 +137,33 @@ export const AssetInsights = (props: AssetInsightsProps) => {
     <s.Container>
       <s.Header>
         <s.Breadcrumbs>
-          <s.BreadcrumbContent
-            variant={"h4"}
-            component={"span"}
-            onClick={handleAssetsLinkClick}
-          >
+          <s.Breadcrumb onClick={handleAssetsLinkClick}>
             <ChevronLeftIcon />
-            Assets
-          </s.BreadcrumbContent>
-          <s.BreadcrumbContent
-            title={props.assetEntry.span.displayName}
-            variant={"h4"}
-            component={"span"}
-          >
-            {assetTypeInfo && assetTypeInfo.icon && (
-              <assetTypeInfo.icon size={24} />
+            <Typography variant={"h4"} component={"span"}>
+              Assets
+            </Typography>
+          </s.Breadcrumb>
+          <s.Breadcrumb>
+            {assetTypeInfo?.icon && (
+              <s.AssetTypeIconContainer>
+                <assetTypeInfo.icon size={24} />
+              </s.AssetTypeIconContainer>
             )}
-            {props.assetEntry.span.displayName}
-          </s.BreadcrumbContent>
+            <Typography
+              title={props.assetEntry.span.displayName}
+              variant={"h4"}
+              component={"span"}
+              noWrap={true}
+            >
+              {props.assetEntry.span.displayName}
+            </Typography>
+          </s.Breadcrumb>
         </s.Breadcrumbs>
       </s.Header>
       {insights ? (
-        <>
-          <Typography>Insights:</Typography>
-          <s.InsightsContainer>
-            {insights.map((insight, i) => renderInsightCard(insight))}
-          </s.InsightsContainer>
-        </>
+        <s.InsightsContainer>
+          {insights.map((insight, i) => renderInsightCard(insight))}
+        </s.InsightsContainer>
       ) : (
         <NoData
           icon={<Loader status={"pending"} size={86} />}

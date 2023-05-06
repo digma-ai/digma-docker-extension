@@ -2,7 +2,7 @@ import ExtensionIcon from "@mui/icons-material/Extension";
 import Divider from "@mui/material/Divider";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ddClient } from "../../dockerDesktopClient";
 import { Assets } from "../Assets";
 import { AssetInsights } from "../Assets/AssetInsights";
@@ -33,18 +33,60 @@ const PAGES = {
   ASSETS: "ASSETS",
 };
 
+const handleSlackButtonClick = () => {
+  ddClient.host.openExternal(SLACK_CHANNEL_URL);
+};
+
+const openJetBrainsPluginPage = () => {
+  ddClient.host.openExternal(JETBRAINS_PLUGIN_URL);
+};
+
+const renderLinkButtons = () => {
+  return (
+    <s.LinkButtonsContainer>
+      <Tooltip
+        key={"slack"}
+        title={
+          <s.LinkButtonTooltipTextContainer>
+            <s.LinkButtonTooltipTitle>
+              We want your feedback!
+            </s.LinkButtonTooltipTitle>
+            Join our Slack channel to let us know your thoughts, suggestions or
+            report any issues
+          </s.LinkButtonTooltipTextContainer>
+        }
+      >
+        <s.LinkButton variant={"outlined"} onClick={handleSlackButtonClick}>
+          <SlackLogoIcon size={16} />
+        </s.LinkButton>
+      </Tooltip>
+      <Tooltip
+        key={"intellij-idea"}
+        title={
+          "Install the Digma Plugin to see more code data in the IDE (Java only for now)"
+        }
+      >
+        <s.LinkButton variant={"outlined"} onClick={openJetBrainsPluginPage}>
+          <IntellijLogoIcon size={16} />
+        </s.LinkButton>
+      </Tooltip>
+    </s.LinkButtonsContainer>
+  );
+};
+
 export const App = () => {
   const [assets, setAssets] = useState<AssetsData>();
   const [environments, setEnvironments] = useState<string[]>();
   const [selectedEnvironment, setSelectedEnvironment] = useState<string>();
-  const [currentPage, setCurrentPage] = useState<string | undefined>();
+  const [currentPage, setCurrentPage] = useState<string>();
   const [isRedirectedToAssets, setIsRedirectedToAssets] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState<ExtendedAssetEntry>();
+  const [assetNavigateTo, setAssetNavigateTo] = useState<ExtendedAssetEntry>();
+  const [isBadgeVisible, setIsBadgeVisible] = useState<boolean>(false);
 
   const isBadgeEnabled = ["true", null].includes(
     localStorage.getItem("isBadgeEnabled")
   );
-  const [isBadgeVisible, setIsBadgeVisible] = useState<boolean>(false);
 
   const fetchEnvironments = async () => {
     const environments = (await ddClient.extension.vm?.service?.get(
@@ -69,6 +111,17 @@ export const App = () => {
   };
 
   useEffect(() => {
+    fetchEnvironments();
+    const refreshInterval = setInterval(() => {
+      fetchEnvironments();
+    }, REFRESH_INTERVAL);
+
+    return () => {
+      clearInterval(refreshInterval);
+    };
+  }, []);
+
+  useEffect(() => {
     if (!selectedEnvironment && environments && environments.length > 0) {
       setSelectedEnvironment(environments[0]);
     }
@@ -82,7 +135,7 @@ export const App = () => {
 
   // Redirect to "Getting started" page on startup if there are no environments yet
   useEffect(() => {
-    if (!currentPage && environments && environments.length === 0) {
+    if (!currentPage && environments?.length === 0) {
       setCurrentPage(PAGES.GETTING_STARTED);
     }
   }, [currentPage, environments]);
@@ -110,37 +163,13 @@ export const App = () => {
       0;
 
     if (environments && environments.length > 0 && isBadgeEnabled) {
-      if (assetsCount === 0) {
-        setIsBadgeVisible(true);
-      } else {
-        setIsBadgeVisible(false);
-      }
+      setIsBadgeVisible(assetsCount === 0);
     }
   }, [assets, environments, isRedirectedToAssets]);
-
-  useEffect(() => {
-    fetchEnvironments();
-    const refreshInterval = setInterval(() => {
-      fetchEnvironments();
-    }, REFRESH_INTERVAL);
-
-    return () => {
-      clearInterval(refreshInterval);
-    };
-  }, []);
 
   const handleEnvironmentSelect = (environment: string) => {
     setSelectedEnvironment(environment);
   };
-
-  console.log("State:", {
-    environments,
-    assets,
-    selectedEnvironment,
-    currentPage,
-    isRedirectedToAssets,
-    isBadgeVisible,
-  });
 
   const handleGoToAssetsPageButtonClick = () => {
     goToAssetPage();
@@ -150,8 +179,13 @@ export const App = () => {
     goToAssetPage(asset);
   };
 
-  const goToAssetPage = (asset?: ExtendedAssetEntry) => {
+  const handleAssetNavigate = () => {
+    setAssetNavigateTo(undefined);
+  };
+
+  const goToAssetPage = (assetNavigateTo?: ExtendedAssetEntry) => {
     setSelectedAsset(undefined);
+    setAssetNavigateTo(assetNavigateTo);
 
     if (isBadgeEnabled && isBadgeVisible) {
       localStorage.setItem("isBadgeEnabled", "false");
@@ -169,46 +203,16 @@ export const App = () => {
     setSelectedAsset(entry);
   };
 
-  const handleSlackButtonClick = () => {
-    ddClient.host.openExternal(SLACK_CHANNEL_URL);
-  };
-
-  const openJetBrainsPluginPage = () => {
-    ddClient.host.openExternal(JETBRAINS_PLUGIN_URL);
-  };
-
-  const renderLinkButtons = useCallback(() => {
-    return (
-      <s.LinkButtonsContainer>
-        <Tooltip
-          key={"slack"}
-          title={
-            <s.LinkButtonTooltipTextContainer>
-              <s.LinkButtonTooltipTitle>
-                We want your feedback!
-              </s.LinkButtonTooltipTitle>
-              Join our Slack channel to let us know your thoughts, suggestions
-              or report any issues
-            </s.LinkButtonTooltipTextContainer>
-          }
-        >
-          <s.LinkButton variant={"outlined"} onClick={handleSlackButtonClick}>
-            <SlackLogoIcon size={16} />
-          </s.LinkButton>
-        </Tooltip>
-        <Tooltip
-          key={"intellij-idea"}
-          title={
-            "Install the Digma Plugin to see more code data in the IDE (Java only for now)"
-          }
-        >
-          <s.LinkButton variant={"outlined"} onClick={openJetBrainsPluginPage}>
-            <IntellijLogoIcon size={16} />
-          </s.LinkButton>
-        </Tooltip>
-      </s.LinkButtonsContainer>
-    );
-  }, []);
+  console.log("State:", {
+    assets,
+    environments,
+    selectedEnvironment,
+    currentPage,
+    isBadgeVisible,
+    isRedirectedToAssets,
+    selectedAsset,
+    assetNavigateTo,
+  });
 
   return (
     <>
@@ -295,6 +299,8 @@ export const App = () => {
                 onGettingStartedButtonClick={handleGettingStartedButtonClick}
                 environments={environments}
                 onAssetSelect={handleAssetSelect}
+                assetNavigateTo={assetNavigateTo}
+                onAssetNavigate={handleAssetNavigate}
               />
             )
           }

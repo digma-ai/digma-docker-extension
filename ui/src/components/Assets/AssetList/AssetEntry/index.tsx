@@ -1,11 +1,15 @@
 import { useTheme } from "@mui/material";
+import { ForwardedRef, forwardRef } from "react";
 import { timeAgo } from "../../../../utils/timeAgo";
 import { OpenTelemetryLogoIcon } from "../../../common/icons/OpenTelemetryLogoIcon";
 import { getInsightImportanceColor, getInsightTypeInfo } from "../../utils";
 import * as s from "./styles";
 import { AssetEntryProps } from "./types";
 
-export const AssetEntry = (props: AssetEntryProps) => {
+const AssetEntryComponent = (
+  props: AssetEntryProps,
+  ref: ForwardedRef<HTMLDivElement>
+) => {
   const theme = useTheme();
 
   const handleLinkClick = () => {
@@ -27,7 +31,7 @@ export const AssetEntry = (props: AssetEntryProps) => {
   );
 
   return (
-    <s.Container elevation={0}>
+    <s.Container elevation={0} id={props.id} ref={ref}>
       <s.Header>
         <s.OpenTelemetryIconContainer>
           <OpenTelemetryLogoIcon size={20} />
@@ -91,3 +95,5 @@ export const AssetEntry = (props: AssetEntryProps) => {
     </s.Container>
   );
 };
+
+export const AssetEntry = forwardRef(AssetEntryComponent);
