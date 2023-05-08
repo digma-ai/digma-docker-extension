@@ -59,6 +59,7 @@ export const Assets = (props: AssetsProps) => {
     props.assetNavigateTo?.assetType || "Endpoint"
   );
   const previousSelectedAssetTypeId = usePrevious(selectedAssetTypeId);
+  const previousEnvironment = usePrevious(props.environment);
 
   const [sorting, setSorting] = useState<{
     criterion: string;
@@ -90,14 +91,24 @@ export const Assets = (props: AssetsProps) => {
   }, [props.assetNavigateTo]);
 
   useEffect(() => {
-    if (
+    const didEnvironmentChanged =
+      previousEnvironment && previousEnvironment !== props.environment;
+    const didAssetTypeIdChanged =
       previousSelectedAssetTypeId &&
-      previousSelectedAssetTypeId !== selectedAssetTypeId &&
+      previousSelectedAssetTypeId !== selectedAssetTypeId;
+
+    if (
+      (didEnvironmentChanged || didAssetTypeIdChanged) &&
       assetListRef.current
     ) {
       assetListRef.current.scrollTop = 0;
     }
-  }, [selectedAssetTypeId, previousSelectedAssetTypeId]);
+  }, [
+    selectedAssetTypeId,
+    previousSelectedAssetTypeId,
+    props.environment,
+    previousEnvironment,
+  ]);
 
   const handleAssetTypeSelect = (assetTypeId: string) => {
     setSelectedAssetTypeId(assetTypeId);

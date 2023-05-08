@@ -39,9 +39,6 @@ const AssetEntryComponent = (
         <s.Link onClick={() => handleLinkClick()} title={name}>
           {name}
         </s.Link>
-        {/* <s.Name noWrap={true} title={name}>
-          {name}
-        </s.Name> */}
         <s.InsightIconsContainer>
           {sortedInsights.map((insight) => {
             const insightTypeInfo = getInsightTypeInfo(insight.type);

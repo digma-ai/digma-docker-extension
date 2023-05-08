@@ -21,7 +21,7 @@ export const Breadcrumbs = styled(MuiBreadcrumbs)`
 
   & .MuiBreadcrumbs-separator {
     margin: 0 8px;
-    color: ${({ theme }) => theme.palette.text.primary};
+    color: #70787d;
   }
 
   & .MuiBreadcrumbs-ol {
@@ -29,10 +29,11 @@ export const Breadcrumbs = styled(MuiBreadcrumbs)`
   }
 
   & .MuiBreadcrumbs-li {
-    color: ${({ theme }) => theme.palette.text.primary};
+    color: #70787d;
 
     &:last-child {
       overflow: hidden;
+      color: ${({ theme }) => theme.palette.text.primary};
     }
   }
 `;

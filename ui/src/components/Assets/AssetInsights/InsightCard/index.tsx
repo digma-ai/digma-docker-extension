@@ -30,10 +30,12 @@ export const InsightCard = (props: InsightCardProps) => {
   };
 
   return (
-    <s.Container>
+    <s.Container elevation={0}>
       <s.TitleRow>
         {insightTypeInfo && (
-          <insightTypeInfo.icon color={insightIconColor} size={22} />
+          <s.InsightIconContainer>
+            <insightTypeInfo.icon color={insightIconColor} size={24} />
+          </s.InsightIconContainer>
         )}
         {insightTypeInfo?.label || props.data.type}
         {props.stats && <s.Stats>{props.stats}</s.Stats>}

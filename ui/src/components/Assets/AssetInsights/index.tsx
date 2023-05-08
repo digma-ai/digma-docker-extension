@@ -1,7 +1,9 @@
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import { useTheme } from "@mui/material";
 import Typography from "@mui/material/Typography";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ddClient } from "../../../dockerDesktopClient";
+import { usePrevious } from "../../../hooks/usePrevious";
 import { Loader } from "../../common/Loader";
 import { NoData } from "../NoData";
 import { InsightType } from "../types";
@@ -101,6 +103,10 @@ const renderInsightCard = (insight: CodeObjectInsight): JSX.Element => {
 
 export const AssetInsights = (props: AssetInsightsProps) => {
   const [insights, setInsights] = useState<CodeObjectInsight[]>();
+  const previousEnvironment = usePrevious(props.environment);
+  const insightsContainerRef = useRef<HTMLDivElement>(null);
+
+  const theme = useTheme();
 
   const assetTypeInfo = getAssetTypeInfo(props.assetEntry.assetType);
 
@@ -133,6 +139,15 @@ export const AssetInsights = (props: AssetInsightsProps) => {
     fetchInsights();
   }, []);
 
+  useEffect(() => {
+    if (
+      previousEnvironment !== props.environment &&
+      insightsContainerRef.current
+    ) {
+      insightsContainerRef.current.scrollTop = 0;
+    }
+  }, [previousEnvironment, props.environment]);
+
   return (
     <s.Container>
       <s.Header>
@@ -146,7 +161,10 @@ export const AssetInsights = (props: AssetInsightsProps) => {
           <s.Breadcrumb>
             {assetTypeInfo?.icon && (
               <s.AssetTypeIconContainer>
-                <assetTypeInfo.icon size={24} />
+                <assetTypeInfo.icon
+                  size={24}
+                  color={theme.palette.text.primary}
+                />
               </s.AssetTypeIconContainer>
             )}
             <Typography
@@ -161,8 +179,8 @@ export const AssetInsights = (props: AssetInsightsProps) => {
         </s.Breadcrumbs>
       </s.Header>
       {insights ? (
-        <s.InsightsContainer>
-          {insights.map((insight, i) => renderInsightCard(insight))}
+        <s.InsightsContainer ref={insightsContainerRef}>
+          {insights.map((insight) => renderInsightCard(insight))}
         </s.InsightsContainer>
       ) : (
         <NoData

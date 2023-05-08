@@ -29,15 +29,15 @@ export const EndpointNPlusOneInsight = (
                 <s.Span key={name}>
                   {name}
                   <s.Stats>
-                    <s.Stat key={"impact"}>
+                    <s.Stat>
                       <s.Description>Impact</s.Description>
                       <span>{fraction}</span>
                     </s.Stat>
-                    <s.Stat key={"repeats"}>
+                    <s.Stat>
                       <s.Description>Repeats</s.Description>
                       <span>{span.occurrences}</span>
                     </s.Stat>
-                    <s.Stat key={"duration"}>
+                    <s.Stat>
                       <s.Description>Duration</s.Description>
                       <span>
                         {span.duration.value} {span.duration.unit}

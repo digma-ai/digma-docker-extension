@@ -73,7 +73,7 @@ export const GettingStarted = (props: GettingStartedProps) => {
 
   return (
     <s.Container>
-      <s.Card key={"intellij"}>
+      <s.Card>
         <s.CardTextContent>
           <s.SectionTitleContainer>
             <s.IntellijFlatIconContainer>
@@ -107,7 +107,7 @@ export const GettingStarted = (props: GettingStartedProps) => {
           />
         </s.CardIllustration>
       </s.Card>
-      <s.Card key={"containers"}>
+      <s.Card>
         <s.CardTextContent>
           <s.SectionTitleContainer>
             <ContainerIcon color={iconColor} size={24} />

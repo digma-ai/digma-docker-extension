@@ -145,6 +145,7 @@ const AssetListComponent = (
                 delete entriesRef.current[id];
               }
             }}
+            key={id}
             id={id}
             entry={entry}
             onAssetLinkClick={handleAssetLinkClick}

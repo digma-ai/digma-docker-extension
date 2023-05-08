@@ -11,11 +11,11 @@ export const NPlusOneInsight = (props: NPlusOneInsightProps) => {
           <s.Description>Check the following SELECT statement:</s.Description>
           <span>{props.insight.clientSpanName}</span>
           <s.Stats>
-            <s.Stat key={"repeats"}>
+            <s.Stat>
               <s.Description>Repeats</s.Description>
               <span>{props.insight.occurrences} (median)</span>
             </s.Stat>
-            <s.Stat key={"duration"}>
+            <s.Stat>
               <s.Description>Duration</s.Description>
               <span>
                 {props.insight.duration.value} {props.insight.duration.unit}

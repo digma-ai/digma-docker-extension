@@ -14,13 +14,14 @@ export const ErrorList = styled.div`
 `;
 
 export const EntityName = styled.span`
-  font-size: 12px;
-  line-height: 14px;
+  font-size: 14px;
+  line-height: 17px;
   font-weight: 500;
+
   color: ${({ theme }) => {
     switch (theme.palette.mode) {
       case "light":
-        return "#4d668a";
+        return "#49494d";
       case "dark":
         return "#dadada";
     }
@@ -28,12 +29,13 @@ export const EntityName = styled.span`
 `;
 
 export const Description = styled.span`
-  font-size: 12px;
-  line-height: 14px;
+  font-size: 14px;
+  line-height: 17px;
+
   color: ${({ theme }) => {
     switch (theme.palette.mode) {
       case "light":
-        return "#828797";
+        return "#70787d";
       case "dark":
         return "#9b9b9b";
     }

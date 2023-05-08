@@ -1,50 +1,72 @@
+import Paper from "@mui/material/Paper";
 import styled from "styled-components";
 
-export const Container = styled.div`
+export const Container = styled(Paper)`
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  padding: 8px;
-  gap: 8px;
-  border-radius: 4px;
+  gap: 12px;
+  box-sizing: border-box;
 
-  color: ${({ theme }) => {
-    switch (theme.palette.mode) {
-      case "light":
-        return "#4d668a";
-      case "dark":
-        return "#dadada";
-    }
-  }};
-
-  background: ${({ theme }) => {
-    switch (theme.palette.mode) {
-      case "light":
-        return "#f1f5fa";
-      case "dark":
-        return "#27343e";
-    }
-  }};
+  border: 1px solid
+    ${({ theme }) => {
+      switch (theme.palette.mode) {
+        case "light":
+          return theme.palette.background.paper;
+        case "dark":
+          return "#465c6e";
+      }
+    }};
 `;
 
 export const TitleRow = styled.div`
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
   font-weight: 500;
-  font-size: 14px;
-  line-height: 17px;
+  font-size: 16px;
+  line-height: 19px;
+
+  color: ${({ theme }) => {
+    switch (theme.palette.mode) {
+      case "light":
+        return "#49494d";
+      case "dark":
+        return "#dadada";
+    }
+  }};
+`;
+
+export const InsightIconContainer = styled.span`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  border-radius: 4px;
+
+  background: ${({ theme }) => {
+    switch (theme.palette.mode) {
+      case "light":
+        return "#e9eef4";
+      case "dark":
+        return "#36414e";
+    }
+  }};
 `;
 
 export const Stats = styled.span`
   margin-left: auto;
-  font-size: 12px;
-  line-height: 14px;
+  font-size: 14px;
+  line-height: 17px;
+
   color: ${({ theme }) => {
     switch (theme.palette.mode) {
       case "light":
         return "#7891d0";
       case "dark":
-        return "#b9C2eb";
+        return "#b9c2eb";
     }
   }};
 `;

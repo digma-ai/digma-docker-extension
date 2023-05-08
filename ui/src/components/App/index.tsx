@@ -45,7 +45,6 @@ const renderLinkButtons = () => {
   return (
     <s.LinkButtonsContainer>
       <Tooltip
-        key={"slack"}
         title={
           <s.LinkButtonTooltipTextContainer>
             <s.LinkButtonTooltipTitle>
@@ -61,7 +60,6 @@ const renderLinkButtons = () => {
         </s.LinkButton>
       </Tooltip>
       <Tooltip
-        key={"intellij-idea"}
         title={
           "Install the Digma Plugin to see more code data in the IDE (Java only for now)"
         }
@@ -301,6 +299,7 @@ export const App = () => {
                 onAssetSelect={handleAssetSelect}
                 assetNavigateTo={assetNavigateTo}
                 onAssetNavigate={handleAssetNavigate}
+                environment={selectedEnvironment}
               />
             )
           }

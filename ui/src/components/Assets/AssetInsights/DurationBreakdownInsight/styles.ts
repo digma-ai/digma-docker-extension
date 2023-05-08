@@ -7,13 +7,14 @@ export const DurationList = styled.div`
 `;
 
 export const Duration = styled.span`
-  font-size: 12px;
-  line-height: 14px;
+  font-size: 14px;
+  line-height: 17px;
   font-weight: 500;
+
   color: ${({ theme }) => {
     switch (theme.palette.mode) {
       case "light":
-        return "#4d668a";
+        return "#49494d";
       case "dark":
         return "#dadada";
     }
