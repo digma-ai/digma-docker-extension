@@ -29,13 +29,13 @@ const getDurationDifferenceString = (
   const seconds = diff / 1000;
 
   if (seconds < 60) {
-    return `${roundTo(diff, 2)} sec`;
+    return `${roundTo(seconds, 2)} sec`;
   }
 
   const minutes = seconds / 60;
 
   if (minutes < 60) {
-    return `${roundTo(diff, 2)} min`;
+    return `${roundTo(minutes, 2)} min`;
   }
 
   return formatDuration(intervalToDuration({ start: 0, end: diff })); // approximate for the units larger then hours as start and end dates are unknown
@@ -76,6 +76,7 @@ const renderArrowIcon = (
     <ArrowIcon
       direction={direction}
       color={getArrowIconColor(direction, theme)}
+      size={14}
     />
   );
 };
@@ -115,7 +116,7 @@ export const DurationInsight = (props: DurationInsightProps) => {
                   {percentile.previousDuration &&
                     percentile.changeTime &&
                     changeMeaningfulEnough && (
-                      <span>
+                      <s.Change>
                         {renderArrowIcon(percentile, theme)}
                         {getDurationDifferenceString(
                           percentile.previousDuration,
@@ -129,7 +130,7 @@ export const DurationInsight = (props: DurationInsightProps) => {
                             numeric: "always",
                           }
                         )}
-                      </span>
+                      </s.Change>
                     )}
                   {percentile.changeTime &&
                     changeMeaningfulEnough &&
