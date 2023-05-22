@@ -41,8 +41,8 @@ export const InsightIconContainer = styled.span`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
   flex-shrink: 0;
   border-radius: 4px;
 

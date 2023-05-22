@@ -6,9 +6,8 @@ import { DefaultTheme } from "styled-components";
 import { roundTo } from "../../../../utils/roundTo";
 import { ArrowIcon } from "../../../common/icons/ArrowIcon";
 import { Direction } from "../../../common/icons/types";
-import { Duration } from "../../types";
+import { Duration, DurationPercentileWithChange } from "../../types";
 import { InsightCard } from "../InsightCard";
-import { DurationPercentile } from "../types";
 import * as s from "./styles";
 import { DurationInsightProps } from "./types";
 
@@ -60,7 +59,7 @@ const getArrowIconColor = (direction: Direction, theme: DefaultTheme) => {
 };
 
 const renderArrowIcon = (
-  percentile: DurationPercentile,
+  percentile: DurationPercentileWithChange,
   theme: DefaultTheme
 ): JSX.Element | null => {
   if (!percentile.previousDuration) {

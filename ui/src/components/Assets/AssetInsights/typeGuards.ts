@@ -8,10 +8,12 @@ import {
   EndpointNormalUsageInsight,
   EndpointSlowestSpansInsight,
   EndpointSuspectedNPlusOneInsight,
+  InsightScope,
   SlowEndpointInsight,
   SpanDurationBreakdownInsight,
   SpanDurationsInsight,
   SpanEndpointBottleneckInsight,
+  SpanInsight,
   SpanNPlusOneInsight,
   SpanScalingInsight,
   SpanScalingRootCauseInsight,
@@ -85,3 +87,7 @@ export const isCodeObjectErrorsInsight = (
 export const isCodeObjectHotSpotInsight = (
   insight: CodeObjectInsight
 ): insight is CodeObjectHotSpotInsight => insight.type === InsightType.HotSpot;
+
+export const isSpanInsight = (
+  insight: CodeObjectInsight
+): insight is SpanInsight => insight.scope === InsightScope.Span;

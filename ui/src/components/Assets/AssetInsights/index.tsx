@@ -41,6 +41,8 @@ import {
 } from "./typeGuards";
 import { AssetInsightsProps, CodeObjectInsight } from "./types";
 
+const REFRESH_INTERVAL = 10 * 1000; // in milliseconds
+
 const renderInsightCard = (insight: CodeObjectInsight): JSX.Element => {
   if (isSpanDurationsInsight(insight)) {
     return <DurationInsight key={insight.type} insight={insight} />;
@@ -110,9 +112,13 @@ export const AssetInsights = (props: AssetInsightsProps) => {
 
   const assetTypeInfo = getAssetTypeInfo(props.assetEntry.assetType);
 
-  const codeObjectId =
+  const codeObjectIds = [
     props.assetEntry.endpointCodeObjectId ||
-    props.assetEntry.span.spanCodeObjectId;
+      props.assetEntry.span.spanCodeObjectId,
+    // `method:${props.assetEntry.span.methodCodeObjectId}`,
+  ];
+
+  // console.log(codeObjectIds);
 
   const handleAssetsLinkClick = () => {
     props.onGoToAsset(props.assetEntry);
@@ -120,10 +126,25 @@ export const AssetInsights = (props: AssetInsightsProps) => {
 
   const fetchInsights = async () => {
     const insights = (await ddClient.extension.vm?.service?.post("/insights", {
-      codeObjectIds: [codeObjectId],
+      codeObjectIds,
       environment: props.environment,
     })) as CodeObjectInsight[];
+
     console.log("Insights have been fetched:", insights);
+
+    // const spanInsights = insights.filter(
+    //   (x) => isSpanInsight(x) && x.type !== InsightType.SpanUsageStatus
+    // );
+    // const groupedSpanInsights = groupBy(spanInsights, [
+    //   "spanInfo",
+    //   "spanCodeObjectId",
+    // ]);
+
+    // console.log(groupedSpanInsights);
+
+    // if (Object.keys(groupedSpanInsights).length > 1) {
+    //   console.log("groups: ", groupedSpanInsights);
+    // }
 
     const filteredInsights = insights.filter(
       (x) => x.type !== InsightType.SpanUsageStatus
@@ -137,6 +158,13 @@ export const AssetInsights = (props: AssetInsightsProps) => {
 
   useEffect(() => {
     fetchInsights();
+    const refreshInterval = setInterval(() => {
+      fetchInsights();
+    }, REFRESH_INTERVAL);
+
+    return () => {
+      clearInterval(refreshInterval);
+    };
   }, []);
 
   useEffect(() => {

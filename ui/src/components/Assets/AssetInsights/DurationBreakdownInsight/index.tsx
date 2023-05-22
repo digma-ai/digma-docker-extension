@@ -1,4 +1,5 @@
 import { InsightCard } from "../InsightCard";
+import { Pagination } from "../Pagination";
 import { DurationPercentile, SpanDurationBreakdownEntry } from "../types";
 import * as s from "./styles";
 import { DurationBreakdownInsightProps } from "./types";
@@ -57,15 +58,20 @@ export const DurationBreakdownInsight = (
       data={props.insight}
       content={
         <s.DurationList>
-          {sortedEntries.map((entry) => {
-            const percentile = getPercentile(entry, DEFAULT_PERCENTILE);
+          <Pagination>
+            {sortedEntries.map((entry) => {
+              const percentile = getPercentile(entry, DEFAULT_PERCENTILE);
 
-            return percentile ? (
-              <s.Duration title={getTitle(entry)} key={entry.spanCodeObjectId}>
-                {`${entry.spanDisplayName} ${percentile.duration.value} ${percentile.duration.unit}`}
-              </s.Duration>
-            ) : null;
-          })}
+              return percentile ? (
+                <s.Duration
+                  title={getTitle(entry)}
+                  key={entry.spanCodeObjectId}
+                >
+                  {`${entry.spanDisplayName} ${percentile.duration.value} ${percentile.duration.unit}`}
+                </s.Duration>
+              ) : null;
+            })}
+          </Pagination>
         </s.DurationList>
       }
     />

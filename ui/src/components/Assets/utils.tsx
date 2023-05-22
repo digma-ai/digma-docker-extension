@@ -2,6 +2,7 @@ import { MemoExoticComponent } from "react";
 import { DefaultTheme } from "styled-components";
 import { AlarmClockIcon } from "../common/icons/AlarmClockIcon";
 import { BottleneckIcon } from "../common/icons/BottleneckIcon";
+import { ClockWithTicksIcon } from "../common/icons/ClockWithTicksIcon";
 import { CodeMarkerPinIcon } from "../common/icons/CodeMarkerPinIcon";
 import { DatabaseIcon } from "../common/icons/DatabaseIcon";
 import { EndpointIcon } from "../common/icons/EndpointIcon";
@@ -91,7 +92,7 @@ export const getInsightTypeInfo = (
       label: "Duration",
     },
     [InsightType.SpanDurationBreakdown]: {
-      icon: AlarmClockIcon,
+      icon: ClockWithTicksIcon,
       label: "Duration Breakdown",
     },
   };
@@ -107,7 +108,7 @@ export const getInsightImportanceColor = (
     return undefined;
   }
   if (importance < 3) {
-    return theme.palette.mode === "light" ? "#f93967" : "#e00036";
+    return theme.palette.mode === "light" ? "#e00036" : "#f93967";
   }
   if (importance < 5) {
     return theme.palette.mode === "light" ? "#e06c00" : "#ff810d";

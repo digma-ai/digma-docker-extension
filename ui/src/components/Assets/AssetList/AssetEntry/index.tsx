@@ -1,8 +1,11 @@
 import { useTheme } from "@mui/material";
 import { ForwardedRef, forwardRef } from "react";
 import { timeAgo } from "../../../../utils/timeAgo";
-import { OpenTelemetryLogoIcon } from "../../../common/icons/OpenTelemetryLogoIcon";
-import { getInsightImportanceColor, getInsightTypeInfo } from "../../utils";
+import {
+  getAssetTypeInfo,
+  getInsightImportanceColor,
+  getInsightTypeInfo,
+} from "../../utils";
 import * as s from "./styles";
 import { AssetEntryProps } from "./types";
 
@@ -30,12 +33,16 @@ const AssetEntryComponent = (
     (a, b) => a.importance - b.importance
   );
 
+  const assetTypeInfo = getAssetTypeInfo(props.entry.assetType);
+
   return (
     <s.Container elevation={0} id={props.id} ref={ref}>
       <s.Header>
-        <s.OpenTelemetryIconContainer>
-          <OpenTelemetryLogoIcon size={20} />
-        </s.OpenTelemetryIconContainer>
+        {assetTypeInfo?.icon && (
+          <s.AssetTypeIconContainer>
+            <assetTypeInfo.icon size={20} color={"#7891d0"} />
+          </s.AssetTypeIconContainer>
+        )}
         <s.Link onClick={() => handleLinkClick()} title={name}>
           {name}
         </s.Link>
@@ -53,7 +60,7 @@ const AssetEntryComponent = (
                 title={insightTypeInfo?.label || insight.type}
               >
                 {insightTypeInfo && (
-                  <insightTypeInfo.icon color={insightIconColor} size={20} />
+                  <insightTypeInfo.icon color={insightIconColor} size={24} />
                 )}
               </s.InsightIconContainer>
             );

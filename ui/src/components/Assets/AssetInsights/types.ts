@@ -1,4 +1,10 @@
-import { Duration, ExtendedAssetEntry, InsightType } from "../types";
+import {
+  Duration,
+  DurationPercentileWithChange,
+  ExtendedAssetEntry,
+  InsightType,
+  SpanInfo,
+} from "../types";
 
 export interface AssetInsightsProps {
   assetEntry: ExtendedAssetEntry;
@@ -40,20 +46,6 @@ export enum InsightImportance {
   ShowStopper = 1,
 }
 
-export interface SpanInfo {
-  name: string;
-  displayName: string;
-  instrumentationLibrary: string;
-  spanCodeObjectId: string;
-  methodCodeObjectId: string | null;
-  kind: string;
-
-  /**
-   * @deprecated
-   */
-  codeObjectId: string | null;
-}
-
 export interface Insight {
   category: string;
   type: InsightType;
@@ -78,22 +70,13 @@ export interface CodeObjectInsight extends Insight {
   importance: InsightImportance;
   severity: number;
   isRecalculateEnabled: boolean;
-  prefixedCodeObjectId: string;
+  prefixedCodeObjectId: string | null;
   customStartTime: string | null;
   actualStartTime: string | null;
 }
 
 export interface SpanInsight extends CodeObjectInsight {
-  spanInfo: SpanInfo;
-}
-
-export interface DurationPercentile {
-  percentile: number;
-  currentDuration: Duration;
-  previousDuration: Duration | null;
-  changeTime: string | null;
-  changeVerified: boolean | null;
-  traceIds: string[];
+  spanInfo: SpanInfo | null;
 }
 
 export interface SpanDurationsInsight extends SpanInsight {
@@ -109,7 +92,7 @@ export interface SpanDurationsInsight extends SpanInsight {
     sampleTraces: string[];
     period: string;
   }[];
-  percentiles: DurationPercentile[];
+  percentiles: DurationPercentileWithChange[];
 
   /**
    * @deprecated
