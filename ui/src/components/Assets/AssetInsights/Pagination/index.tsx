@@ -17,10 +17,6 @@ export const Pagination = (props: PaginationProps) => {
   const pageStart = currentPage * pageSize;
   const pageEnd = pageStart + pageSize;
 
-  console.log(props.children);
-  console.log(currentPage, pageSize, pageCount);
-  console.log(pageStart, pageEnd);
-
   const listItemElements = props.children.slice(pageStart, pageEnd);
 
   const isPrevDisabled = currentPage === 0;

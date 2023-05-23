@@ -4,6 +4,7 @@ import {
   ExtendedAssetEntry,
   InsightType,
   SpanInfo,
+  SpanInstanceInfo,
 } from "../types";
 
 export interface AssetInsightsProps {
@@ -93,6 +94,7 @@ export interface SpanDurationsInsight extends SpanInsight {
     period: string;
   }[];
   percentiles: DurationPercentileWithChange[];
+  lastSpanInstanceInfo: SpanInstanceInfo;
 
   /**
    * @deprecated

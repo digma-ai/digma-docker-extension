@@ -80,6 +80,11 @@ const renderArrowIcon = (
   );
 };
 
+const formatTimeDistance = (dateTime: string) =>
+  intlFormatDistance(new Date(dateTime), new Date(), {
+    numeric: "always",
+  });
+
 export const DurationInsight = (props: DurationInsightProps) => {
   const theme = useTheme();
 
@@ -87,69 +92,72 @@ export const DurationInsight = (props: DurationInsightProps) => {
     (a, b) => a.percentile - b.percentile
   );
 
+  const spanLastCall = props.insight.lastSpanInstanceInfo;
+
   return (
     <InsightCard
       data={props.insight}
       content={
-        sortedPercentiles.length > 0 ? (
-          <s.PercentileList>
-            {sortedPercentiles.map((percentile) => {
-              let changeMeaningfulEnough = false;
+        <>
+          <s.LastCall>
+            Last call: {spanLastCall.duration.value}{" "}
+            {spanLastCall.duration.unit}{" "}
+            {formatTimeDistance(spanLastCall.startTime)}
+          </s.LastCall>
+          {sortedPercentiles.length > 0 ? (
+            <s.PercentileList>
+              {sortedPercentiles.map((percentile) => {
+                let changeMeaningfulEnough = false;
 
-              if (percentile.previousDuration && percentile.changeTime) {
-                const diff = Math.abs(
-                  percentile.currentDuration.raw -
-                    percentile.previousDuration.raw
-                );
+                if (percentile.previousDuration && percentile.changeTime) {
+                  const diff = Math.abs(
+                    percentile.currentDuration.raw -
+                      percentile.previousDuration.raw
+                  );
 
-                changeMeaningfulEnough =
-                  diff / percentile.previousDuration.raw >
-                    DURATION_RATIO_MIN_LIMIT && diff > DURATION_DIFF_MIN_LIMIT;
-              }
+                  changeMeaningfulEnough =
+                    diff / percentile.previousDuration.raw >
+                      DURATION_RATIO_MIN_LIMIT &&
+                    diff > DURATION_DIFF_MIN_LIMIT;
+                }
 
-              return (
-                <s.Percentile key={percentile.percentile}>
-                  {`P${percentile.percentile * 100} ${
-                    percentile.currentDuration.value
-                  } ${percentile.currentDuration.unit}`}
-                  {percentile.previousDuration &&
-                    percentile.changeTime &&
-                    changeMeaningfulEnough && (
-                      <s.Change>
-                        {renderArrowIcon(percentile, theme)}
-                        {getDurationDifferenceString(
-                          percentile.previousDuration,
-                          percentile.currentDuration
-                        )}
-                        ,{" "}
-                        {intlFormatDistance(
-                          new Date(percentile.changeTime),
-                          new Date(),
-                          {
-                            numeric: "always",
+                return (
+                  <s.Percentile key={percentile.percentile}>
+                    {`P${percentile.percentile * 100} ${
+                      percentile.currentDuration.value
+                    } ${percentile.currentDuration.unit}`}
+                    {percentile.previousDuration &&
+                      percentile.changeTime &&
+                      changeMeaningfulEnough && (
+                        <s.Change>
+                          {renderArrowIcon(percentile, theme)}
+                          {getDurationDifferenceString(
+                            percentile.previousDuration,
+                            percentile.currentDuration
+                          )}
+                          , {formatTimeDistance(percentile.changeTime)}
+                        </s.Change>
+                      )}
+                    {percentile.changeTime &&
+                      changeMeaningfulEnough &&
+                      percentile.changeVerified === false && (
+                        <span
+                          title={
+                            "This change is still being validated and is based on initial data"
                           }
-                        )}
-                      </s.Change>
-                    )}
-                  {percentile.changeTime &&
-                    changeMeaningfulEnough &&
-                    percentile.changeVerified === false && (
-                      <span
-                        title={
-                          "This change is still being validated and is based on initial data"
-                        }
-                      >
-                        Evaluating
-                      </span>
-                    )}
-                </s.Percentile>
-              );
-            })}
-          </s.PercentileList>
-        ) : (
-          // TODO: add hourglass icon
-          <span>Waiting for more data...</span>
-        )
+                        >
+                          Evaluating
+                        </span>
+                      )}
+                  </s.Percentile>
+                );
+              })}
+            </s.PercentileList>
+          ) : (
+            // TODO: add hourglass icon
+            <span>Waiting for more data...</span>
+          )}
+        </>
       }
     />
   );
