@@ -1,3 +1,5 @@
+import { MemoExoticComponent } from "react";
+import { IconProps } from "../../common/icons/types";
 import {
   Duration,
   DurationPercentileWithChange,
@@ -11,6 +13,12 @@ export interface AssetInsightsProps {
   assetEntry: ExtendedAssetEntry;
   onGoToAsset: (asset: ExtendedAssetEntry) => void;
   environment: string;
+}
+
+export interface InsightGroup {
+  insights: CodeObjectInsight[];
+  name?: string;
+  icon?: MemoExoticComponent<(props: IconProps) => JSX.Element>;
 }
 
 export enum InsightScope {

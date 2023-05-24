@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { ddClient } from "../../../dockerDesktopClient";
 import { usePrevious } from "../../../hooks/usePrevious";
 import { Loader } from "../../common/Loader";
+import { OpenTelemetryLogoIcon } from "../../common/icons/OpenTelemetryLogoIcon";
 import { NoData } from "../NoData";
 import { InsightType } from "../types";
 import { getAssetTypeInfo } from "../utils";
@@ -34,14 +35,46 @@ import {
   isSpanDurationBreakdownInsight,
   isSpanDurationsInsight,
   isSpanEndpointBottleneckInsight,
+  isSpanInsight,
   isSpanNPlusOneInsight,
   isSpanScalingInsight,
   isSpanScalingRootCauseInsight,
   isSpanUsagesInsight,
 } from "./typeGuards";
-import { AssetInsightsProps, CodeObjectInsight } from "./types";
+import {
+  AssetInsightsProps,
+  CodeObjectInsight,
+  InsightGroup,
+  SpanInsight,
+} from "./types";
 
 const REFRESH_INTERVAL = 10 * 1000; // in milliseconds
+
+export const getInsightTypeOrderPriority = (type: string): number => {
+  const insightOrderPriorityMap: Record<string, number> = {
+    [InsightType.HotSpot]: 1,
+    [InsightType.Errors]: 2,
+    [InsightType.TopErrorFlows]: 3,
+
+    [InsightType.SpanDurations]: 60,
+    [InsightType.SpanUsages]: 61,
+    [InsightType.SpanScalingRootCause]: 62,
+    [InsightType.SpanScaling]: 63,
+    [InsightType.SpanNPlusOne]: 65,
+    [InsightType.SpanDurationChange]: 66,
+    [InsightType.SpanEndpointBottleneck]: 67,
+    [InsightType.SpanDurationBreakdown]: 68,
+
+    [InsightType.EndpointSpanNPlusOne]: 55,
+    [InsightType.SlowestSpans]: 40,
+    [InsightType.LowUsage]: 30,
+    [InsightType.NormalUsage]: 50,
+    [InsightType.HighUsage]: 10,
+    [InsightType.SlowEndpoint]: 20,
+  };
+
+  return insightOrderPriorityMap[type] || Infinity;
+};
 
 const renderInsightCard = (insight: CodeObjectInsight): JSX.Element => {
   if (isSpanDurationsInsight(insight)) {
@@ -104,7 +137,7 @@ const renderInsightCard = (insight: CodeObjectInsight): JSX.Element => {
 };
 
 export const AssetInsights = (props: AssetInsightsProps) => {
-  const [insights, setInsights] = useState<CodeObjectInsight[]>();
+  const [insights, setInsights] = useState<InsightGroup[]>();
   const previousEnvironment = usePrevious(props.environment);
   const insightsContainerRef = useRef<HTMLDivElement>(null);
 
@@ -112,13 +145,13 @@ export const AssetInsights = (props: AssetInsightsProps) => {
 
   const assetTypeInfo = getAssetTypeInfo(props.assetEntry.assetType);
 
-  const codeObjectIds = [
-    props.assetEntry.endpointCodeObjectId ||
-      props.assetEntry.span.spanCodeObjectId,
-    // `method:${props.assetEntry.span.methodCodeObjectId}`,
-  ];
+  const codeObjectIds = [props.assetEntry.span.spanCodeObjectId];
 
-  // console.log(codeObjectIds);
+  if (props.assetEntry.span.methodCodeObjectId) {
+    codeObjectIds.push(`method:${props.assetEntry.span.methodCodeObjectId}`);
+  }
+
+  console.log("codeObjectIds to send: ", codeObjectIds);
 
   const handleAssetsLinkClick = () => {
     props.onGoToAsset(props.assetEntry);
@@ -132,28 +165,55 @@ export const AssetInsights = (props: AssetInsightsProps) => {
 
     console.log("Insights have been fetched:", insights);
 
-    // const spanInsights = insights.filter(
-    //   (x) => isSpanInsight(x) && x.type !== InsightType.SpanUsageStatus
-    // );
-    // const groupedSpanInsights = groupBy(spanInsights, [
-    //   "spanInfo",
-    //   "spanCodeObjectId",
-    // ]);
-
-    // console.log(groupedSpanInsights);
-
-    // if (Object.keys(groupedSpanInsights).length > 1) {
-    //   console.log("groups: ", groupedSpanInsights);
-    // }
-
-    const filteredInsights = insights.filter(
-      (x) => x.type !== InsightType.SpanUsageStatus
+    const sortedInsights = [...insights].sort(
+      (a, b) =>
+        getInsightTypeOrderPriority(a.type) -
+        getInsightTypeOrderPriority(b.type)
     );
 
-    const sortedInsights = filteredInsights.sort(
-      (a, b) => a.importance - b.importance
-    );
-    setInsights(sortedInsights);
+    const ungroupedInsights: CodeObjectInsight[] = [];
+    const spanInsightGroups: { [key: string]: SpanInsight[] } = {};
+
+    for (let insight of sortedInsights) {
+      // Do not show Span Usage insight
+      if (insight.type === InsightType.SpanUsageStatus) {
+        continue;
+      }
+
+      if (!isSpanInsight(insight)) {
+        ungroupedInsights.push(insight);
+        continue;
+      }
+
+      const spanCodeObjectId = insight.spanInfo?.spanCodeObjectId;
+
+      if (
+        !spanCodeObjectId ||
+        spanCodeObjectId === props.assetEntry.span.spanCodeObjectId
+      ) {
+        ungroupedInsights.push(insight);
+        continue;
+      }
+
+      if (!spanInsightGroups[spanCodeObjectId]) {
+        spanInsightGroups[spanCodeObjectId] = [];
+      }
+
+      spanInsightGroups[spanCodeObjectId].push(insight);
+    }
+
+    console.log(ungroupedInsights);
+    console.log(spanInsightGroups);
+
+    setInsights([
+      { insights: ungroupedInsights },
+      // span insight groups
+      ...Object.values(spanInsightGroups).map((x, i) => ({
+        icon: OpenTelemetryLogoIcon,
+        name: x[0].spanInfo?.displayName,
+        insights: x,
+      })),
+    ]);
   };
 
   useEffect(() => {
@@ -208,7 +268,16 @@ export const AssetInsights = (props: AssetInsightsProps) => {
       </s.Header>
       {insights ? (
         <s.InsightsContainer ref={insightsContainerRef}>
-          {insights.map((insight) => renderInsightCard(insight))}
+          {insights.map((x) => (
+            <s.InsightGroup key={x.name || "__ungrouped"}>
+              {x.name && (
+                <s.InsightGroupName>
+                  {x.icon && <x.icon size={20} />} {x.name}
+                </s.InsightGroupName>
+              )}
+              {x.insights.map((insight) => renderInsightCard(insight))}
+            </s.InsightGroup>
+          ))}
         </s.InsightsContainer>
       ) : (
         <NoData

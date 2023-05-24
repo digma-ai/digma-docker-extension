@@ -4,7 +4,6 @@ import styled from "styled-components";
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
 `;
 
 export const Header = styled.div`
@@ -61,19 +60,45 @@ export const Breadcrumb = styled.span`
 export const InsightsContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
   padding-bottom: 28px;
 `;
 
 export const Description = styled.span`
   font-size: 12px;
   line-height: 14px;
+
   color: ${({ theme }) => {
     switch (theme.palette.mode) {
       case "light":
         return "#828797";
       case "dark":
         return "#9b9b9b";
+    }
+  }};
+`;
+
+export const InsightGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`;
+
+export const InsightGroupName = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 19px;
+  height: 28px;
+
+  color: ${({ theme }) => {
+    switch (theme.palette.mode) {
+      case "light":
+        return "#7891d0";
+      case "dark":
+        return "#dadada";
     }
   }};
 `;
