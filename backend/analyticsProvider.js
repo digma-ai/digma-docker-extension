@@ -37,23 +37,6 @@ class AnalyticsProvider {
     }
   }
 
-  async getGlobalInsights(environment) {
-    try {
-      const response = await this.send(
-        "POST",
-        `/CodeAnalytics/insights`,
-        undefined,
-        {
-          environment,
-        }
-      );
-      return response;
-    } catch (e) {
-      console.log(e);
-      throw new Error(e);
-    }
-  }
-
   async getInsights(codeObjectIds, environment) {
     try {
       const response = await this.send(
