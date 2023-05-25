@@ -17,7 +17,6 @@ import { ErrorsInsight } from "./ErrorsInsight";
 import { InsightCard } from "./InsightCard";
 import { NPlusOneInsight } from "./NPlusOneInsight";
 import { ScalingIssueInsight } from "./ScalingIssueInsight";
-import { ScalingIssueRootCauseInsight } from "./ScalingIssueRootCauseInsight";
 import { SlowEndpointInsight } from "./SlowEndpointInsight";
 import { SpanBottleneckInsight } from "./SpanBottleneckInsight";
 import { TopUsageInsight } from "./TopUsageInsight";
@@ -38,7 +37,6 @@ import {
   isSpanInsight,
   isSpanNPlusOneInsight,
   isSpanScalingInsight,
-  isSpanScalingRootCauseInsight,
   isSpanUsagesInsight,
 } from "./typeGuards";
 import {
@@ -58,7 +56,6 @@ export const getInsightTypeOrderPriority = (type: string): number => {
 
     [InsightType.SpanDurations]: 60,
     [InsightType.SpanUsages]: 61,
-    [InsightType.SpanScalingRootCause]: 62,
     [InsightType.SpanScaling]: 63,
     [InsightType.SpanNPlusOne]: 65,
     [InsightType.SpanDurationChange]: 66,
@@ -113,11 +110,6 @@ const renderInsightCard = (insight: CodeObjectInsight): JSX.Element => {
   }
   if (isSpanScalingInsight(insight)) {
     return <ScalingIssueInsight key={insight.type} insight={insight} />;
-  }
-  if (isSpanScalingRootCauseInsight(insight)) {
-    return (
-      <ScalingIssueRootCauseInsight key={insight.type} insight={insight} />
-    );
   }
   if (isCodeObjectHotSpotInsight(insight)) {
     return (

@@ -79,10 +79,6 @@ export const getInsightTypeInfo = (
       icon: ScalesIcon,
       label: "Scaling Issue Found",
     },
-    [InsightType.SpanScalingRootCause]: {
-      icon: ScalesIcon,
-      label: "Scaling Issue Root Cause Found",
-    },
     [InsightType.SpanUsages]: {
       icon: SineIcon,
       label: "Top Usage",

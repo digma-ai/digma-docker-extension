@@ -350,6 +350,12 @@ export interface SpanScalingInsight extends SpanInsight {
   minDuration: Duration;
   maxDuration: Duration;
   rootCauseSpans: RootCauseSpanInfo[];
+  affectedEndpoints: {
+    route: string;
+    serviceName: string;
+    sampleTraceId: string | null;
+    flowHash: string;
+  }[];
 
   /**
    * @deprecated
@@ -359,21 +365,6 @@ export interface SpanScalingInsight extends SpanInsight {
    * @deprecated
    */
   spanInstrumentationLibrary: string;
-}
-
-export interface SpanScalingRootCauseInsight extends SpanInsight {
-  name: "Scaling Issue Root Cause";
-  type: InsightType.SpanScalingRootCause;
-  category: InsightCategory.Performance;
-  specifity: InsightSpecificity.OwnInsight;
-  importance: InsightImportance.Critical;
-  spanName: string;
-  affectedEndpoints: {
-    route: string;
-    serviceName: string;
-    sampleTraceId: string | null;
-    flowHash: string;
-  }[];
 }
 
 export interface SpanNPlusOneInsight extends SpanInsight {

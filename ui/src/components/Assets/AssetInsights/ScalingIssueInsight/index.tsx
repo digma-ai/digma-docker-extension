@@ -1,3 +1,4 @@
+import { trimEndpointScheme } from "../../../../utils/trimEndpointScheme";
 import { InsightCard } from "../InsightCard";
 import * as s from "./styles";
 import { ScalingIssueInsightProps } from "./types";
@@ -26,12 +27,22 @@ export const ScalingIssueInsight = (props: ScalingIssueInsightProps) => (
           </s.Stat>
         </s.Stats>
         {props.insight.rootCauseSpans.length > 0 && (
-          <s.RootCauseList>
+          <s.List>
             <s.Description>Caused by:</s.Description>
             {props.insight.rootCauseSpans.map((span) => (
               <span key={span.spanCodeObjectId}>{span.displayName}</span>
             ))}
-          </s.RootCauseList>
+          </s.List>
+        )}
+        <s.Description>Affected endpoints:</s.Description>
+        {props.insight.affectedEndpoints.length > 0 && (
+          <s.List>
+            {props.insight.affectedEndpoints.map((endpoint) => (
+              <span key={endpoint.route}>
+                {trimEndpointScheme(endpoint.route)}
+              </span>
+            ))}
+          </s.List>
         )}
       </s.ContentContainer>
     }
