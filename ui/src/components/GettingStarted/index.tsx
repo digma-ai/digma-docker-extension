@@ -73,17 +73,17 @@ export const GettingStarted = (props: GettingStartedProps) => {
 
   return (
     <s.Container>
-      <s.Card key={"intellij"}>
+      <s.Card>
         <s.CardTextContent>
           <s.SectionTitleContainer>
             <s.IntellijFlatIconContainer>
               <IntellijLogoFlatIcon color={iconColor} size={16} />
             </s.IntellijFlatIconContainer>
-            <Typography variant={"h4"} component={"h2"}>
+            <s.SectionTitle component={"h2"}>
               Collecting data from your source code in the IDE
-            </Typography>
+            </s.SectionTitle>
           </s.SectionTitleContainer>
-          <s.SectionContent>
+          <s.JetBrainsPluginLinkContainer>
             <s.SectionText color={"text.secondary"}>
               Get continuous code feedback by installing the Digma plugin
             </s.SectionText>
@@ -92,14 +92,14 @@ export const GettingStarted = (props: GettingStartedProps) => {
               Digma JetBrains Plugin
               <s.LaunchIcon />
             </s.JetBrainsPluginLink>
-            <s.SectionText>
-              Digma analyzes your code runtime data. It enables rapid
-              development in complex projects by dynamic runtime linting,
-              detecting issues as they appear. Digma highlights possible risks
-              in the IDE, provides code change analysis and context and detect
-              common code smells and bad practices.
-            </s.SectionText>
-          </s.SectionContent>
+          </s.JetBrainsPluginLinkContainer>
+          <s.SectionText>
+            Digma analyzes your code runtime data. It enables rapid development
+            in complex projects by dynamic runtime linting, detecting issues as
+            they appear. Digma highlights possible risks in the IDE, provides
+            code change analysis and context and detect common code smells and
+            bad practices.
+          </s.SectionText>
         </s.CardTextContent>
         <s.CardIllustration>
           <s.JetBrainsPluginThumbnail
@@ -107,42 +107,38 @@ export const GettingStarted = (props: GettingStartedProps) => {
           />
         </s.CardIllustration>
       </s.Card>
-      <s.Card key={"containers"}>
+      <s.Card>
         <s.CardTextContent>
           <s.SectionTitleContainer>
             <ContainerIcon color={iconColor} size={24} />
-            <Typography variant={"h4"} component={"h2"}>
+            <s.SectionTitle component={"h2"}>
               Collecting data from your containers
-            </Typography>
+            </s.SectionTitle>
           </s.SectionTitleContainer>
-          <s.SectionContent>
-            <s.SectionText color={"text.secondary"}>
-              Add the following commands/parameters when running a docker
-              container to collect data from it
-            </s.SectionText>
-          </s.SectionContent>
-          <s.Tabs value={selectedTab} onChange={handleTabChange}>
-            <s.Tab label={"Java"} />
-            <s.Tab disabled={true} label={"Python (Coming soon)"} />
-          </s.Tabs>
+          <s.SectionText color={"text.secondary"}>
+            Add the following commands/parameters when running a docker
+            container to collect data from it
+          </s.SectionText>
           <div>
+            <s.Tabs value={selectedTab} onChange={handleTabChange}>
+              <s.Tab label={"Java"} />
+              <s.Tab disabled={true} label={"Python (Coming soon)"} />
+            </s.Tabs>
             <CodeSnippet
               text={dockerInstrumentationCommands}
               multiline={true}
             />
-            <s.SectionDivider variant={"subtitle1"}>-or-</s.SectionDivider>
-            <s.SectionTitleContainer>
-              <Typography variant={"h4"} component={"h2"}>
-                Run a sample application
-              </Typography>
-            </s.SectionTitleContainer>
-            <CodeSnippet text={sampleAppCommands} multiline={true} />
-            <s.SectionText color={"text.secondary"}>
-              To see complete code insights you can clone the sample repo{" "}
-              <s.Link onClick={handleJavaSampleAppLinkClick}>here</s.Link> and
-              install the Digma plugin into your IDE using the link below
-            </s.SectionText>
           </div>
+          <s.SectionDivider variant={"subtitle1"}>-or-</s.SectionDivider>
+          <Typography variant={"h4"} component={"h3"}>
+            Run a sample application
+          </Typography>
+          <CodeSnippet text={sampleAppCommands} multiline={true} />
+          <s.SectionText color={"text.secondary"}>
+            To see complete code insights you can clone the sample repo{" "}
+            <s.Link onClick={handleJavaSampleAppLinkClick}>here</s.Link> and
+            install the Digma plugin into your IDE using the link below
+          </s.SectionText>
         </s.CardTextContent>
       </s.Card>
     </s.Container>

@@ -46,7 +46,33 @@ export interface Duration {
   raw: number;
 }
 
-export interface DurationPercentiles {
+export interface SpanInfo {
+  name: string;
+  displayName: string;
+  instrumentationLibrary: string;
+  spanCodeObjectId: string;
+  methodCodeObjectId: string | null;
+  kind: string;
+
+  /**
+   * @deprecated
+   */
+  codeObjectId: string | null;
+}
+
+export interface AssetEntrySpanInfo extends SpanInfo {
+  classification: string;
+  role: string;
+}
+
+export interface SpanInstanceInfo {
+  traceId: string;
+  spanId: string;
+  startTime: string;
+  duration: Duration;
+}
+
+export interface DurationPercentileWithChange {
   percentile: number;
   currentDuration: Duration;
   previousDuration: Duration | null;
@@ -56,28 +82,13 @@ export interface DurationPercentiles {
 }
 
 export interface AssetEntry {
-  span: {
-    classification: string;
-    role: string;
-    name: string;
-    displayName: string;
-    instrumentationLibrary: string;
-    methodCodeObjectId: string;
-    spanCodeObjectId: string;
-    kind: string;
-    codeObjectId: string;
-  };
+  span: AssetEntrySpanInfo;
   assetType: string;
   serviceName: string;
   endpointCodeObjectId: string | null;
-  durationPercentiles: DurationPercentiles[];
+  durationPercentiles: DurationPercentileWithChange[];
   insights: Insight[];
-  lastSpanInstanceInfo: {
-    traceId: string;
-    spanId: string;
-    startTime: string;
-    duration: Duration;
-  };
+  lastSpanInstanceInfo: SpanInstanceInfo;
   firstDataSeenTime: string;
 }
 
@@ -96,6 +107,9 @@ export interface AssetsProps {
   environments?: string[];
   onGettingStartedButtonClick: () => void;
   onAssetSelect: (entry: ExtendedAssetEntry) => void;
+  onAssetNavigate: () => void;
+  assetNavigateTo?: ExtendedAssetEntry;
+  environment?: string;
 }
 
 export interface GetAssetsResponse extends AssetsData {

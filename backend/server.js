@@ -31,6 +31,19 @@ app.post("/environments/:environmentId/assets", async function (req, res) {
   }
 });
 
+app.post("/insights", async function (req, res) {
+  try {
+    const insights = await analyticsProvider.getInsights(
+      req.body.codeObjectIds,
+      req.body.environment
+    );
+    res.send(insights);
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(500);
+  }
+});
+
 var sock = process.argv[2];
 
 fs.stat(sock, function (err) {
