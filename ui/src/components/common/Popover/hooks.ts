@@ -22,8 +22,8 @@ export const usePopover = ({
   onOpenChange: setControlledOpen,
 }: PopoverProps = {}) => {
   const [uncontrolledOpen, setUncontrolledOpen] = useState(initialOpen);
-  const [labelId, setLabelId] = useState<string | undefined>();
-  const [descriptionId, setDescriptionId] = useState<string | undefined>();
+  const [labelId, setLabelId] = useState<string>();
+  const [descriptionId, setDescriptionId] = useState<string>();
 
   const open = controlledOpen ?? uncontrolledOpen;
   const setOpen = setControlledOpen ?? setUncontrolledOpen;

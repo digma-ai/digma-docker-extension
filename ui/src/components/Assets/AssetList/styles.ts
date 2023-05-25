@@ -1,17 +1,12 @@
 import styled from "styled-components";
 
-export const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  overflow: auto;
-`;
-
 export const List = styled.ul`
   padding: 0;
   display: flex;
   flex-direction: column;
   gap: 8px;
   margin: 0;
+  overflow: auto;
 `;
 
 export const ListItem = styled.li`

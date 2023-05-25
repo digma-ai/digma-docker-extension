@@ -2,14 +2,14 @@ import MuiLaunchIcon from "@mui/icons-material/Launch";
 import MuiLink from "@mui/material/Link";
 import MuiTab from "@mui/material/Tab";
 import MuiTabs from "@mui/material/Tabs";
-import Typography from "@mui/material/Typography";
+import Typography, { TypographyProps } from "@mui/material/Typography";
 import styled from "styled-components";
 
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 24px;
-  padding-top: 40px;
+  padding: 40px 0;
   width: 100%;
 `;
 
@@ -26,6 +26,7 @@ export const CardTextContent = styled.div`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  gap: 20px;
 `;
 
 export const CardIllustration = styled.div`
@@ -40,14 +41,16 @@ export const SectionTitleContainer = styled.div`
     theme.palette.mode === "light" ? "#505968" : "#fff"};
 `;
 
-export const SectionContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding-left: 32px;
+export const SectionTitle = styled(Typography)<
+  TypographyProps<"span", { component: "h2" }>
+>`
+  font-size: 20px;
+  line-height: 24px;
+  font-weight: 500;
 `;
 
 export const SectionText = styled(Typography)`
-  margin-top: 8px;
+  margin-top: 4px;
   color: ${({ theme }) =>
     theme.palette.mode === "light" ? "#505968" : "#c4d0da"};
 `;
@@ -56,9 +59,15 @@ export const Link = styled(MuiLink)`
   cursor: pointer;
 `;
 
-export const JetBrainsPluginLink = styled(Link)`
-  margin: 24px 0;
+export const JetBrainsPluginLinkContainer = styled.div`
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+`;
+
+export const JetBrainsPluginLink = styled(Link)`
+  display: inline-flex;
   align-items: center;
   gap: 4px;
 `;
@@ -75,8 +84,8 @@ export const LaunchIcon = styled(MuiLaunchIcon)`
 `;
 
 export const Tabs = styled(MuiTabs)`
-  margin-top: 24px;
-  min-height: 24px;
+  margin: 4px 0 8px;
+  min-height: 32px;
 
   & .MuiTabs-indicator {
     background: ${({ theme }) =>
@@ -97,7 +106,6 @@ export const Tab = styled(MuiTab)`
 `;
 
 export const SectionDivider = styled(Typography)`
-  margin: 20px 0;
   color: ${({ theme }) =>
     theme.palette.mode === "light" ? "#677285" : "#898f93"};
 `;
