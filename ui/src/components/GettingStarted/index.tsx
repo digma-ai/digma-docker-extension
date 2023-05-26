@@ -73,6 +73,7 @@ export const GettingStarted = (props: GettingStartedProps) => {
 
   return (
     <s.Container>
+      <iframe src="./jaeger/index.html" style={{ resize: "both" }} />
       <s.Card>
         <s.CardTextContent>
           <s.SectionTitleContainer>
@@ -137,7 +138,7 @@ export const GettingStarted = (props: GettingStartedProps) => {
           <s.SectionText color={"text.secondary"}>
             To see complete code insights you can clone the sample repo{" "}
             <s.Link onClick={handleJavaSampleAppLinkClick}>here</s.Link> and
-            install the Digma plugin into your IDE using the link below
+            install the Digma plugin into your IDE using the link above
           </s.SectionText>
         </s.CardTextContent>
       </s.Card>
