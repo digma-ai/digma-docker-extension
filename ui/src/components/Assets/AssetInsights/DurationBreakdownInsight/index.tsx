@@ -1,3 +1,4 @@
+import { getPercentileLabel } from "../../../../utils/getPercentileLabel";
 import { InsightCard } from "../InsightCard";
 import { Pagination } from "../Pagination";
 import { DurationPercentile, SpanDurationBreakdownEntry } from "../types";
@@ -25,9 +26,9 @@ const getTitle = (breakdownEntry: SpanDurationBreakdownEntry) => {
   let title = "Percentage of time spent in span:";
 
   sortedPercentiles.forEach((percentile) => {
-    title += `\nP${percentile.percentile * 100}: ${percentile.duration.value} ${
-      percentile.duration.unit
-    }`;
+    title += `\n${getPercentileLabel(percentile.percentile)}: ${
+      percentile.duration.value
+    } ${percentile.duration.unit}`;
   });
 
   return title;
