@@ -1,6 +1,7 @@
 import { MemoExoticComponent } from "react";
 import { IconProps } from "../../common/icons/types";
 import {
+  AssetsData,
   Duration,
   DurationPercentileWithChange,
   ExtendedAssetEntry,
@@ -10,9 +11,17 @@ import {
 } from "../types";
 
 export interface AssetInsightsProps {
+  assets: AssetsData;
   assetEntry: ExtendedAssetEntry;
-  onGoToAsset: (asset: ExtendedAssetEntry) => void;
+  onGoToAssetsPage: (asset?: ExtendedAssetEntry) => void;
   environment: string;
+  onAssetSelect: (asset: ExtendedAssetEntry) => void;
+}
+
+export interface InsightWithLinksProps {
+  asset: ExtendedAssetEntry;
+  assets: AssetsData;
+  onAssetSelect: (asset: ExtendedAssetEntry) => void;
 }
 
 export interface InsightGroup {
@@ -339,6 +348,13 @@ export interface RootCauseSpanInfo extends SpanInfo {
   flowHash: string;
 }
 
+interface AffectedEndpoint extends SpanInfo {
+  route: string;
+  serviceName: string;
+  sampleTraceId: string | null;
+  flowHash: string;
+}
+
 export interface SpanScalingInsight extends SpanInsight {
   name: "Scaling Issue Found";
   type: InsightType.SpanScaling;
@@ -350,6 +366,7 @@ export interface SpanScalingInsight extends SpanInsight {
   minDuration: Duration;
   maxDuration: Duration;
   rootCauseSpans: RootCauseSpanInfo[];
+  affectedEndpoints: AffectedEndpoint[];
 
   /**
    * @deprecated
@@ -359,21 +376,6 @@ export interface SpanScalingInsight extends SpanInsight {
    * @deprecated
    */
   spanInstrumentationLibrary: string;
-}
-
-export interface SpanScalingRootCauseInsight extends SpanInsight {
-  name: "Scaling Issue Root Cause";
-  type: InsightType.SpanScalingRootCause;
-  category: InsightCategory.Performance;
-  specifity: InsightSpecificity.OwnInsight;
-  importance: InsightImportance.Critical;
-  spanName: string;
-  affectedEndpoints: {
-    route: string;
-    serviceName: string;
-    sampleTraceId: string | null;
-    flowHash: string;
-  }[];
 }
 
 export interface SpanNPlusOneInsight extends SpanInsight {

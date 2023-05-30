@@ -4,6 +4,8 @@ import styled from "styled-components";
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
+  overflow: auto;
+  padding-bottom: 28px;
 `;
 
 export const Header = styled.div`
@@ -11,6 +13,7 @@ export const Header = styled.div`
   height: 96px;
   justify-content: space-between;
   align-items: center;
+  flex-shrink: 0;
 `;
 
 export const Breadcrumbs = styled(MuiBreadcrumbs)`
@@ -61,7 +64,7 @@ export const InsightsContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding-bottom: 28px;
+  overflow: auto;
 `;
 
 export const Description = styled.span`
@@ -76,6 +79,11 @@ export const Description = styled.span`
         return "#9b9b9b";
     }
   }};
+`;
+
+export const Link = styled.a`
+  color: #7891d0;
+  cursor: pointer;
 `;
 
 export const InsightGroup = styled.div`

@@ -1,6 +1,9 @@
-import { getPercentileLabel } from "../../../../utils/getPercentileLabel";
+import { ExtendedAssetEntry } from "../../types";
+import { findAssetBySpanCodeObjectId } from "../../utils/findAssetBySpanCodeObjectId";
+import { getPercentileLabel } from "../../utils/getPercentileLabel";
 import { InsightCard } from "../InsightCard";
 import { Pagination } from "../Pagination";
+import { Link } from "../styles";
 import { DurationPercentile, SpanDurationBreakdownEntry } from "../types";
 import * as s from "./styles";
 import { DurationBreakdownInsightProps } from "./types";
@@ -37,6 +40,9 @@ const getTitle = (breakdownEntry: SpanDurationBreakdownEntry) => {
 export const DurationBreakdownInsight = (
   props: DurationBreakdownInsightProps
 ) => {
+  console.log("DurationBreakdownInsight");
+  console.log(props.insight);
+
   let filteredEntries = props.insight.breakdownEntries.filter((entry) =>
     entry.percentiles.some(
       (percentile) => percentile.percentile === DEFAULT_PERCENTILE
@@ -54,6 +60,10 @@ export const DurationBreakdownInsight = (
     return 0;
   });
 
+  const handleSpanLinkClick = (asset: ExtendedAssetEntry) => {
+    props.onAssetSelect(asset);
+  };
+
   return (
     <InsightCard
       data={props.insight}
@@ -63,12 +73,27 @@ export const DurationBreakdownInsight = (
             {sortedEntries.map((entry) => {
               const percentile = getPercentile(entry, DEFAULT_PERCENTILE);
 
+              const asset = findAssetBySpanCodeObjectId(
+                props.assets,
+                entry.spanCodeObjectId,
+                props.asset.serviceName
+              );
+
+              const name = entry.spanDisplayName;
+
               return percentile ? (
                 <s.Duration
                   title={getTitle(entry)}
                   key={entry.spanCodeObjectId}
                 >
-                  {`${entry.spanDisplayName} ${percentile.duration.value} ${percentile.duration.unit}`}
+                  {asset ? (
+                    <Link onClick={() => handleSpanLinkClick(asset)}>
+                      {name}
+                    </Link>
+                  ) : (
+                    name
+                  )}{" "}
+                  {`${percentile.duration.value} ${percentile.duration.unit}`}
                 </s.Duration>
               ) : null;
             })}

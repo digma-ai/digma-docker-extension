@@ -1,5 +1,5 @@
-import { SpanUsagesInsight } from "../types";
+import { InsightWithLinksProps, SpanUsagesInsight } from "../types";
 
-export interface TopUsageInsightProps {
+export interface TopUsageInsightProps extends InsightWithLinksProps {
   insight: SpanUsagesInsight;
 }

@@ -1,5 +1,5 @@
-import { SpanScalingInsight } from "../types";
+import { InsightWithLinksProps, SpanScalingInsight } from "../types";
 
-export interface ScalingIssueInsightProps {
+export interface ScalingIssueInsightProps extends InsightWithLinksProps {
   insight: SpanScalingInsight;
 }

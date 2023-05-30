@@ -1,5 +1,8 @@
-import { EndpointSuspectedNPlusOneInsight } from "../types";
+import {
+  EndpointSuspectedNPlusOneInsight,
+  InsightWithLinksProps,
+} from "../types";
 
-export interface EndpointNPlusOneInsightProps {
+export interface EndpointNPlusOneInsightProps extends InsightWithLinksProps {
   insight: EndpointSuspectedNPlusOneInsight;
 }

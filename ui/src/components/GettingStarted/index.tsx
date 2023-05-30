@@ -73,7 +73,6 @@ export const GettingStarted = (props: GettingStartedProps) => {
 
   return (
     <s.Container>
-      <iframe src="./jaeger/index.html" style={{ resize: "both" }} />
       <s.Card>
         <s.CardTextContent>
           <s.SectionTitleContainer>

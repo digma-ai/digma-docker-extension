@@ -173,7 +173,7 @@ export const App = () => {
     goToAssetPage();
   };
 
-  const handleGoToAsset = (asset: ExtendedAssetEntry) => {
+  const handleGoToAssetPage = (asset?: ExtendedAssetEntry) => {
     goToAssetPage(asset);
   };
 
@@ -197,8 +197,8 @@ export const App = () => {
     setCurrentPage(PAGES.GETTING_STARTED);
   };
 
-  const handleAssetSelect = async (entry: ExtendedAssetEntry) => {
-    setSelectedAsset(entry);
+  const handleAssetSelect = (asset: ExtendedAssetEntry) => {
+    setSelectedAsset(asset);
   };
 
   console.log("State:", {
@@ -285,11 +285,13 @@ export const App = () => {
             </>
           }
           main={
-            selectedAsset && selectedEnvironment ? (
+            assets && selectedAsset && selectedEnvironment ? (
               <AssetInsights
+                assets={assets}
                 assetEntry={selectedAsset}
                 environment={selectedEnvironment}
-                onGoToAsset={handleGoToAsset}
+                onGoToAssetsPage={handleGoToAssetPage}
+                onAssetSelect={handleAssetSelect}
               />
             ) : (
               <Assets

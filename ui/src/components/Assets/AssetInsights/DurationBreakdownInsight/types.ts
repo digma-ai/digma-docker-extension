@@ -1,5 +1,5 @@
-import { SpanDurationBreakdownInsight } from "../types";
+import { InsightWithLinksProps, SpanDurationBreakdownInsight } from "../types";
 
-export interface DurationBreakdownInsightProps {
+export interface DurationBreakdownInsightProps extends InsightWithLinksProps {
   insight: SpanDurationBreakdownInsight;
 }
