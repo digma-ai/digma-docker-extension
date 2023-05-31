@@ -7,9 +7,6 @@ import * as s from "./styles";
 import { ScalingIssueInsightProps } from "./types";
 
 export const ScalingIssueInsight = (props: ScalingIssueInsightProps) => {
-  console.log("ScalingIssueInsight");
-  console.log(props.insight);
-
   const handleLinkClick = (asset: ExtendedAssetEntry) => {
     props.onAssetSelect(asset);
   };

@@ -13,6 +13,7 @@ import { getAssetTypeInfo } from "../utils/getAssetTypeInfo";
 import { BottleneckInsight } from "./BottleneckInsight";
 import { DurationBreakdownInsight } from "./DurationBreakdownInsight";
 import { DurationInsight } from "./DurationInsight";
+import { DurationSlowdownSourceInsight } from "./DurationSlowdownSourceInsight";
 import { EndpointNPlusOneInsight } from "./EndpointNPlusOneInsight";
 import { ErrorsInsight } from "./ErrorsInsight";
 import { InsightCard } from "./InsightCard";
@@ -26,6 +27,7 @@ import * as s from "./styles";
 import {
   isCodeObjectErrorsInsight,
   isCodeObjectHotSpotInsight,
+  isEndpointDurationSlowdownInsight,
   isEndpointHighUsageInsight,
   isEndpointLowUsageInsight,
   isEndpointNormalUsageInsight,
@@ -69,6 +71,7 @@ export const getInsightTypeOrderPriority = (type: string): number => {
     [InsightType.NormalUsage]: 50,
     [InsightType.HighUsage]: 10,
     [InsightType.SlowEndpoint]: 20,
+    [InsightType.EndpointDurationSlowdown]: 25,
   };
 
   return insightOrderPriorityMap[type] || Infinity;
@@ -186,6 +189,11 @@ const renderInsightCard = (
       />
     );
   }
+  if (isEndpointDurationSlowdownInsight(insight)) {
+    return (
+      <DurationSlowdownSourceInsight key={insight.type} insight={insight} />
+    );
+  }
 
   return <InsightCard key={insight.type} data={insight} />;
 };
@@ -205,8 +213,6 @@ export const AssetInsights = (props: AssetInsightsProps) => {
     codeObjectIds.push(`method:${props.assetEntry.span.methodCodeObjectId}`);
   }
 
-  console.log("codeObjectIds to send: ", codeObjectIds);
-
   const handleAssetsLinkClick = () => {
     props.onGoToAssetsPage(props.assetEntry);
   };
@@ -221,7 +227,12 @@ export const AssetInsights = (props: AssetInsightsProps) => {
       environment: props.environment,
     })) as CodeObjectInsight[];
 
-    console.log("Insights have been fetched:", insights);
+    console.debug(
+      `Insights for asset with ids [${codeObjectIds
+        .map((x) => `"${x}"`)
+        .join(", ")}] have been fetched:`,
+      insights
+    );
 
     const sortedInsights = [...insights].sort(
       (a, b) =>

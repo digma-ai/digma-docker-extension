@@ -3,6 +3,7 @@ import {
   CodeObjectErrorsInsight,
   CodeObjectHotSpotInsight,
   CodeObjectInsight,
+  EndpointDurationSlowdownInsight,
   EndpointHighUsageInsight,
   EndpointLowUsageInsight,
   EndpointNormalUsageInsight,
@@ -18,6 +19,10 @@ import {
   SpanScalingInsight,
   SpanUsagesInsight,
 } from "./types";
+
+export const isSpanInsight = (
+  insight: CodeObjectInsight
+): insight is SpanInsight => insight.scope === InsightScope.Span;
 
 export const isSpanDurationsInsight = (
   insight: CodeObjectInsight
@@ -82,6 +87,7 @@ export const isCodeObjectHotSpotInsight = (
   insight: CodeObjectInsight
 ): insight is CodeObjectHotSpotInsight => insight.type === InsightType.HotSpot;
 
-export const isSpanInsight = (
+export const isEndpointDurationSlowdownInsight = (
   insight: CodeObjectInsight
-): insight is SpanInsight => insight.scope === InsightScope.Span;
+): insight is EndpointDurationSlowdownInsight =>
+  insight.type === InsightType.EndpointDurationSlowdown;

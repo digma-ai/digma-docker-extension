@@ -90,7 +90,7 @@ export const App = () => {
     const environments = (await ddClient.extension.vm?.service?.get(
       "/environments"
     )) as string[];
-    console.log("Environments have been fetched:", environments);
+    console.debug("Environments have been fetched:", environments);
     setEnvironments(environments);
   };
 
@@ -99,7 +99,7 @@ export const App = () => {
       `/environments/${environment}/assets`,
       { serviceNames: [] }
     )) as GetAssetsResponse;
-    console.log(
+    console.debug(
       `Assets for "${environment}" environment have been fetched:`,
       assets
     );
@@ -201,7 +201,7 @@ export const App = () => {
     setSelectedAsset(asset);
   };
 
-  console.log("State:", {
+  console.debug("State:", {
     assets,
     environments,
     selectedEnvironment,

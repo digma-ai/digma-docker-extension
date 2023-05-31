@@ -7,9 +7,6 @@ import * as s from "./styles";
 import { SpanBottleneckInsightProps } from "./types";
 
 export const SpanBottleneckInsight = (props: SpanBottleneckInsightProps) => {
-  console.log("SpanBottleneckInsight");
-  console.log(props.insight);
-
   const handleSpanLinkClick = (asset: ExtendedAssetEntry) => {
     props.onAssetSelect(asset);
   };

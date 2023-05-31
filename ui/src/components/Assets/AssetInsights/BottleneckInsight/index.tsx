@@ -8,9 +8,6 @@ import * as s from "./styles";
 import { BottleneckInsightProps } from "./types";
 
 export const BottleneckInsight = (props: BottleneckInsightProps) => {
-  console.log("BottleneckInsight");
-  console.log(props.insight);
-
   const handleEndpointLinkClick = (asset: ExtendedAssetEntry) => {
     props.onAssetSelect(asset);
   };

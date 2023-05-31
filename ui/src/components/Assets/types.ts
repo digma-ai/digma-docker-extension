@@ -16,6 +16,7 @@ export enum InsightType {
   SpanDurations = "SpanDurations",
   SpanScaling = "SpanScaling",
   SpanDurationBreakdown = "SpanDurationBreakdown",
+  EndpointDurationSlowdown = "EndpointDurationSlowdown",
 }
 
 export interface ExtendedAssetEntry extends AssetEntry {

@@ -12,9 +12,6 @@ const FRACTION_MIN_LIMIT = 0.01;
 export const EndpointNPlusOneInsight = (
   props: EndpointNPlusOneInsightProps
 ) => {
-  console.log("EndpointNPlusOneInsight");
-  console.log(props.insight);
-
   const handleSpanLinkClick = (asset: ExtendedAssetEntry) => {
     props.onAssetSelect(asset);
   };
@@ -34,8 +31,6 @@ export const EndpointNPlusOneInsight = (
                   spanInfo.spanCodeObjectId,
                   props.asset.serviceName
                 );
-
-                console.log(asset);
 
                 const spanName = spanInfo.displayName;
 

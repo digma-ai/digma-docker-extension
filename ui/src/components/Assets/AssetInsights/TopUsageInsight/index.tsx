@@ -8,9 +8,6 @@ import * as s from "./styles";
 import { TopUsageInsightProps } from "./types";
 
 export const TopUsageInsight = (props: TopUsageInsightProps) => {
-  console.log("TopUsageInsight");
-  console.log(props.insight);
-
   const handleServiceLinkClick = (asset: ExtendedAssetEntry) => {
     props.onAssetSelect(asset);
   };

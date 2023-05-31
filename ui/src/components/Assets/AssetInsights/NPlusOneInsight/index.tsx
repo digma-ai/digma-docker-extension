@@ -6,9 +6,6 @@ import * as s from "./styles";
 import { NPlusOneInsightProps } from "./types";
 
 export const NPlusOneInsight = (props: NPlusOneInsightProps) => {
-  console.log("NPlusOneInsight");
-  console.log(props.insight);
-
   const handleSpanLinkClick = (asset: ExtendedAssetEntry) => {
     props.onAssetSelect(asset);
   };
@@ -20,8 +17,6 @@ export const NPlusOneInsight = (props: NPlusOneInsightProps) => {
         props.asset.serviceName
       )
     : undefined;
-
-  console.log(asset);
 
   const spanName = props.insight.clientSpanName;
 

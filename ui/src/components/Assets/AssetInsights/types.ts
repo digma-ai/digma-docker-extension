@@ -70,6 +70,11 @@ export interface Insight {
   specifity: InsightSpecificity;
 }
 
+export interface CodeObjectDecorator {
+  description: string;
+  title: string;
+}
+
 export interface CodeObjectInsight extends Insight {
   shortDisplayInfo: {
     title: string;
@@ -80,10 +85,7 @@ export interface CodeObjectInsight extends Insight {
   name: string;
   scope: InsightScope;
   codeObjectId: string;
-  decorators: {
-    title: string;
-    description: string;
-  }[];
+  decorators: CodeObjectDecorator[];
   environment: string;
   importance: InsightImportance;
   severity: number;
@@ -103,13 +105,6 @@ export interface SpanDurationsInsight extends SpanInsight {
   category: InsightCategory.Performance;
   specifity: InsightSpecificity.OwnInsight;
   isRecalculateEnabled: true;
-  periodicPercentiles: {
-    percentile: number;
-    currentDuration: Duration;
-    previousDuration: Duration | null;
-    sampleTraces: string[];
-    period: string;
-  }[];
   percentiles: DurationPercentileWithChange[];
   lastSpanInstanceInfo: SpanInstanceInfo;
 
@@ -135,6 +130,7 @@ export interface SpanUsagesInsight extends SpanInsight {
   type: InsightType.SpanUsages;
   category: InsightCategory.Usage;
   specifity: InsightSpecificity.OwnInsight;
+  isRecalculateEnabled: true;
   importance: InsightImportance.Interesting;
   sampleTrace: string;
   flows: {
@@ -240,11 +236,6 @@ export interface EndpointInsight extends SpanInsight {
    * @deprecated
    */
   spanCodeObjectId: string;
-}
-
-export interface CodeObjectDecorator {
-  description: string;
-  title: string;
 }
 
 export interface EndpointLowUsageInsight extends EndpointInsight {
@@ -450,4 +441,24 @@ export interface CodeObjectErrorsInsight extends CodeObjectInsight {
     errorType: string;
     sourceCodeObjectId: string;
   }[];
+}
+
+export interface DurationSlowdownSource {
+  percentile: string;
+  spanInfo: SpanInfo;
+  level: number;
+  previousDuration: Duration;
+  currentDuration: Duration;
+  changeTime: string;
+  changeVerified: boolean;
+}
+
+export interface EndpointDurationSlowdownInsight extends EndpointInsight {
+  name: "Endpoint Duration Slowdown Source";
+  type: InsightType.EndpointDurationSlowdown;
+  category: InsightCategory.Performance;
+  specifity: InsightSpecificity.OwnInsight;
+  importance: InsightImportance.Critical;
+  durationSlowdownSources: DurationSlowdownSource[];
+  decorators: CodeObjectDecorator[];
 }

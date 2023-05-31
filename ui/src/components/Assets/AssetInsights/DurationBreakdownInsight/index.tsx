@@ -40,9 +40,6 @@ const getTitle = (breakdownEntry: SpanDurationBreakdownEntry) => {
 export const DurationBreakdownInsight = (
   props: DurationBreakdownInsightProps
 ) => {
-  console.log("DurationBreakdownInsight");
-  console.log(props.insight);
-
   let filteredEntries = props.insight.breakdownEntries.filter((entry) =>
     entry.percentiles.some(
       (percentile) => percentile.percentile === DEFAULT_PERCENTILE
