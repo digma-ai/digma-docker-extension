@@ -15,23 +15,40 @@ const sortEntries = (
 
   const sortByName = (
     a: ExtendedAssetEntryWithServices,
-    b: ExtendedAssetEntryWithServices
-  ) => a.span.displayName.localeCompare(b.span.displayName);
+    b: ExtendedAssetEntryWithServices,
+    isDesc: boolean
+  ) =>
+    isDesc
+      ? b.span.displayName.localeCompare(a.span.displayName)
+      : a.span.displayName.localeCompare(b.span.displayName);
 
   switch (sorting.criterion) {
     case "Critical insights":
       return entries.sort((a, b) => {
-        const aCriticalInsights = a.insights.filter(
-          (x) => x.importance < 3
+        const aHighestImportance =
+          a.insights.length > 0
+            ? Math.min(...a.insights.map((x) => x.importance))
+            : Infinity;
+        const bHighestImportance =
+          b.insights.length > 0
+            ? Math.min(...b.insights.map((x) => x.importance))
+            : Infinity;
+
+        const aMostImportantInsightCount = a.insights.filter(
+          (x) => x.importance === aHighestImportance
         ).length;
-        const bCriticalInsights = b.insights.filter(
-          (x) => x.importance < 3
+        const bMostImportantInsightCount = b.insights.filter(
+          (x) => x.importance === bHighestImportance
         ).length;
 
         return (
           (sorting.isDesc
-            ? bCriticalInsights - aCriticalInsights
-            : aCriticalInsights - bCriticalInsights) || sortByName(a, b)
+            ? aHighestImportance - bHighestImportance
+            : bHighestImportance - aHighestImportance) ||
+          (sorting.isDesc
+            ? bMostImportantInsightCount - aMostImportantInsightCount
+            : aMostImportantInsightCount - bMostImportantInsightCount) ||
+          sortByName(a, b, sorting.isDesc)
         );
       });
     case "Performance":
@@ -57,7 +74,7 @@ const sortEntries = (
 
         return (
           (sorting.isDesc ? bDuration - aDuration : aDuration - bDuration) ||
-          sortByName(a, b)
+          sortByName(a, b, sorting.isDesc)
         );
       });
     case "Latest":
@@ -67,12 +84,14 @@ const sortEntries = (
 
         return (
           (sorting.isDesc ? bDateTime - aDateTime : aDateTime - bDateTime) ||
-          sortByName(a, b)
+          sortByName(a, b, sorting.isDesc)
         );
       });
     case "Name":
       return entries.sort((a, b) =>
-        sorting.isDesc ? sortByName(b, a) : sortByName(a, b)
+        sorting.isDesc
+          ? sortByName(b, a, sorting.isDesc)
+          : sortByName(a, b, sorting.isDesc)
       );
     default:
       return entries;
