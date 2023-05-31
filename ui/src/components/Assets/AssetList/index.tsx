@@ -129,8 +129,6 @@ const AssetListComponent = (
     }
   }, []);
 
-  console.log(sortedEntries);
-
   return (
     <s.List ref={ref}>
       {sortedEntries.map((entry) => {

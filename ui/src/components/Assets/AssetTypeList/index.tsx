@@ -1,4 +1,4 @@
-import { getAssetTypeInfo } from "../utils";
+import { getAssetTypeInfo } from "../utils/getAssetTypeInfo";
 import { AssetTypeListItem } from "./AssetTypeListItem";
 import * as s from "./styles";
 import { AssetListProps } from "./types";

@@ -7,6 +7,7 @@ import { roundTo } from "../../../../utils/roundTo";
 import { ArrowIcon } from "../../../common/icons/ArrowIcon";
 import { Direction } from "../../../common/icons/types";
 import { Duration, DurationPercentileWithChange } from "../../types";
+import { getPercentileLabel } from "../../utils/getPercentileLabel";
 import { InsightCard } from "../InsightCard";
 import * as s from "./styles";
 import { DurationInsightProps } from "./types";
@@ -44,17 +45,17 @@ const getArrowIconColor = (direction: Direction, theme: DefaultTheme) => {
   if (direction === Direction.UP) {
     switch (theme.palette.mode) {
       case "light":
-        return "#1dc693";
-      case "dark":
         return "#e00036";
+      case "dark":
+        return "#f93967";
     }
   }
 
   switch (theme.palette.mode) {
     case "light":
-      return "#67d28b";
+      return "#1dc693";
     case "dark":
-      return "#f93967";
+      return "#67d28b";
   }
 };
 
@@ -123,7 +124,7 @@ export const DurationInsight = (props: DurationInsightProps) => {
 
                 return (
                   <s.Percentile key={percentile.percentile}>
-                    {`P${percentile.percentile * 100} ${
+                    {`${getPercentileLabel(percentile.percentile)}: ${
                       percentile.currentDuration.value
                     } ${percentile.currentDuration.unit}`}
                     {percentile.previousDuration &&

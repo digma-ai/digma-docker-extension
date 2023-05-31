@@ -90,7 +90,7 @@ export const App = () => {
     const environments = (await ddClient.extension.vm?.service?.get(
       "/environments"
     )) as string[];
-    console.log("Environments have been fetched:", environments);
+    console.debug("Environments have been fetched:", environments);
     setEnvironments(environments);
   };
 
@@ -99,7 +99,7 @@ export const App = () => {
       `/environments/${environment}/assets`,
       { serviceNames: [] }
     )) as GetAssetsResponse;
-    console.log(
+    console.debug(
       `Assets for "${environment}" environment have been fetched:`,
       assets
     );
@@ -173,7 +173,7 @@ export const App = () => {
     goToAssetPage();
   };
 
-  const handleGoToAsset = (asset: ExtendedAssetEntry) => {
+  const handleGoToAssetPage = (asset?: ExtendedAssetEntry) => {
     goToAssetPage(asset);
   };
 
@@ -197,11 +197,11 @@ export const App = () => {
     setCurrentPage(PAGES.GETTING_STARTED);
   };
 
-  const handleAssetSelect = async (entry: ExtendedAssetEntry) => {
-    setSelectedAsset(entry);
+  const handleAssetSelect = (asset: ExtendedAssetEntry) => {
+    setSelectedAsset(asset);
   };
 
-  console.log("State:", {
+  console.debug("State:", {
     assets,
     environments,
     selectedEnvironment,
@@ -285,11 +285,13 @@ export const App = () => {
             </>
           }
           main={
-            selectedAsset && selectedEnvironment ? (
+            assets && selectedAsset && selectedEnvironment ? (
               <AssetInsights
+                assets={assets}
                 assetEntry={selectedAsset}
                 environment={selectedEnvironment}
-                onGoToAsset={handleGoToAsset}
+                onGoToAssetsPage={handleGoToAssetPage}
+                onAssetSelect={handleAssetSelect}
               />
             ) : (
               <Assets

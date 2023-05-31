@@ -7,17 +7,18 @@ import { usePrevious } from "../../../hooks/usePrevious";
 import { Loader } from "../../common/Loader";
 import { OpenTelemetryLogoIcon } from "../../common/icons/OpenTelemetryLogoIcon";
 import { NoData } from "../NoData";
-import { InsightType } from "../types";
-import { getAssetTypeInfo } from "../utils";
+import { AssetsData, ExtendedAssetEntry, InsightType } from "../types";
+import { findAssetBySpanCodeObjectId } from "../utils/findAssetBySpanCodeObjectId";
+import { getAssetTypeInfo } from "../utils/getAssetTypeInfo";
 import { BottleneckInsight } from "./BottleneckInsight";
 import { DurationBreakdownInsight } from "./DurationBreakdownInsight";
 import { DurationInsight } from "./DurationInsight";
+import { DurationSlowdownSourceInsight } from "./DurationSlowdownSourceInsight";
 import { EndpointNPlusOneInsight } from "./EndpointNPlusOneInsight";
 import { ErrorsInsight } from "./ErrorsInsight";
 import { InsightCard } from "./InsightCard";
 import { NPlusOneInsight } from "./NPlusOneInsight";
 import { ScalingIssueInsight } from "./ScalingIssueInsight";
-import { ScalingIssueRootCauseInsight } from "./ScalingIssueRootCauseInsight";
 import { SlowEndpointInsight } from "./SlowEndpointInsight";
 import { SpanBottleneckInsight } from "./SpanBottleneckInsight";
 import { TopUsageInsight } from "./TopUsageInsight";
@@ -26,6 +27,7 @@ import * as s from "./styles";
 import {
   isCodeObjectErrorsInsight,
   isCodeObjectHotSpotInsight,
+  isEndpointDurationSlowdownInsight,
   isEndpointHighUsageInsight,
   isEndpointLowUsageInsight,
   isEndpointNormalUsageInsight,
@@ -38,7 +40,6 @@ import {
   isSpanInsight,
   isSpanNPlusOneInsight,
   isSpanScalingInsight,
-  isSpanScalingRootCauseInsight,
   isSpanUsagesInsight,
 } from "./typeGuards";
 import {
@@ -58,7 +59,6 @@ export const getInsightTypeOrderPriority = (type: string): number => {
 
     [InsightType.SpanDurations]: 60,
     [InsightType.SpanUsages]: 61,
-    [InsightType.SpanScalingRootCause]: 62,
     [InsightType.SpanScaling]: 63,
     [InsightType.SpanNPlusOne]: 65,
     [InsightType.SpanDurationChange]: 66,
@@ -71,26 +71,64 @@ export const getInsightTypeOrderPriority = (type: string): number => {
     [InsightType.NormalUsage]: 50,
     [InsightType.HighUsage]: 10,
     [InsightType.SlowEndpoint]: 20,
+    [InsightType.EndpointDurationSlowdown]: 25,
   };
 
   return insightOrderPriorityMap[type] || Infinity;
 };
 
-const renderInsightCard = (insight: CodeObjectInsight): JSX.Element => {
+const renderInsightCard = (
+  insight: CodeObjectInsight,
+  assets: AssetsData,
+  asset: ExtendedAssetEntry,
+  onAssetSelect: (asset: ExtendedAssetEntry) => void
+): JSX.Element => {
   if (isSpanDurationsInsight(insight)) {
     return <DurationInsight key={insight.type} insight={insight} />;
   }
   if (isSpanDurationBreakdownInsight(insight)) {
-    return <DurationBreakdownInsight key={insight.type} insight={insight} />;
+    return (
+      <DurationBreakdownInsight
+        key={insight.type}
+        insight={insight}
+        assets={assets}
+        asset={asset}
+        onAssetSelect={onAssetSelect}
+      />
+    );
   }
   if (isSpanUsagesInsight(insight)) {
-    return <TopUsageInsight key={insight.type} insight={insight} />;
+    return (
+      <TopUsageInsight
+        key={insight.type}
+        insight={insight}
+        assets={assets}
+        asset={asset}
+        onAssetSelect={onAssetSelect}
+      />
+    );
   }
   if (isSpanEndpointBottleneckInsight(insight)) {
-    return <BottleneckInsight key={insight.type} insight={insight} />;
+    return (
+      <BottleneckInsight
+        key={insight.type}
+        insight={insight}
+        assets={assets}
+        asset={asset}
+        onAssetSelect={onAssetSelect}
+      />
+    );
   }
   if (isEndpointSlowestSpansInsight(insight)) {
-    return <SpanBottleneckInsight key={insight.type} insight={insight} />;
+    return (
+      <SpanBottleneckInsight
+        key={insight.type}
+        insight={insight}
+        assets={assets}
+        asset={asset}
+        onAssetSelect={onAssetSelect}
+      />
+    );
   }
   if (isSlowEndpointInsight(insight)) {
     return <SlowEndpointInsight key={insight.type} insight={insight} />;
@@ -106,17 +144,36 @@ const renderInsightCard = (insight: CodeObjectInsight): JSX.Element => {
     return <ErrorsInsight key={insight.type} insight={insight} />;
   }
   if (isEndpointSuspectedNPlusOneInsight(insight)) {
-    return <EndpointNPlusOneInsight key={insight.type} insight={insight} />;
+    return (
+      <EndpointNPlusOneInsight
+        key={insight.type}
+        insight={insight}
+        assets={assets}
+        asset={asset}
+        onAssetSelect={onAssetSelect}
+      />
+    );
   }
   if (isSpanNPlusOneInsight(insight)) {
-    return <NPlusOneInsight key={insight.type} insight={insight} />;
+    return (
+      <NPlusOneInsight
+        key={insight.type}
+        insight={insight}
+        assets={assets}
+        asset={asset}
+        onAssetSelect={onAssetSelect}
+      />
+    );
   }
   if (isSpanScalingInsight(insight)) {
-    return <ScalingIssueInsight key={insight.type} insight={insight} />;
-  }
-  if (isSpanScalingRootCauseInsight(insight)) {
     return (
-      <ScalingIssueRootCauseInsight key={insight.type} insight={insight} />
+      <ScalingIssueInsight
+        key={insight.type}
+        insight={insight}
+        assets={assets}
+        asset={asset}
+        onAssetSelect={onAssetSelect}
+      />
     );
   }
   if (isCodeObjectHotSpotInsight(insight)) {
@@ -130,6 +187,11 @@ const renderInsightCard = (insight: CodeObjectInsight): JSX.Element => {
           </s.Description>
         }
       />
+    );
+  }
+  if (isEndpointDurationSlowdownInsight(insight)) {
+    return (
+      <DurationSlowdownSourceInsight key={insight.type} insight={insight} />
     );
   }
 
@@ -151,10 +213,12 @@ export const AssetInsights = (props: AssetInsightsProps) => {
     codeObjectIds.push(`method:${props.assetEntry.span.methodCodeObjectId}`);
   }
 
-  console.log("codeObjectIds to send: ", codeObjectIds);
-
   const handleAssetsLinkClick = () => {
-    props.onGoToAsset(props.assetEntry);
+    props.onGoToAssetsPage(props.assetEntry);
+  };
+
+  const handleSelectAsset = (asset: ExtendedAssetEntry) => {
+    props.onAssetSelect(asset);
   };
 
   const fetchInsights = async () => {
@@ -163,7 +227,12 @@ export const AssetInsights = (props: AssetInsightsProps) => {
       environment: props.environment,
     })) as CodeObjectInsight[];
 
-    console.log("Insights have been fetched:", insights);
+    console.debug(
+      `Insights for asset with ids [${codeObjectIds
+        .map((x) => `"${x}"`)
+        .join(", ")}] have been fetched:`,
+      insights
+    );
 
     const sortedInsights = [...insights].sort(
       (a, b) =>
@@ -202,9 +271,6 @@ export const AssetInsights = (props: AssetInsightsProps) => {
       spanInsightGroups[spanCodeObjectId].push(insight);
     }
 
-    console.log(ungroupedInsights);
-    console.log(spanInsightGroups);
-
     setInsights([
       { insights: ungroupedInsights },
       // span insight groups
@@ -217,6 +283,10 @@ export const AssetInsights = (props: AssetInsightsProps) => {
   };
 
   useEffect(() => {
+    if (insightsContainerRef.current) {
+      insightsContainerRef.current.scrollTop = 0;
+    }
+
     fetchInsights();
     const refreshInterval = setInterval(() => {
       fetchInsights();
@@ -225,7 +295,7 @@ export const AssetInsights = (props: AssetInsightsProps) => {
     return () => {
       clearInterval(refreshInterval);
     };
-  }, []);
+  }, [props.assetEntry.span.spanCodeObjectId]);
 
   useEffect(() => {
     if (
@@ -235,6 +305,18 @@ export const AssetInsights = (props: AssetInsightsProps) => {
       insightsContainerRef.current.scrollTop = 0;
     }
   }, [previousEnvironment, props.environment]);
+
+  useEffect(() => {
+    const asset = findAssetBySpanCodeObjectId(
+      props.assets,
+      props.assetEntry.span.spanCodeObjectId,
+      props.assetEntry.serviceName
+    );
+
+    if (!asset) {
+      props.onGoToAssetsPage();
+    }
+  }, [props.assets, props.assetEntry]);
 
   return (
     <s.Container>
@@ -275,7 +357,14 @@ export const AssetInsights = (props: AssetInsightsProps) => {
                   {x.icon && <x.icon size={20} />} {x.name}
                 </s.InsightGroupName>
               )}
-              {x.insights.map((insight) => renderInsightCard(insight))}
+              {x.insights.map((insight) =>
+                renderInsightCard(
+                  insight,
+                  props.assets,
+                  props.assetEntry,
+                  handleSelectAsset
+                )
+              )}
             </s.InsightGroup>
           ))}
         </s.InsightsContainer>

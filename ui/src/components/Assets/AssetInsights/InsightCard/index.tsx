@@ -2,7 +2,8 @@ import { useTheme } from "@mui/material";
 import { useState } from "react";
 import { ChevronIcon } from "../../../common/icons/ChevronIcon";
 import { Direction } from "../../../common/icons/types";
-import { getInsightImportanceColor, getInsightTypeInfo } from "../../utils";
+import { getInsightImportanceColor } from "../../utils/getInsightImportanceColor";
+import { getInsightTypeInfo } from "../../utils/getInsightTypeInfo";
 import * as s from "./styles";
 import { InsightCardProps } from "./types";
 

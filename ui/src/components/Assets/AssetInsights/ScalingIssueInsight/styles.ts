@@ -41,7 +41,7 @@ export const Description = styled.span`
   }};
 `;
 
-export const RootCauseList = styled.div`
+export const List = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;

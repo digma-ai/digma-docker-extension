@@ -77,6 +77,8 @@ export const Assets = (props: AssetsProps) => {
     return props.data ? groupEntries(props.data) : undefined;
   }, [props.data]);
 
+  console.debug("Assets dictionary: ", data);
+
   const assetsCount = useMemo(() => {
     return (
       props.data?.serviceAssetsEntries.map((x) => x.assetEntries).flat()

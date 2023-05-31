@@ -1,5 +1,5 @@
-import { SpanNPlusOneInsight } from "../types";
+import { InsightWithLinksProps, SpanNPlusOneInsight } from "../types";
 
-export interface NPlusOneInsightProps {
+export interface NPlusOneInsightProps extends InsightWithLinksProps {
   insight: SpanNPlusOneInsight;
 }
