@@ -1,7 +1,6 @@
 import { roundTo } from "../../../../utils/roundTo";
 import { ExtendedAssetEntry } from "../../types";
 import { findAssetBySpanCodeObjectId } from "../../utils/findAssetBySpanCodeObjectId";
-import { toSpanCodeObjectId } from "../../utils/toSpanCodeObjectId";
 import { trimEndpointScheme } from "../../utils/trimEndpointScheme";
 import { InsightCard } from "../InsightCard";
 import { Link } from "../styles";
@@ -24,10 +23,7 @@ export const BottleneckInsight = (props: BottleneckInsightProps) => {
           {props.insight.slowEndpoints.map((endpoint, i) => {
             const asset = findAssetBySpanCodeObjectId(
               props.assets,
-              toSpanCodeObjectId(
-                endpoint.endpointInfo.instrumentationLibrary,
-                endpoint.endpointInfo.spanName
-              ),
+              endpoint.endpointInfo.spanCodeObjectId,
               endpoint.endpointInfo.serviceName
             );
 

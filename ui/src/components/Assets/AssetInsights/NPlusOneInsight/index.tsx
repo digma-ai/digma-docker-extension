@@ -1,4 +1,5 @@
 import { ExtendedAssetEntry } from "../../types";
+import { findAssetBySpanCodeObjectId } from "../../utils/findAssetBySpanCodeObjectId";
 import { InsightCard } from "../InsightCard";
 import { Link } from "../styles";
 import * as s from "./styles";
@@ -12,8 +13,13 @@ export const NPlusOneInsight = (props: NPlusOneInsightProps) => {
     props.onAssetSelect(asset);
   };
 
-  // TODO: look up for the asset by spanCodeObjectId
-  const asset = undefined;
+  const asset = props.insight.clientSpanCodeObjectId
+    ? findAssetBySpanCodeObjectId(
+        props.assets,
+        props.insight.clientSpanCodeObjectId,
+        props.asset.serviceName
+      )
+    : undefined;
 
   console.log(asset);
 

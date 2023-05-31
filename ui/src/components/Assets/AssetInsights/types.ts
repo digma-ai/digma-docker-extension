@@ -127,6 +127,7 @@ export interface FlowSpan {
   service: string;
   span: string;
   codeObjectId: string;
+  spanCodeObjectId: string;
 }
 
 export interface SpanUsagesInsight extends SpanInsight {
@@ -168,6 +169,7 @@ export interface SpanEndpointBottleneckInsight extends SpanInsight {
       instrumentationLibrary: string;
       serviceName: string;
       codeObjectId: string;
+      spanCodeObjectId: string;
       spanName: string;
     };
     probabilityOfBeingBottleneck: number;
@@ -387,11 +389,13 @@ export interface SpanNPlusOneInsight extends SpanInsight {
   occurrences: number;
   traceId: string | null;
   clientSpanName: string | null;
+  clientSpanCodeObjectId: string | null;
   duration: Duration;
   endpoints: {
     info: {
       route: string;
       instrumentationLibrary: string;
+      spanCodeObjectId: string;
       serviceName: string;
     };
     occurrences: number;

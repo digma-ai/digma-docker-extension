@@ -1,6 +1,5 @@
 import { ExtendedAssetEntry } from "../../types";
 import { findAssetBySpanCodeObjectId } from "../../utils/findAssetBySpanCodeObjectId";
-import { toSpanCodeObjectId } from "../../utils/toSpanCodeObjectId";
 import { trimEndpointScheme } from "../../utils/trimEndpointScheme";
 import { InsightCard } from "../InsightCard";
 import { Link } from "../styles";
@@ -72,10 +71,7 @@ export const ScalingIssueInsight = (props: ScalingIssueInsightProps) => {
               {props.insight.affectedEndpoints.map((endpoint) => {
                 const asset = findAssetBySpanCodeObjectId(
                   props.assets,
-                  toSpanCodeObjectId(
-                    endpoint.instrumentationLibrary,
-                    endpoint.name
-                  ),
+                  endpoint.spanCodeObjectId,
                   endpoint.serviceName
                 );
 

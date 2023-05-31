@@ -1,7 +1,6 @@
 import { roundTo } from "../../../../utils/roundTo";
 import { ExtendedAssetEntry } from "../../types";
 import { findAssetBySpanCodeObjectId } from "../../utils/findAssetBySpanCodeObjectId";
-import { toSpanCodeObjectId } from "../../utils/toSpanCodeObjectId";
 import { InsightCard } from "../InsightCard";
 import { Pagination } from "../Pagination";
 import { Link } from "../styles";
@@ -32,10 +31,7 @@ export const EndpointNPlusOneInsight = (
                 const spanInfo = span.internalSpan || span.clientSpan;
                 const asset = findAssetBySpanCodeObjectId(
                   props.assets,
-                  toSpanCodeObjectId(
-                    spanInfo.instrumentationLibrary,
-                    spanInfo.name
-                  ),
+                  spanInfo.spanCodeObjectId,
                   props.asset.serviceName
                 );
 

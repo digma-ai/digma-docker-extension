@@ -1,25 +1,11 @@
 import { roundTo } from "../../../../utils/roundTo";
-import { AssetsData, ExtendedAssetEntry } from "../../types";
+import { ExtendedAssetEntry } from "../../types";
+import { findAssetBySpanCodeObjectId } from "../../utils/findAssetBySpanCodeObjectId";
 import { InsightCard } from "../InsightCard";
 import { Pagination } from "../Pagination";
 import { Link } from "../styles";
 import * as s from "./styles";
 import { TopUsageInsightProps } from "./types";
-
-const findEndpointAsset = (
-  assets: AssetsData,
-  codeObjectId: string,
-  serviceName: string
-): ExtendedAssetEntry | undefined => {
-  const asset = assets?.serviceAssetsEntries
-    .find((x) => x.serviceName === serviceName)
-    ?.assetEntries.find(
-      (x) =>
-        x.span.methodCodeObjectId === codeObjectId && x.assetType === "Endpoint"
-    );
-
-  return asset ? { ...asset, id: asset.span.spanCodeObjectId } : undefined;
-};
 
 export const TopUsageInsight = (props: TopUsageInsightProps) => {
   console.log("TopUsageInsight");
@@ -36,19 +22,18 @@ export const TopUsageInsight = (props: TopUsageInsightProps) => {
         <s.FlowList>
           <Pagination>
             {props.insight.flows.map((flow, i) => {
-              // TODO: replace with lookup by spanCodeObjectId
-              const firstServiceAsset = findEndpointAsset(
+              const firstServiceAsset = findAssetBySpanCodeObjectId(
                 props.assets,
-                flow.firstService.codeObjectId,
+                flow.firstService.spanCodeObjectId,
                 props.asset.serviceName
               );
               const firstServiceName = `${flow.firstService.service}:${flow.firstService.span}`;
 
               const lastServiceAsset =
                 flow.lastService &&
-                findEndpointAsset(
+                findAssetBySpanCodeObjectId(
                   props.assets,
-                  flow.lastService.codeObjectId,
+                  flow.lastService.spanCodeObjectId,
                   flow.lastService.service
                 );
               const lastServiceName = `${flow.lastService?.service}:${flow.lastService?.span}`;
