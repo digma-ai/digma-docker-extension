@@ -1,6 +1,7 @@
 import { useTheme } from "@mui/material";
 import { ForwardedRef, forwardRef } from "react";
 import { timeAgo } from "../../../../utils/timeAgo";
+import { getInsightTypeOrderPriority } from "../../AssetInsights";
 import { getAssetTypeInfo } from "../../utils/getAssetTypeInfo";
 import { getInsightImportanceColor } from "../../utils/getInsightImportanceColor";
 import { getInsightTypeInfo } from "../../utils/getInsightTypeInfo";
@@ -28,7 +29,9 @@ const AssetEntryComponent = (
   const lastSeenDateTime = props.entry.lastSpanInstanceInfo.startTime;
 
   const sortedInsights = [...props.entry.insights].sort(
-    (a, b) => a.importance - b.importance
+    (a, b) =>
+      a.importance - b.importance ||
+      getInsightTypeOrderPriority(a.type) - getInsightTypeOrderPriority(b.type)
   );
 
   const assetTypeInfo = getAssetTypeInfo(props.entry.assetType);

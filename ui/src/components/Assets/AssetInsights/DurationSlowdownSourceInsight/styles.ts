@@ -1,33 +1,33 @@
 import styled from "styled-components";
 
-export const LastCall = styled.span`
+export const Container = styled.div`
   display: flex;
+  flex-direction: column;
+  gap: 8px;
   font-size: 14px;
   line-height: 17px;
-  font-weight: 500;
-  margin-bottom: 8px;
+`;
 
+export const Description = styled.span`
   color: ${({ theme }) => {
     switch (theme.palette.mode) {
       case "light":
-        return "#49494d";
+        return "#70787d";
       case "dark":
-        return "#dadada";
+        return "#9b9b9b";
     }
   }};
 `;
 
-export const PercentileList = styled.div`
+export const SourceList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
 `;
 
-export const Percentile = styled.span`
+export const Source = styled.span`
   display: flex;
   gap: 8px;
-  font-size: 14px;
-  line-height: 17px;
   font-weight: 500;
 
   color: ${({ theme }) => {

@@ -46,6 +46,7 @@ export const CopyButton = styled(Button)`
   padding: 0;
   background: transparent;
 
+  &:focus,
   &:hover {
     color: ${({ theme }) =>
       theme.palette.mode === "light" ? "#55a4F1" : "#fff"};

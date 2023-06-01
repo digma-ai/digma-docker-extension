@@ -1,6 +1,3 @@
-import ExtensionIcon from "@mui/icons-material/Extension";
-import Divider from "@mui/material/Divider";
-import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import { useEffect, useState } from "react";
 import { ddClient } from "../../dockerDesktopClient";
@@ -15,62 +12,12 @@ import {
 import { GettingStarted } from "../GettingStarted";
 import { Loader } from "../common/Loader";
 import { Page } from "../common/Page";
+import { PageContent } from "../common/Page/types";
 import { DigmaLogoIcon } from "../common/icons/DigmaLogoIcon";
-import { IntellijLogoIcon } from "../common/icons/IntellijLogoIcon";
-import { SlackLogoIcon } from "../common/icons/SlackLogoIcon";
-import { StackIcon } from "../common/icons/StackIcon";
+import { PAGES } from "./constants";
 import * as s from "./styles";
 
-const SLACK_CHANNEL_URL =
-  "https://join.slack.com/t/continuous-feedback/shared_invite/zt-1hk5rbjow-yXOIxyyYOLSXpCZ4RXstgA";
-const JETBRAINS_PLUGIN_URL =
-  "https://plugins.jetbrains.com/plugin/19470-digma-continuous-feedback";
-
 const REFRESH_INTERVAL = 10 * 1000; // in milliseconds
-
-const PAGES = {
-  GETTING_STARTED: "GETTING_STARTED",
-  ASSETS: "ASSETS",
-};
-
-const handleSlackButtonClick = () => {
-  ddClient.host.openExternal(SLACK_CHANNEL_URL);
-};
-
-const openJetBrainsPluginPage = () => {
-  ddClient.host.openExternal(JETBRAINS_PLUGIN_URL);
-};
-
-const renderLinkButtons = () => {
-  return (
-    <s.LinkButtonsContainer>
-      <Tooltip
-        title={
-          <s.LinkButtonTooltipTextContainer>
-            <s.LinkButtonTooltipTitle>
-              We want your feedback!
-            </s.LinkButtonTooltipTitle>
-            Join our Slack channel to let us know your thoughts, suggestions or
-            report any issues
-          </s.LinkButtonTooltipTextContainer>
-        }
-      >
-        <s.LinkButton variant={"outlined"} onClick={handleSlackButtonClick}>
-          <SlackLogoIcon size={16} />
-        </s.LinkButton>
-      </Tooltip>
-      <Tooltip
-        title={
-          "Install the Digma Plugin to see more code data in the IDE (Java only for now)"
-        }
-      >
-        <s.LinkButton variant={"outlined"} onClick={openJetBrainsPluginPage}>
-          <IntellijLogoIcon size={16} />
-        </s.LinkButton>
-      </Tooltip>
-    </s.LinkButtonsContainer>
-  );
-};
 
 export const App = () => {
   const [assets, setAssets] = useState<AssetsData>();
@@ -80,11 +27,11 @@ export const App = () => {
   const [isRedirectedToAssets, setIsRedirectedToAssets] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState<ExtendedAssetEntry>();
   const [assetNavigateTo, setAssetNavigateTo] = useState<ExtendedAssetEntry>();
-  const [isBadgeVisible, setIsBadgeVisible] = useState<boolean>(false);
+  // const [isBadgeVisible, setIsBadgeVisible] = useState<boolean>(false);
 
-  const isBadgeEnabled = ["true", null].includes(
-    localStorage.getItem("isBadgeEnabled")
-  );
+  // const isBadgeEnabled = ["true", null].includes(
+  //   localStorage.getItem("isBadgeEnabled")
+  // );
 
   const fetchEnvironments = async () => {
     const environments = (await ddClient.extension.vm?.service?.get(
@@ -155,22 +102,18 @@ export const App = () => {
 
   // Show badge on "Go To Assets page" button
   // when the are environments with no assets yet
-  useEffect(() => {
-    const assetsCount =
-      assets?.serviceAssetsEntries.map((x) => x.assetEntries).flat().length ||
-      0;
+  // useEffect(() => {
+  //   const assetsCount =
+  //     assets?.serviceAssetsEntries.map((x) => x.assetEntries).flat().length ||
+  //     0;
 
-    if (environments && environments.length > 0 && isBadgeEnabled) {
-      setIsBadgeVisible(assetsCount === 0);
-    }
-  }, [assets, environments, isRedirectedToAssets]);
+  //   if (environments && environments.length > 0 && isBadgeEnabled) {
+  //     setIsBadgeVisible(assetsCount === 0);
+  //   }
+  // }, [assets, environments, isRedirectedToAssets]);
 
   const handleEnvironmentSelect = (environment: string) => {
     setSelectedEnvironment(environment);
-  };
-
-  const handleGoToAssetsPageButtonClick = () => {
-    goToAssetPage();
   };
 
   const handleGoToAssetPage = (asset?: ExtendedAssetEntry) => {
@@ -185,10 +128,10 @@ export const App = () => {
     setSelectedAsset(undefined);
     setAssetNavigateTo(assetNavigateTo);
 
-    if (isBadgeEnabled && isBadgeVisible) {
-      localStorage.setItem("isBadgeEnabled", "false");
-      setIsBadgeVisible(false);
-    }
+    // if (isBadgeEnabled && isBadgeVisible) {
+    //   localStorage.setItem("isBadgeEnabled", "false");
+    //   setIsBadgeVisible(false);
+    // }
 
     setCurrentPage(PAGES.ASSETS);
   };
@@ -201,110 +144,82 @@ export const App = () => {
     setSelectedAsset(asset);
   };
 
+  const handlePageChange = (page: string) => {
+    setCurrentPage(page);
+  };
+
   console.debug("State:", {
     assets,
     environments,
     selectedEnvironment,
     currentPage,
-    isBadgeVisible,
+    // isBadgeVisible,
     isRedirectedToAssets,
     selectedAsset,
     assetNavigateTo,
   });
 
+  const pages: Record<string, PageContent> = {
+    [PAGES.GETTING_STARTED]: {
+      header: (
+        <>
+          <DigmaLogoIcon size={52} />
+          <s.TitleContainer>
+            <Typography variant={"h3"} component={"h1"}>
+              Digma
+            </Typography>
+            <Typography color={"text.secondary"}>
+              Getting Started with Digma
+            </Typography>
+          </s.TitleContainer>
+        </>
+      ),
+      main: <GettingStarted />,
+    },
+    [PAGES.ASSETS]: {
+      header: (
+        <Menu
+          title={"Environments"}
+          placeholder={"No Environments"}
+          icon={<DigmaLogoIcon size={24} />}
+          value={selectedEnvironment}
+          items={environments}
+          onSelect={handleEnvironmentSelect}
+          disabled={!environments || environments.length === 0}
+        />
+      ),
+      main:
+        assets && selectedAsset && selectedEnvironment ? (
+          <AssetInsights
+            assets={assets}
+            assetEntry={selectedAsset}
+            environment={selectedEnvironment}
+            onGoToAssetsPage={handleGoToAssetPage}
+            onAssetSelect={handleAssetSelect}
+          />
+        ) : (
+          <Assets
+            data={assets}
+            onGettingStartedButtonClick={handleGettingStartedButtonClick}
+            environments={environments}
+            onAssetSelect={handleAssetSelect}
+            assetNavigateTo={assetNavigateTo}
+            onAssetNavigate={handleAssetNavigate}
+            environment={selectedEnvironment}
+          />
+        ),
+    },
+  };
+
   return (
     <>
       <s.GlobalStyles />
-      {currentPage === PAGES.GETTING_STARTED && (
+      {currentPage && (
         <Page
-          header={
-            <>
-              <DigmaLogoIcon size={52} />
-              <s.TitleContainer>
-                <Typography variant={"h3"} component={"h1"}>
-                  Digma
-                </Typography>
-                <Typography color={"text.secondary"}>
-                  Getting Started with Digma
-                </Typography>
-              </s.TitleContainer>
-              <s.NavigationButtonContainer>
-                {renderLinkButtons()}
-                <Divider orientation={"vertical"} flexItem />
-                <s.Badge variant={"dot"} invisible={!isBadgeVisible}>
-                  <s.GoToAssetsPageButton
-                    variant={"contained"}
-                    onClick={handleGoToAssetsPageButtonClick}
-                    endIcon={<StackIcon size={16} color={"#fff"} />}
-                  >
-                    Go To Assets page
-                  </s.GoToAssetsPageButton>
-                </s.Badge>
-              </s.NavigationButtonContainer>
-            </>
-          }
-          main={
-            <GettingStarted
-              client={ddClient}
-              onJetBrainsPluginLinkClick={openJetBrainsPluginPage}
-            />
-          }
-        />
-      )}
-      {currentPage === PAGES.ASSETS && (
-        <Page
-          header={
-            <>
-              <Menu
-                title={"Environments"}
-                placeholder={"No Environments"}
-                icon={<DigmaLogoIcon size={24} />}
-                value={selectedEnvironment}
-                items={environments}
-                onSelect={handleEnvironmentSelect}
-                disabled={!environments || environments.length === 0}
-              />
-              <s.NavigationButtonContainer>
-                {renderLinkButtons()}
-                <Divider orientation={"vertical"} flexItem />
-                <s.NavigationButton
-                  variant={"outlined"}
-                  onClick={handleGettingStartedButtonClick}
-                  endIcon={
-                    <ExtensionIcon
-                      sx={{
-                        width: 16,
-                        height: 16,
-                      }}
-                    />
-                  }
-                >
-                  Getting Started
-                </s.NavigationButton>
-              </s.NavigationButtonContainer>
-            </>
-          }
-          main={
-            assets && selectedAsset && selectedEnvironment ? (
-              <AssetInsights
-                assets={assets}
-                assetEntry={selectedAsset}
-                environment={selectedEnvironment}
-                onGoToAssetsPage={handleGoToAssetPage}
-                onAssetSelect={handleAssetSelect}
-              />
-            ) : (
-              <Assets
-                data={assets}
-                onGettingStartedButtonClick={handleGettingStartedButtonClick}
-                environments={environments}
-                onAssetSelect={handleAssetSelect}
-                assetNavigateTo={assetNavigateTo}
-                onAssetNavigate={handleAssetNavigate}
-                environment={selectedEnvironment}
-              />
-            )
-          }
+          header={pages[currentPage].header}
+          main={pages[currentPage].main}
+          onPageChange={handlePageChange}
+          currentPage={currentPage}
         />
       )}
       {!currentPage && (

@@ -191,7 +191,13 @@ const renderInsightCard = (
   }
   if (isEndpointDurationSlowdownInsight(insight)) {
     return (
-      <DurationSlowdownSourceInsight key={insight.type} insight={insight} />
+      <DurationSlowdownSourceInsight
+        key={insight.type}
+        insight={insight}
+        assets={assets}
+        asset={asset}
+        onAssetSelect={onAssetSelect}
+      />
     );
   }
 

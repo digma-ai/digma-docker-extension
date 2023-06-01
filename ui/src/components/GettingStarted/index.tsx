@@ -3,14 +3,15 @@ import { useState } from "react";
 import { DefaultTheme, useTheme } from "styled-components";
 import jetBrainsPluginThumbnailDark from "../../../assets/images/jetBrainsPluginThumbnail_dark.png";
 import jetBrainsPluginThumbnailLight from "../../../assets/images/jetBrainsPluginThumbnail_light.png";
+import { ddClient } from "../../dockerDesktopClient";
+import { JETBRAINS_PLUGIN_URL } from "../App/constants";
 import { ContainerIcon } from "../common/icons/ContainerIcon";
 import { IntellijLogoFlatIcon } from "../common/icons/IntellijLogoFlatIcon";
 import { IntellijLogoIcon } from "../common/icons/IntellijLogoIcon";
 import { CodeSnippet } from "./CodeSnippet";
 import * as s from "./styles";
-import { GettingStartedProps } from "./types";
 
-const dockerInstrumentationCommands = `curl --create-dirs -O -L --output-dir ./otel
+const DOCKER_INSTRUMENTATION_COMMANDS = `curl --create-dirs -O -L --output-dir ./otel
 https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/latest/download/opentelemetry-javaagent.jar
 
 curl --create-dirs -O -L --output-dir ./otel
@@ -22,8 +23,11 @@ export DEPLOYMENT_ENV=LOCAL_DOCKER
 
 docker run -d -v "/$(pwd)/otel:/otel" --env JAVA_TOOL_OPTIONS --env OTEL_SERVICE_NAME --env DEPLOYMENT_ENV {-- APPEND PARAMS AND REPO/IMAGE --}`;
 
-const sampleAppCommands = `docker run -d -p 9753:9753 --name petshop-sample digmaai/petshop-app:latest
+const SAMPLE_APPLICATION_COMMANDS = `docker run -d -p 9753:9753 --name petshop-sample digmaai/petshop-app:latest
 docker run --rm digmaai/petshop-app-tester:latest`;
+
+const JAVA_SAMPLE_APPLICATION_URL =
+  "https://github.com/digma-ai/otel-sample-app-java";
 
 const getCardTitleIconColor = (theme: DefaultTheme) => {
   switch (theme.palette.mode) {
@@ -43,7 +47,7 @@ const getJetBrainsPluginThumbnail = (theme: DefaultTheme) => {
   }
 };
 
-export const GettingStarted = (props: GettingStartedProps) => {
+export const GettingStarted = () => {
   const [selectedTab, setSelectedTab] = useState(0);
   const theme = useTheme();
   const iconColor = getCardTitleIconColor(theme);
@@ -55,20 +59,12 @@ export const GettingStarted = (props: GettingStartedProps) => {
     setSelectedTab(value);
   };
 
-  const handleJavaSampleAppLinkClick = (
-    e: React.MouseEvent<HTMLAnchorElement>
-  ) => {
-    e.preventDefault();
-    props.client.host.openExternal(
-      "https://github.com/digma-ai/otel-sample-app-java"
-    );
+  const handleJavaSampleAppLinkClick = () => {
+    ddClient.host.openExternal(JAVA_SAMPLE_APPLICATION_URL);
   };
 
-  const handleJetBrainsPluginLink = (
-    e: React.MouseEvent<HTMLAnchorElement>
-  ) => {
-    e.preventDefault();
-    props.onJetBrainsPluginLinkClick();
+  const handleJetBrainsPluginLink = () => {
+    ddClient.host.openExternal(JETBRAINS_PLUGIN_URL);
   };
 
   return (
@@ -125,7 +121,7 @@ export const GettingStarted = (props: GettingStartedProps) => {
               <s.Tab disabled={true} label={"Python (Coming soon)"} />
             </s.Tabs>
             <CodeSnippet
-              text={dockerInstrumentationCommands}
+              text={DOCKER_INSTRUMENTATION_COMMANDS}
               multiline={true}
             />
           </div>
@@ -133,7 +129,7 @@ export const GettingStarted = (props: GettingStartedProps) => {
           <Typography variant={"h4"} component={"h3"}>
             Run a sample application
           </Typography>
-          <CodeSnippet text={sampleAppCommands} multiline={true} />
+          <CodeSnippet text={SAMPLE_APPLICATION_COMMANDS} multiline={true} />
           <s.SectionText color={"text.secondary"}>
             To see complete code insights you can clone the sample repo{" "}
             <s.Link onClick={handleJavaSampleAppLinkClick}>here</s.Link> and
