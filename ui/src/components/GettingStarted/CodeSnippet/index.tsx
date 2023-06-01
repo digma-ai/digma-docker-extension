@@ -1,11 +1,21 @@
 import FileCopyIcon from "@mui/icons-material/FileCopy";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
+import Tooltip from "@mui/material/Tooltip";
 import copy from "copy-to-clipboard";
+import { useState } from "react";
 import * as s from "./styles";
 import { CodeSnippetProps } from "./types";
 
 export const CodeSnippet = (props: CodeSnippetProps) => {
+  const [isTooltipVisible, setIsTooltipVisible] = useState(false);
+
   const handleCopyButtonClick = () => {
     copy(props.text);
+    setIsTooltipVisible(true);
+  };
+
+  const handleTooltipClose = () => {
+    setIsTooltipVisible(false);
   };
 
   return (
@@ -20,15 +30,25 @@ export const CodeSnippet = (props: CodeSnippetProps) => {
           readOnly: true,
         }}
       />
-      {props.multiline ? (
-        <s.FloatingCopyButton onClick={handleCopyButtonClick}>
-          <FileCopyIcon />
-        </s.FloatingCopyButton>
-      ) : (
-        <s.CopyButton onClick={handleCopyButtonClick}>
-          <FileCopyIcon />
-        </s.CopyButton>
-      )}
+      <ClickAwayListener onClickAway={handleTooltipClose}>
+        <Tooltip
+          title={"Copied"}
+          disableFocusListener
+          disableHoverListener
+          onClose={handleTooltipClose}
+          open={isTooltipVisible}
+        >
+          {props.multiline ? (
+            <s.FloatingCopyButton onClick={handleCopyButtonClick}>
+              <FileCopyIcon />
+            </s.FloatingCopyButton>
+          ) : (
+            <s.CopyButton onClick={handleCopyButtonClick}>
+              <FileCopyIcon />
+            </s.CopyButton>
+          )}
+        </Tooltip>
+      </ClickAwayListener>
     </s.Container>
   );
 };
