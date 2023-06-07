@@ -1,11 +1,17 @@
 import { useTheme } from "@mui/material";
+import { ForwardedRef, forwardRef } from "react";
 import { timeAgo } from "../../../../utils/timeAgo";
-import { OpenTelemetryLogoIcon } from "../../../common/icons/OpenTelemetryLogoIcon";
-import { getInsightImportanceColor, getInsightTypeInfo } from "../../utils";
+import { getInsightTypeOrderPriority } from "../../AssetInsights";
+import { getAssetTypeInfo } from "../../utils/getAssetTypeInfo";
+import { getInsightImportanceColor } from "../../utils/getInsightImportanceColor";
+import { getInsightTypeInfo } from "../../utils/getInsightTypeInfo";
 import * as s from "./styles";
 import { AssetEntryProps } from "./types";
 
-export const AssetEntry = (props: AssetEntryProps) => {
+const AssetEntryComponent = (
+  props: AssetEntryProps,
+  ref: ForwardedRef<HTMLDivElement>
+) => {
   const theme = useTheme();
 
   const handleLinkClick = () => {
@@ -23,21 +29,24 @@ export const AssetEntry = (props: AssetEntryProps) => {
   const lastSeenDateTime = props.entry.lastSpanInstanceInfo.startTime;
 
   const sortedInsights = [...props.entry.insights].sort(
-    (a, b) => a.importance - b.importance
+    (a, b) =>
+      a.importance - b.importance ||
+      getInsightTypeOrderPriority(a.type) - getInsightTypeOrderPriority(b.type)
   );
 
+  const assetTypeInfo = getAssetTypeInfo(props.entry.assetType);
+
   return (
-    <s.Container elevation={0}>
+    <s.Container elevation={0} id={props.id} ref={ref}>
       <s.Header>
-        <s.OpenTelemetryIconContainer>
-          <OpenTelemetryLogoIcon size={20} />
-        </s.OpenTelemetryIconContainer>
-        {/* <s.Link onClick={() => handleLinkClick()} title={name}>
+        {assetTypeInfo?.icon && (
+          <s.AssetTypeIconContainer>
+            <assetTypeInfo.icon size={20} color={"#7891d0"} />
+          </s.AssetTypeIconContainer>
+        )}
+        <s.Link onClick={() => handleLinkClick()} title={name}>
           {name}
-        </s.Link> */}
-        <s.Name noWrap={true} title={name}>
-          {name}
-        </s.Name>
+        </s.Link>
         <s.InsightIconsContainer>
           {sortedInsights.map((insight) => {
             const insightTypeInfo = getInsightTypeInfo(insight.type);
@@ -52,7 +61,7 @@ export const AssetEntry = (props: AssetEntryProps) => {
                 title={insightTypeInfo?.label || insight.type}
               >
                 {insightTypeInfo && (
-                  <insightTypeInfo.icon color={insightIconColor} size={20} />
+                  <insightTypeInfo.icon color={insightIconColor} size={24} />
                 )}
               </s.InsightIconContainer>
             );
@@ -91,3 +100,5 @@ export const AssetEntry = (props: AssetEntryProps) => {
     </s.Container>
   );
 };
+
+export const AssetEntry = forwardRef(AssetEntryComponent);

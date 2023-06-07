@@ -20,12 +20,12 @@ export const Header = styled.div`
   align-items: center;
 `;
 
-export const OpenTelemetryIconContainer = styled.div`
+export const AssetTypeIconContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   width: 28px;
-  height: 100%;
+  height: 28px;
   flex-shrink: 0;
 `;
 
@@ -55,12 +55,11 @@ export const InsightIconsContainer = styled.div`
   height: 100%;
 `;
 
-export const InsightIconContainer = styled(OpenTelemetryIconContainer)`
+export const InsightIconContainer = styled(AssetTypeIconContainer)`
   border-radius: 4px;
+
   background: ${({ theme }) =>
-    theme.palette.mode === "light" ? "none" : "#36414e"};
-  border: ${({ theme }) =>
-    theme.palette.mode === "light" ? "1px solid #efeff2" : "none"};
+    theme.palette.mode === "light" ? "#e9eef4" : "#36414e"};
 `;
 
 export const StatsContainer = styled.div`

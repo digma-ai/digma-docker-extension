@@ -21,15 +21,14 @@ const ArrowIconComponent = (props: RotatableIconProps) => {
       width={size}
       height={size}
       fill="none"
-      viewBox="0 0 32 32"
+      viewBox="0 0 16 16"
       {...transform}
     >
       <path
         stroke={color}
         strokeLinecap="round"
         strokeLinejoin="round"
-        strokeWidth="2"
-        d="M8 24 24 8M11 8h13v13"
+        d="m4 12 8-8M5.5 4H12v6.5"
       />
     </svg>
   );

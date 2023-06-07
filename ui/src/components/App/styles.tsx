@@ -1,5 +1,3 @@
-import MuiBadge from "@mui/material/Badge";
-import Button from "@mui/material/Button";
 import MuiGlobalStyles from "@mui/material/GlobalStyles";
 import styled from "styled-components";
 import "../../../assets/styles.css";
@@ -21,53 +19,10 @@ export const TitleContainer = styled.div`
   height: 52px;
 `;
 
-export const NavigationButtonContainer = styled.div`
-  margin-left: auto;
-  display: flex;
-`;
-
-export const NavigationButton = styled(Button)`
-  font-weight: 500;
-`;
-
-export const Badge = styled(MuiBadge)`
-  & .MuiBadge-badge {
-    min-width: 16px;
-    min-height: 16px;
-    border-radius: 50%;
-    background: ${({ theme }) =>
-      theme.palette.mode === "light" ? "#08489b" : "#fff"};
-  }
-`;
-
-export const GoToAssetsPageButton = styled(NavigationButton)`
-  background: ${({ theme }) =>
-    theme.palette.mode === "light" ? "#086dd7" : "#3391ee"};
-`;
-
 export const LoaderContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100vh;
-`;
-
-export const LinkButtonsContainer = styled.div`
-  display: flex;
-  gap: 8px;
-`;
-
-export const LinkButton = styled(Button)`
-  padding: 10px;
-`;
-
-export const LinkButtonTooltipTextContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-export const LinkButtonTooltipTitle = styled.span`
-  font-weight: 500;
-  padding-bottom: 14px;
 `;
