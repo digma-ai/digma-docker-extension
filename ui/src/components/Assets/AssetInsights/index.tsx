@@ -10,6 +10,7 @@ import { NoData } from "../NoData";
 import { AssetsData, ExtendedAssetEntry, InsightType } from "../types";
 import { findAssetBySpanCodeObjectId } from "../utils/findAssetBySpanCodeObjectId";
 import { getAssetTypeInfo } from "../utils/getAssetTypeInfo";
+import { getInsightTypeInfo } from "../utils/getInsightTypeInfo";
 import { BottleneckInsight } from "./BottleneckInsight";
 import { DurationBreakdownInsight } from "./DurationBreakdownInsight";
 import { DurationInsight } from "./DurationInsight";
@@ -250,6 +251,12 @@ export const AssetInsights = (props: AssetInsightsProps) => {
     const spanInsightGroups: { [key: string]: SpanInsight[] } = {};
 
     for (let insight of sortedInsights) {
+      // Do not show unknown insights
+      const insightTypeInfo = getInsightTypeInfo(insight.type);
+      if (!insightTypeInfo) {
+        continue;
+      }
+
       // Do not show Span Usage insight
       if (insight.type === InsightType.SpanUsageStatus) {
         continue;

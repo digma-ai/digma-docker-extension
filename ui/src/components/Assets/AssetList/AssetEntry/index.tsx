@@ -56,14 +56,14 @@ const AssetEntryComponent = (
             );
 
             return (
-              <s.InsightIconContainer
-                key={insight.type}
-                title={insightTypeInfo?.label || insight.type}
-              >
-                {insightTypeInfo && (
+              insightTypeInfo && (
+                <s.InsightIconContainer
+                  key={insight.type}
+                  title={insightTypeInfo?.label || insight.type}
+                >
                   <insightTypeInfo.icon color={insightIconColor} size={24} />
-                )}
-              </s.InsightIconContainer>
+                </s.InsightIconContainer>
+              )
             );
           })}
         </s.InsightIconsContainer>
