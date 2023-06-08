@@ -14,7 +14,7 @@ export const GlobalStyles = () => (
 
 export const Container = styled.div`
   display: flex;
-  width: 100%;
+  flex-grow: 1;
 `;
 
 export const DigmaLogoContainer = styled.div`
@@ -33,6 +33,7 @@ export const LoaderContainer = styled.div`
   align-items: center;
   justify-content: center;
   height: 100vh;
+  flex-grow: 1;
 `;
 
 export const JaegerContainer = styled.div`

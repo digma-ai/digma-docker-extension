@@ -91,6 +91,7 @@ services:
     depends_on:
       - rabbitmq
     restart: unless-stopped
+
   digma-collector-worker:
     image: digmatic/digma-collector-worker:0.2.99
     environment:
@@ -109,6 +110,7 @@ services:
       - influxdb
       - rabbitmq
     restart: unless-stopped
+
   digma-plugin-api:
     image: digmatic/digma-plugin-api:0.2.99
     ports:
