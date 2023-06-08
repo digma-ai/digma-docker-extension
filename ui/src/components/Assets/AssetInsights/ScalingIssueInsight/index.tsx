@@ -1,14 +1,20 @@
+import { CrosshairIcon } from "../../../common/icons/CrosshairIcon";
 import { ExtendedAssetEntry } from "../../types";
 import { findAssetBySpanCodeObjectId } from "../../utils/findAssetBySpanCodeObjectId";
 import { trimEndpointScheme } from "../../utils/trimEndpointScheme";
 import { InsightCard } from "../InsightCard";
 import { Link } from "../styles";
+import { Trace } from "../types";
 import * as s from "./styles";
 import { ScalingIssueInsightProps } from "./types";
 
 export const ScalingIssueInsight = (props: ScalingIssueInsightProps) => {
   const handleLinkClick = (asset: ExtendedAssetEntry) => {
     props.onAssetSelect(asset);
+  };
+
+  const handleTraceButtonClick = (trace: Trace) => {
+    props.onTraceSelect(trace);
   };
 
   return (
@@ -46,17 +52,33 @@ export const ScalingIssueInsight = (props: ScalingIssueInsightProps) => {
                 );
 
                 const spanName = span.displayName;
+                const traceId = span.sampleTraceId;
 
                 return (
-                  <span key={span.spanCodeObjectId}>
-                    {asset ? (
-                      <Link onClick={() => handleLinkClick(asset)}>
-                        {spanName}
-                      </Link>
-                    ) : (
-                      spanName
+                  <s.RootCause>
+                    <span key={span.spanCodeObjectId}>
+                      {asset ? (
+                        <Link onClick={() => handleLinkClick(asset)}>
+                          {spanName}
+                        </Link>
+                      ) : (
+                        spanName
+                      )}
+                    </span>
+                    {traceId && (
+                      <s.Button
+                        icon={{ component: CrosshairIcon, size: 16 }}
+                        onClick={() =>
+                          handleTraceButtonClick({
+                            name: spanName,
+                            id: traceId,
+                          })
+                        }
+                      >
+                        Trace
+                      </s.Button>
                     )}
-                  </span>
+                  </s.RootCause>
                 );
               })}
             </s.List>

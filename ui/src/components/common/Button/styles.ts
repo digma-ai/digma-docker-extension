@@ -4,8 +4,8 @@ import { ButtonElementProps } from "./types";
 export const Button = styled.button<ButtonElementProps>`
   font-family: inherit;
   font-weight: 500;
-  font-size: 10px;
-  line-height: 12px;
+  font-size: 14px;
+  line-height: 17px;
   padding: 2px 4px;
   border-radius: 2px;
   cursor: pointer;

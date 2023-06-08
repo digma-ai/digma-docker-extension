@@ -12,11 +12,19 @@ export const GlobalStyles = () => (
   />
 );
 
+export const Container = styled.div`
+  display: flex;
+  width: 100%;
+`;
+
+export const DigmaLogoContainer = styled.div`
+  flex-shrink: 0;
+`;
+
 export const TitleContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 52px;
 `;
 
 export const LoaderContainer = styled.div`
@@ -25,4 +33,11 @@ export const LoaderContainer = styled.div`
   align-items: center;
   justify-content: center;
   height: 100vh;
+`;
+
+export const JaegerContainer = styled.div`
+  display: flex;
+  overflow: auto;
+  flex-shrink: 0;
+  width: 50%;
 `;

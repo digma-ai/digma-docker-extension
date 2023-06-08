@@ -13,7 +13,7 @@ class AnalyticsProvider {
     try {
       const response = await this.send("GET", `/CodeAnalytics/environments`);
       return response;
-    } catch (error) {
+    } catch (e) {
       console.log(e);
       throw new Error(e);
     }

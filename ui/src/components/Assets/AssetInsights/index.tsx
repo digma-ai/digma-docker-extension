@@ -10,6 +10,7 @@ import { NoData } from "../NoData";
 import { AssetsData, ExtendedAssetEntry, InsightType } from "../types";
 import { findAssetBySpanCodeObjectId } from "../utils/findAssetBySpanCodeObjectId";
 import { getAssetTypeInfo } from "../utils/getAssetTypeInfo";
+import { getInsightTypeInfo } from "../utils/getInsightTypeInfo";
 import { BottleneckInsight } from "./BottleneckInsight";
 import { DurationBreakdownInsight } from "./DurationBreakdownInsight";
 import { DurationInsight } from "./DurationInsight";
@@ -47,6 +48,7 @@ import {
   CodeObjectInsight,
   InsightGroup,
   SpanInsight,
+  Trace,
 } from "./types";
 
 const REFRESH_INTERVAL = 10 * 1000; // in milliseconds
@@ -81,10 +83,17 @@ const renderInsightCard = (
   insight: CodeObjectInsight,
   assets: AssetsData,
   asset: ExtendedAssetEntry,
-  onAssetSelect: (asset: ExtendedAssetEntry) => void
+  onAssetSelect: (asset: ExtendedAssetEntry) => void,
+  onTracesSelect: (traces: Trace[]) => void
 ): JSX.Element => {
   if (isSpanDurationsInsight(insight)) {
-    return <DurationInsight key={insight.type} insight={insight} />;
+    return (
+      <DurationInsight
+        onTracesSelect={onTracesSelect}
+        key={insight.type}
+        insight={insight}
+      />
+    );
   }
   if (isSpanDurationBreakdownInsight(insight)) {
     return (
@@ -105,6 +114,7 @@ const renderInsightCard = (
         assets={assets}
         asset={asset}
         onAssetSelect={onAssetSelect}
+        onTraceSelect={(trace) => onTracesSelect([trace])}
       />
     );
   }
@@ -151,6 +161,7 @@ const renderInsightCard = (
         assets={assets}
         asset={asset}
         onAssetSelect={onAssetSelect}
+        onTraceSelect={(trace) => onTracesSelect([trace])}
       />
     );
   }
@@ -162,6 +173,7 @@ const renderInsightCard = (
         assets={assets}
         asset={asset}
         onAssetSelect={onAssetSelect}
+        onTraceSelect={(trace) => onTracesSelect([trace])}
       />
     );
   }
@@ -173,6 +185,7 @@ const renderInsightCard = (
         assets={assets}
         asset={asset}
         onAssetSelect={onAssetSelect}
+        onTraceSelect={(trace) => onTracesSelect([trace])}
       />
     );
   }
@@ -223,7 +236,7 @@ export const AssetInsights = (props: AssetInsightsProps) => {
     props.onGoToAssetsPage(props.assetEntry);
   };
 
-  const handleSelectAsset = (asset: ExtendedAssetEntry) => {
+  const handleAssetSelect = (asset: ExtendedAssetEntry) => {
     props.onAssetSelect(asset);
   };
 
@@ -250,6 +263,12 @@ export const AssetInsights = (props: AssetInsightsProps) => {
     const spanInsightGroups: { [key: string]: SpanInsight[] } = {};
 
     for (let insight of sortedInsights) {
+      // Do not show unknown insights
+      const insightTypeInfo = getInsightTypeInfo(insight.type);
+      if (!insightTypeInfo) {
+        continue;
+      }
+
       // Do not show Span Usage insight
       if (insight.type === InsightType.SpanUsageStatus) {
         continue;
@@ -354,32 +373,35 @@ export const AssetInsights = (props: AssetInsightsProps) => {
           </s.Breadcrumb>
         </s.Breadcrumbs>
       </s.Header>
-      {insights ? (
-        <s.InsightsContainer ref={insightsContainerRef}>
-          {insights.map((x) => (
-            <s.InsightGroup key={x.name || "__ungrouped"}>
-              {x.name && (
-                <s.InsightGroupName>
-                  {x.icon && <x.icon size={20} />} {x.name}
-                </s.InsightGroupName>
-              )}
-              {x.insights.map((insight) =>
-                renderInsightCard(
-                  insight,
-                  props.assets,
-                  props.assetEntry,
-                  handleSelectAsset
-                )
-              )}
-            </s.InsightGroup>
-          ))}
-        </s.InsightsContainer>
-      ) : (
-        <NoData
-          icon={<Loader status={"pending"} size={86} />}
-          title={"Loading Insights..."}
-        />
-      )}
+      <s.ContentContainer>
+        {insights ? (
+          <s.InsightsContainer ref={insightsContainerRef}>
+            {insights.map((x) => (
+              <s.InsightGroup key={x.name || "__ungrouped"}>
+                {x.name && (
+                  <s.InsightGroupName>
+                    {x.icon && <x.icon size={20} />} {x.name}
+                  </s.InsightGroupName>
+                )}
+                {x.insights.map((insight) =>
+                  renderInsightCard(
+                    insight,
+                    props.assets,
+                    props.assetEntry,
+                    handleAssetSelect,
+                    props.onTracesSelect
+                  )
+                )}
+              </s.InsightGroup>
+            ))}
+          </s.InsightsContainer>
+        ) : (
+          <NoData
+            icon={<Loader status={"pending"} size={86} />}
+            title={"Loading Insights..."}
+          />
+        )}
+      </s.ContentContainer>
     </s.Container>
   );
 };

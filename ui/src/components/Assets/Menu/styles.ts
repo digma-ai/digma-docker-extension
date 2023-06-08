@@ -9,6 +9,7 @@ export const MenuButton = styled(Button)`
   gap: 10px;
   background: none;
   padding: 11px 16px 11px 0px;
+  min-width: 130px;
 
   color: ${({ theme }) =>
     theme.palette.mode === "light" ? "#677285" : "#fff"};
@@ -19,6 +20,11 @@ export const MenuButton = styled(Button)`
       theme.palette.mode === "light" ? "#677285" : "#fff"};
     background: none;
   }
+`;
+
+export const SelectedValue = styled.span`
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export const Menu = styled(MuiMenu)`

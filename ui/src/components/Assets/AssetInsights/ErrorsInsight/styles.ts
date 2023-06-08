@@ -11,6 +11,7 @@ export const ErrorList = styled.div`
   flex-direction: column;
   margin-top: 4px;
   gap: 4px;
+  word-break: break-all;
 `;
 
 export const EntityName = styled.span`

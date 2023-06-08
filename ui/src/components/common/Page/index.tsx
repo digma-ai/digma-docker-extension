@@ -1,4 +1,5 @@
 import ExtensionIcon from "@mui/icons-material/Extension";
+import { useMediaQuery } from "@mui/material";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Tooltip from "@mui/material/Tooltip";
 import { ddClient } from "../../../dockerDesktopClient";
@@ -13,6 +14,8 @@ import { StackIcon } from "../icons/StackIcon";
 import * as s from "./styles";
 import { PageProps } from "./types";
 
+const MIN_WIDTH = 830; // in pixels
+
 const handleSlackButtonClick = () => {
   ddClient.host.openExternal(SLACK_CHANNEL_URL);
 };
@@ -25,7 +28,7 @@ const getNavigationButtonIconColor = (currentPage: string, page: string) =>
   currentPage === page ? "#fff" : "#7794ab";
 
 const renderLinks = () => (
-  <s.LinksContainer>
+  <s.LinksContainer minWidth={MIN_WIDTH}>
     <Tooltip
       title={
         <s.LinkTooltipTextContainer>
@@ -54,6 +57,8 @@ const renderLinks = () => (
 );
 
 export const Page = (props: PageProps) => {
+  const isSmallView = useMediaQuery(`(min-width:${MIN_WIDTH}px)`);
+
   const handlePageSelect = (page: string) => {
     props.onPageChange(page);
   };
@@ -90,7 +95,11 @@ export const Page = (props: PageProps) => {
         <s.NavigationButtonsContainer>
           {renderLinks()}
           <s.Divider orientation={"vertical"} flexItem />
-          <ButtonGroup variant={"contained"} disableElevation>
+          <ButtonGroup
+            variant={"contained"}
+            orientation={isSmallView ? "horizontal" : "vertical"}
+            disableElevation
+          >
             {pageButtons.map((x) => {
               const isSelected = props.currentPage === x.pageId;
 

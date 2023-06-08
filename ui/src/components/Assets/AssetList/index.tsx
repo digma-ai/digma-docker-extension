@@ -1,4 +1,5 @@
 import { ForwardedRef, forwardRef, useEffect, useMemo, useRef } from "react";
+import { SORTING_CRITERION } from "../types";
 import { AssetEntry as AssetEntryComponent } from "./AssetEntry";
 import * as s from "./styles";
 import {
@@ -23,7 +24,7 @@ const sortEntries = (
       : a.span.displayName.localeCompare(b.span.displayName);
 
   switch (sorting.criterion) {
-    case "Critical insights":
+    case SORTING_CRITERION.CRITICAL_INSIGHTS:
       return entries.sort((a, b) => {
         const aHighestImportance =
           a.insights.length > 0
@@ -51,7 +52,7 @@ const sortEntries = (
           sortByName(a, b, sorting.isDesc)
         );
       });
-    case "Performance":
+    case SORTING_CRITERION.PERFORMANCE:
       return entries.sort((a, b) => {
         const aDuration = a.durationPercentiles.find(
           (duration) => duration.percentile === 0.5
@@ -77,7 +78,7 @@ const sortEntries = (
           sortByName(a, b, sorting.isDesc)
         );
       });
-    case "Latest":
+    case SORTING_CRITERION.LATEST:
       return entries.sort((a, b) => {
         const aDateTime = new Date(a.lastSpanInstanceInfo.startTime).valueOf();
         const bDateTime = new Date(b.lastSpanInstanceInfo.startTime).valueOf();
@@ -87,7 +88,7 @@ const sortEntries = (
           sortByName(a, b, sorting.isDesc)
         );
       });
-    case "Name":
+    case SORTING_CRITERION.NAME:
       return entries.sort((a, b) =>
         sorting.isDesc
           ? sortByName(b, a, sorting.isDesc)

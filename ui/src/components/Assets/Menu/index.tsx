@@ -51,7 +51,7 @@ export const Menu = (props: MenuProps) => {
           }
           onClick={handleMenuButtonClick}
         >
-          {value}
+          <s.SelectedValue title={value}>{value}</s.SelectedValue>
         </s.MenuButton>
       )}
       <s.Menu anchorEl={anchorEl} open={isOpen} onClose={handleMenuClose}>

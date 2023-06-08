@@ -2,6 +2,16 @@ services:
   my-extension:
     image: ${DESKTOP_PLUGIN_IMAGE}
 
+  nginx:
+    build: https://github.com/digma-ai/jaeger-ui.git
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+    environment:
+      - JAEGER_QUERY_URL=http://jaeger:16686
+    depends_on:
+      - jaeger
+
   rabbitmq:
     image: rabbitmq:3.11.9-management-alpine
     volumes:

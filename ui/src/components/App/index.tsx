@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { ddClient } from "../../dockerDesktopClient";
 import { Assets } from "../Assets";
 import { AssetInsights } from "../Assets/AssetInsights";
+import { Trace } from "../Assets/AssetInsights/types";
 import { Menu } from "../Assets/Menu";
 import {
   AssetsData,
@@ -10,6 +11,7 @@ import {
   GetAssetsResponse,
 } from "../Assets/types";
 import { GettingStarted } from "../GettingStarted";
+import { Jaeger } from "../Jaeger";
 import { Loader } from "../common/Loader";
 import { Page } from "../common/Page";
 import { PageContent } from "../common/Page/types";
@@ -27,6 +29,7 @@ export const App = () => {
   const [isRedirectedToAssets, setIsRedirectedToAssets] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState<ExtendedAssetEntry>();
   const [assetNavigateTo, setAssetNavigateTo] = useState<ExtendedAssetEntry>();
+  const [selectedTraces, setSelectedTraces] = useState<Trace[]>();
   // const [isBadgeVisible, setIsBadgeVisible] = useState<boolean>(false);
 
   // const isBadgeEnabled = ["true", null].includes(
@@ -148,6 +151,14 @@ export const App = () => {
     setCurrentPage(page);
   };
 
+  const handleTracesSelect = (traces: Trace[]) => {
+    setSelectedTraces(traces);
+  };
+
+  const handleJaegerCloseButtonClick = () => {
+    setSelectedTraces(undefined);
+  };
+
   console.debug("State:", {
     assets,
     environments,
@@ -163,7 +174,9 @@ export const App = () => {
     [PAGES.GETTING_STARTED]: {
       header: (
         <>
-          <DigmaLogoIcon size={52} />
+          <s.DigmaLogoContainer>
+            <DigmaLogoIcon size={52} />
+          </s.DigmaLogoContainer>
           <s.TitleContainer>
             <Typography variant={"h3"} component={"h1"}>
               Digma
@@ -196,6 +209,7 @@ export const App = () => {
             environment={selectedEnvironment}
             onGoToAssetsPage={handleGoToAssetPage}
             onAssetSelect={handleAssetSelect}
+            onTracesSelect={handleTracesSelect}
           />
         ) : (
           <Assets
@@ -212,7 +226,7 @@ export const App = () => {
   };
 
   return (
-    <>
+    <s.Container>
       <s.GlobalStyles />
       {currentPage && (
         <Page
@@ -220,6 +234,7 @@ export const App = () => {
           main={pages[currentPage].main}
           onPageChange={handlePageChange}
           currentPage={currentPage}
+          isSidePanelOpen={Boolean(selectedTraces)}
         />
       )}
       {!currentPage && (
@@ -228,6 +243,14 @@ export const App = () => {
           <Typography>Initializing...</Typography>
         </s.LoaderContainer>
       )}
-    </>
+      {selectedTraces && (
+        <s.JaegerContainer>
+          <Jaeger
+            traces={selectedTraces}
+            onClose={handleJaegerCloseButtonClick}
+          />
+        </s.JaegerContainer>
+      )}
+    </s.Container>
   );
 };

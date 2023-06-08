@@ -60,11 +60,18 @@ export const Breadcrumb = styled.span`
       : ""}
 `;
 
+export const ContentContainer = styled.div`
+  display: flex;
+  overflow: auto;
+  gap: 20px;
+`;
+
 export const InsightsContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
   overflow: auto;
+  flex-grow: 1;
 `;
 
 export const Description = styled.span`

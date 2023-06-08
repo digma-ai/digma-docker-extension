@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Button as CommonButton } from "../../../common/Button";
 
 export const SpanList = styled.div`
   display: flex;
@@ -53,4 +54,8 @@ export const Description = styled.span`
         return "#9b9b9b";
     }
   }};
+`;
+
+export const Button = styled(CommonButton)`
+  margin-left: auto;
 `;

@@ -18,14 +18,8 @@ import {
   AssetsProps,
   ExtendedAssetEntry,
   GroupedAssetEntries,
+  SORTING_CRITERION,
 } from "./types";
-
-const SORTING_CRITERION = [
-  "Critical insights",
-  "Performance",
-  "Latest",
-  "Name",
-];
 
 const groupEntries = (data: AssetsData): GroupedAssetEntries => {
   const assetEntries: ExtendedAssetEntry[] = data.serviceAssetsEntries
@@ -62,10 +56,10 @@ export const Assets = (props: AssetsProps) => {
   const previousEnvironment = usePrevious(props.environment);
 
   const [sorting, setSorting] = useState<{
-    criterion: string;
+    criterion: SORTING_CRITERION;
     isDesc: boolean;
   }>({
-    criterion: "Critical insights",
+    criterion: SORTING_CRITERION.CRITICAL_INSIGHTS,
     isDesc: true,
   });
 
@@ -128,7 +122,7 @@ export const Assets = (props: AssetsProps) => {
       });
     } else {
       setSorting({
-        criterion: value,
+        criterion: value as SORTING_CRITERION,
         isDesc: false,
       });
     }
@@ -230,7 +224,7 @@ export const Assets = (props: AssetsProps) => {
         <Menu
           value={sorting.criterion}
           title={"Sort by"}
-          items={SORTING_CRITERION}
+          items={Object.values(SORTING_CRITERION)}
           onSelect={handleSortingMenuItemSelect}
           button={ToolbarMenuButton}
         />

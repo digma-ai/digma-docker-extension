@@ -8,6 +8,10 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh;
+  max-width: 100%;
+  min-width: 50%;
+  overflow: auto;
+  flex-grow: 1;
 `;
 
 export const Header = styled.header`
@@ -78,9 +82,15 @@ export const NavigationButton = styled(Button)<NavigationButtonProps>`
 //   }
 // `;
 
-export const LinksContainer = styled.div`
+export const LinksContainer = styled.div<{ minWidth: number }>`
   display: flex;
   gap: 16px;
+
+  @media (max-width: ${({ minWidth }) => minWidth}px) {
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+  }
 `;
 
 export const LinkTooltipTextContainer = styled.div`

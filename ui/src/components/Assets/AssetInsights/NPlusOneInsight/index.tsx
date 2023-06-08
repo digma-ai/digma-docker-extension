@@ -1,13 +1,19 @@
+import { CrosshairIcon } from "../../../common/icons/CrosshairIcon";
 import { ExtendedAssetEntry } from "../../types";
 import { findAssetBySpanCodeObjectId } from "../../utils/findAssetBySpanCodeObjectId";
 import { InsightCard } from "../InsightCard";
 import { Link } from "../styles";
+import { Trace } from "../types";
 import * as s from "./styles";
 import { NPlusOneInsightProps } from "./types";
 
 export const NPlusOneInsight = (props: NPlusOneInsightProps) => {
   const handleSpanLinkClick = (asset: ExtendedAssetEntry) => {
     props.onAssetSelect(asset);
+  };
+
+  const handleTraceButtonClick = (trace: Trace) => {
+    props.onTraceSelect(trace);
   };
 
   const asset = props.insight.clientSpanCodeObjectId
@@ -18,7 +24,8 @@ export const NPlusOneInsight = (props: NPlusOneInsightProps) => {
       )
     : undefined;
 
-  const spanName = props.insight.clientSpanName;
+  const spanName = props.insight.clientSpanName || undefined;
+  const traceId = props.insight.traceId;
 
   return (
     <InsightCard
@@ -26,13 +33,30 @@ export const NPlusOneInsight = (props: NPlusOneInsightProps) => {
       content={
         <s.ContentContainer>
           <s.Description>Check the following SELECT statement:</s.Description>
-          <span>
-            {asset ? (
-              <Link onClick={() => handleSpanLinkClick(asset)}>{spanName}</Link>
-            ) : (
-              spanName
+          <s.SpanContainer>
+            <span>
+              {asset ? (
+                <Link onClick={() => handleSpanLinkClick(asset)}>
+                  {spanName}
+                </Link>
+              ) : (
+                spanName
+              )}
+            </span>
+            {traceId && (
+              <s.Button
+                onClick={() =>
+                  handleTraceButtonClick({
+                    name: spanName,
+                    id: traceId,
+                  })
+                }
+                icon={{ component: CrosshairIcon, size: 16 }}
+              >
+                Trace
+              </s.Button>
             )}
-          </span>
+          </s.SpanContainer>
           <s.Stats>
             <s.Stat>
               <s.Description>Repeats</s.Description>
