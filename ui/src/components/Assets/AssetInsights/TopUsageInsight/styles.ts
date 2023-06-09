@@ -4,7 +4,7 @@ import { Button as CommonButton } from "../../../common/Button";
 export const FlowList = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 12px;
 `;
 
 export const Flow = styled.div`
@@ -12,6 +12,17 @@ export const Flow = styled.div`
   justify-content: space-between;
   align-items: center;
   gap: 4px;
+  padding: 8px 12px;
+  border-radius: 4px;
+
+  background: ${({ theme }) => {
+    switch (theme.palette.mode) {
+      case "light":
+        return "#f9f9f9";
+      case "dark":
+        return "#36414e";
+    }
+  }};
 `;
 
 export const FlowData = styled.span`
