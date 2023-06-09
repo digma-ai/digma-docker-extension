@@ -89,6 +89,10 @@ export const getInsightTypeInfo = (
       icon: SnailIcon,
       label: "Duration Slowdown Source Detected",
     },
+    [InsightType.EndpointBreakdown]: {
+      icon: ClockWithTicksIcon, // TODO: replace
+      label: "Endpoint Breakdown",
+    },
   };
 
   return insightInfoMap[type];

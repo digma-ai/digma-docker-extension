@@ -3,6 +3,7 @@ import {
   CodeObjectErrorsInsight,
   CodeObjectHotSpotInsight,
   CodeObjectInsight,
+  EndpointBreakdownInsight,
   EndpointDurationSlowdownInsight,
   EndpointHighUsageInsight,
   EndpointLowUsageInsight,
@@ -91,3 +92,8 @@ export const isEndpointDurationSlowdownInsight = (
   insight: CodeObjectInsight
 ): insight is EndpointDurationSlowdownInsight =>
   insight.type === InsightType.EndpointDurationSlowdown;
+
+export const isEndpointBreakdownInsight = (
+  insight: CodeObjectInsight
+): insight is EndpointBreakdownInsight =>
+  insight.type === InsightType.EndpointBreakdown;
