@@ -37,14 +37,14 @@ class AnalyticsProvider {
     }
   }
 
-  async getInsights(codeObjectIds, environment) {
+  async getInsights(spanCodeObjectId, environment) {
     try {
       const response = await this.send(
         "POST",
-        `/CodeAnalytics/codeObjects/insights`,
+        `/CodeAnalytics/codeObjects/insights_of_single`,
         undefined,
         {
-          codeObjectIds,
+          spanCodeObjectId,
           environment,
         }
       );

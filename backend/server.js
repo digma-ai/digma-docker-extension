@@ -34,7 +34,7 @@ app.post("/environments/:environmentId/assets", async function (req, res) {
 app.post("/insights", async function (req, res) {
   try {
     const insights = await analyticsProvider.getInsights(
-      req.body.codeObjectIds,
+      req.body.spanCodeObjectId,
       req.body.environment
     );
     res.send(insights);
