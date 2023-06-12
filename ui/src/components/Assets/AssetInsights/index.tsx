@@ -46,6 +46,7 @@ import {
 import {
   AssetInsightsProps,
   CodeObjectInsight,
+  GetInsightsResponse,
   InsightGroup,
   SpanInsight,
   Trace,
@@ -226,11 +227,7 @@ export const AssetInsights = (props: AssetInsightsProps) => {
 
   const assetTypeInfo = getAssetTypeInfo(props.assetEntry.assetType);
 
-  const codeObjectIds = [props.assetEntry.span.spanCodeObjectId];
-
-  if (props.assetEntry.span.methodCodeObjectId) {
-    codeObjectIds.push(`method:${props.assetEntry.span.methodCodeObjectId}`);
-  }
+  const spanCodeObjectId = props.assetEntry.span.spanCodeObjectId;
 
   const handleAssetsLinkClick = () => {
     props.onGoToAssetsPage(props.assetEntry);
@@ -241,19 +238,17 @@ export const AssetInsights = (props: AssetInsightsProps) => {
   };
 
   const fetchInsights = async () => {
-    const insights = (await ddClient.extension.vm?.service?.post("/insights", {
-      codeObjectIds,
+    const response = (await ddClient.extension.vm?.service?.post("/insights", {
+      spanCodeObjectId,
       environment: props.environment,
-    })) as CodeObjectInsight[];
+    })) as GetInsightsResponse;
 
     console.debug(
-      `Insights for asset with ids [${codeObjectIds
-        .map((x) => `"${x}"`)
-        .join(", ")}] have been fetched:`,
+      `Insights for asset with id "${spanCodeObjectId}" have been fetched:`,
       insights
     );
 
-    const sortedInsights = [...insights].sort(
+    const sortedInsights = [...response.insights].sort(
       (a, b) =>
         getInsightTypeOrderPriority(a.type) -
         getInsightTypeOrderPriority(b.type)

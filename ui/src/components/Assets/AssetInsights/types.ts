@@ -25,6 +25,13 @@ export interface InsightWithLinksProps {
   onAssetSelect: (asset: ExtendedAssetEntry) => void;
 }
 
+export interface GetInsightsResponse {
+  accountId: string;
+  environment: string;
+  spanCodeObjectId: string;
+  insights: CodeObjectInsight[];
+}
+
 export interface InsightGroup {
   insights: CodeObjectInsight[];
   name?: string;
