@@ -5,9 +5,16 @@ import styled from "styled-components";
 export const Tabs = styled(MuiTabs)`
   min-height: 40px;
   & .MuiTabs-indicator {
-    background: ${({ theme }) =>
-      theme.palette.mode === "light" ? "#086dd7" : "#3391ee"};
     height: 3px;
+
+    background: ${({ theme }) => {
+      switch (theme.palette.mode) {
+        case "light":
+          return "#086dd7";
+        case "dark":
+          return "#3391ee";
+      }
+    }};
   }
 
   & .MuiTabs-flexContainer {
@@ -20,11 +27,26 @@ export const Tab = styled(MuiTab)`
   min-height: 40px;
   padding: 0;
   font-weight: 400;
-  color: ${({ theme }) => (theme.palette.mode === "light" ? "#000" : "#fff")};
+
+  color: ${({ theme }) => {
+    switch (theme.palette.mode) {
+      case "light":
+        return "#000";
+      case "dark":
+        return "#fff";
+    }
+  }};
 
   &.Mui-selected {
-    color: ${({ theme }) =>
-      theme.palette.mode === "light" ? "#116ed0" : "#fff"};
     font-weight: 500;
+
+    color: ${({ theme }) => {
+      switch (theme.palette.mode) {
+        case "light":
+          return "#116ed0";
+        case "dark":
+          return "#fff";
+      }
+    }};
   }
 `;

@@ -17,9 +17,16 @@ export const Card = styled.div`
   display: flex;
   gap: 40px;
   padding: 20px;
-  background: ${({ theme }) =>
-    theme.palette.mode === "light" ? "#f4f4f4" : "#172026"};
   border-radius: 8px;
+
+  background: ${({ theme }) => {
+    switch (theme.palette.mode) {
+      case "light":
+        return "#f4f4f4";
+      case "dark":
+        return "#172026";
+    }
+  }};
 `;
 
 export const CardTextContent = styled.div`
@@ -37,8 +44,15 @@ export const CardIllustration = styled.div`
 export const SectionTitleContainer = styled.div`
   display: flex;
   gap: 8px;
-  color: ${({ theme }) =>
-    theme.palette.mode === "light" ? "#505968" : "#fff"};
+
+  color: ${({ theme }) => {
+    switch (theme.palette.mode) {
+      case "light":
+        return "#505968";
+      case "dark":
+        return "#fff";
+    }
+  }};
 `;
 
 export const SectionTitle = styled(Typography)<
@@ -51,8 +65,15 @@ export const SectionTitle = styled(Typography)<
 
 export const SectionText = styled(Typography)`
   margin-top: 4px;
-  color: ${({ theme }) =>
-    theme.palette.mode === "light" ? "#505968" : "#c4d0da"};
+
+  color: ${({ theme }) => {
+    switch (theme.palette.mode) {
+      case "light":
+        return "#505968";
+      case "dark":
+        return "#c4d0da";
+    }
+  }};
 `;
 
 export const Link = styled(MuiLink)`
@@ -88,9 +109,16 @@ export const Tabs = styled(MuiTabs)`
   min-height: 32px;
 
   & .MuiTabs-indicator {
-    background: ${({ theme }) =>
-      theme.palette.mode === "light" ? "#086dd7" : "#3391ee"};
     height: 3px;
+
+    background: ${({ theme }) => {
+      switch (theme.palette.mode) {
+        case "light":
+          return "#086dd7";
+        case "dark":
+          return "#3391ee";
+      }
+    }};
   }
 `;
 
@@ -100,14 +128,21 @@ export const Tab = styled(MuiTab)`
   font-weight: 400;
 
   &.Mui-selected {
-    color: ${({ theme }) => theme.palette.text.primary};
     font-weight: 500;
+
+    color: ${({ theme }) => theme.palette.text.primary};
   }
 `;
 
 export const SectionDivider = styled(Typography)`
-  color: ${({ theme }) =>
-    theme.palette.mode === "light" ? "#677285" : "#898f93"};
+  color: ${({ theme }) => {
+    switch (theme.palette.mode) {
+      case "light":
+        return "#677285";
+      case "dark":
+        return "#898f93";
+    }
+  }};
 `;
 
 export const JetBrainsPluginThumbnail = styled.img`

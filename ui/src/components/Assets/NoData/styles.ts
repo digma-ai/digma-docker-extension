@@ -25,6 +25,13 @@ export const NoDataTextContainer = styled.div`
 
 export const NoDataText = styled(Typography)`
   text-align: center;
-  color: ${({ theme }) =>
-    theme.palette.mode === "light" ? "#677285" : "#adbecb"};
+
+  color: ${({ theme }) => {
+    switch (theme.palette.mode) {
+      case "light":
+        return "#677285";
+      case "dark":
+        return "#adbecb";
+    }
+  }};
 `;

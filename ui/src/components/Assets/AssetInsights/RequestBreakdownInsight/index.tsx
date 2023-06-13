@@ -9,10 +9,10 @@ const PIE_CHART_RADIUS = 42;
 const PIE_CHART_ARC_WIDTH = 2;
 
 const componentTypeColors = {
-  [ComponentType.Internal]: "#cbcb41",
-  [ComponentType.DbQueries]: "#f55385",
-  [ComponentType.HttpClients]: "#519aba",
-  [ComponentType.Rendering]: "#e37933",
+  [ComponentType.Internal]: "#53aeb4",
+  [ComponentType.DbQueries]: "#b180d7",
+  [ComponentType.HttpClients]: "#75beff",
+  [ComponentType.Rendering]: "#f55385",
 };
 
 export const RequestBreakdownInsight = (
