@@ -8,14 +8,28 @@ export const Circle = styled.div`
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: ${({ theme }) =>
-    theme.palette.mode === "light" ? "#e1e2e6" : "#333c42"};
+
+  background: ${({ theme }) => {
+    switch (theme.palette.mode) {
+      case "light":
+        return "#e1e2e6";
+      case "dark":
+        return "#333c42";
+    }
+  }};
 `;
 
 export const GettingStartedButton = styled(Button)`
   font-weight: 500;
-  background: ${({ theme }) =>
-    theme.palette.mode === "light" ? "#086dd7" : "#3391ee"};
+
+  background: ${({ theme }) => {
+    switch (theme.palette.mode) {
+      case "light":
+        return "#086dd7";
+      case "dark":
+        return "#3391ee";
+    }
+  }};
 `;
 
 export const Container = styled.div`

@@ -16,13 +16,34 @@ export const Code = styled(TextField)`
     font-size: 14px;
     line-height: 20px;
     letter-spacing: 0.02em;
-    color: ${({ theme }) =>
-      theme.palette.mode === "light" ? "#17191e" : "#fff"};
-    background: ${({ theme }) =>
-      theme.palette.mode === "light" ? "#fff" : "#27343e"};
-    border-color: ${({ theme }) =>
-      theme.palette.mode === "light" ? "#efeff2" : "#465c6e"};
     padding: 11px 42px 11px 8px;
+
+    color: ${({ theme }) => {
+      switch (theme.palette.mode) {
+        case "light":
+          return "#17191e";
+        case "dark":
+          return "#fff";
+      }
+    }};
+
+    background: ${({ theme }) => {
+      switch (theme.palette.mode) {
+        case "light":
+          return "#fff";
+        case "dark":
+          return "#27343e";
+      }
+    }};
+
+    border-color: ${({ theme }) => {
+      switch (theme.palette.mode) {
+        case "light":
+          return "#efeff2";
+        case "dark":
+          return "#465c6e";
+      }
+    }};
   }
 
   & .MuiInputBase-multiline {
@@ -41,16 +62,30 @@ export const CopyButton = styled(Button)`
   right: 11px;
   min-width: 24px;
   height: 24px;
-  color: ${({ theme }) =>
-    theme.palette.mode === "light" ? "#086dd7" : "#55a4f1"};
   padding: 0;
   background: transparent;
 
+  color: ${({ theme }) => {
+    switch (theme.palette.mode) {
+      case "light":
+        return "#086dd7";
+      case "dark":
+        return "#55a4f1";
+    }
+  }};
+
   &:focus,
   &:hover {
-    color: ${({ theme }) =>
-      theme.palette.mode === "light" ? "#55a4F1" : "#fff"};
     background: transparent;
+
+    color: ${({ theme }) => {
+      switch (theme.palette.mode) {
+        case "light":
+          return "#55a4F1";
+        case "dark":
+          return "#fff";
+      }
+    }};
   }
 `;
 

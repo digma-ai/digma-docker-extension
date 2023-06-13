@@ -68,6 +68,7 @@ export const NavigationButton = styled(Button)<NavigationButtonProps>`
         : theme.palette.mode === "light"
         ? "#efeff2"
         : "#27343e"};
+
     color: ${({ selected }) => (selected ? "#fff" : "#7794ab")};
   }
 `;

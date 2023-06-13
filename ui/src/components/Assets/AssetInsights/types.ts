@@ -475,3 +475,23 @@ export interface EndpointDurationSlowdownInsight extends EndpointInsight {
   durationSlowdownSources: DurationSlowdownSource[];
   decorators: CodeObjectDecorator[];
 }
+
+export enum ComponentType {
+  Internal = "Internal",
+  DbQueries = "DB Queries",
+  HttpClients = "HTTP Clients",
+  Rendering = "Rendering",
+}
+
+export interface EndpointBreakdownInsight extends EndpointInsight {
+  name: "Request Breakdown";
+  type: InsightType.EndpointBreakdown;
+  category: InsightCategory.Usage;
+  specifity: InsightSpecificity.OwnInsight;
+  insightImportance: InsightImportance.Info;
+  isRecalculateEnabled: true;
+  components: {
+    type: ComponentType;
+    fraction: number;
+  }[];
+}

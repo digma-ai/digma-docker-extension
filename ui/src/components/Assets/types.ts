@@ -17,6 +17,7 @@ export enum InsightType {
   SpanScaling = "SpanScaling",
   SpanDurationBreakdown = "SpanDurationBreakdown",
   EndpointDurationSlowdown = "EndpointDurationSlowdown",
+  EndpointBreakdown = "EndpointBreakdown",
 }
 
 export enum SORTING_CRITERION {

@@ -7,10 +7,25 @@ export const Container = styled(Paper)`
   flex-direction: column;
   gap: 8px;
   padding: 16px;
-  background: ${({ theme }) =>
-    theme.palette.mode === "light" ? "#fff" : "#27343e"};
+
+  background: ${({ theme }) => {
+    switch (theme.palette.mode) {
+      case "light":
+        return "#fff";
+      case "dark":
+        return "#27343e";
+    }
+  }};
+
   border: 1px solid
-    ${({ theme }) => (theme.palette.mode === "light" ? "#efeff2" : "#465c6e")};
+    ${({ theme }) => {
+      switch (theme.palette.mode) {
+        case "light":
+          return "#efeff2";
+        case "dark":
+          return "#465c6e";
+      }
+    }};
 `;
 
 export const Header = styled.div`
@@ -58,8 +73,14 @@ export const InsightIconsContainer = styled.div`
 export const InsightIconContainer = styled(AssetTypeIconContainer)`
   border-radius: 4px;
 
-  background: ${({ theme }) =>
-    theme.palette.mode === "light" ? "#e9eef4" : "#36414e"};
+  background: ${({ theme }) => {
+    switch (theme.palette.mode) {
+      case "light":
+        return "#e9eef4";
+      case "dark":
+        return "#36414e";
+    }
+  }};
 `;
 
 export const StatsContainer = styled.div`
@@ -74,8 +95,15 @@ export const Stats = styled.div`
   flex-wrap: wrap;
   align-items: center;
   gap: 4px;
-  color: ${({ theme }) =>
-    theme.palette.mode === "light" ? "#70787d" : "#9b9b9b"};
+
+  color: ${({ theme }) => {
+    switch (theme.palette.mode) {
+      case "light":
+        return "#70787d";
+      case "dark":
+        return "#9b9b9b";
+    }
+  }};
 
   &:first-child {
     width: 20%;
@@ -102,30 +130,58 @@ export const ServicesContainer = styled.div`
 
 export const ServiceName = styled.div`
   padding: 4px 6px;
-  color: ${({ theme }) =>
-    theme.palette.mode === "light" ? "#49494d" : "#dadada"};
-  background: ${({ theme }) =>
-    theme.palette.mode === "light" ? "#f0f0f0" : "#3d4753"};
   border-radius: 23px;
   overflow: hidden;
   text-overflow: ellipsis;
+
+  color: ${({ theme }) => {
+    switch (theme.palette.mode) {
+      case "light":
+        return "#49494d";
+      case "dark":
+        return "#dadada";
+    }
+  }};
+
+  background: ${({ theme }) => {
+    switch (theme.palette.mode) {
+      case "light":
+        return "#f0f0f0";
+      case "dark":
+        return "#3d4753";
+    }
+  }};
 `;
 
 export const ValueContainer = styled.div`
   display: flex;
   align-items: flex-end;
-  color: ${({ theme }) =>
-    theme.palette.mode === "light" ? "#49494d" : "#c6c6c6"};
   gap: 2px;
   font-size: 12px;
   line-height: 14px;
   font-weight: 500;
+
+  color: ${({ theme }) => {
+    switch (theme.palette.mode) {
+      case "light":
+        return "#49494d";
+      case "dark":
+        return "#c6c6c6";
+    }
+  }};
 `;
 
 export const Suffix = styled.span`
   font-weight: 500;
   font-size: 11px;
   line-height: 14px;
-  color: ${({ theme }) =>
-    theme.palette.mode === "light" ? "#383838" : "#9b9b9b"};
+
+  color: ${({ theme }) => {
+    switch (theme.palette.mode) {
+      case "light":
+        return "#383838";
+      case "dark":
+        return "#9b9b9b";
+    }
+  }};
 `;

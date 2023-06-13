@@ -35,6 +35,7 @@ export const Breadcrumbs = styled(MuiBreadcrumbs)`
 
     &:last-child {
       overflow: hidden;
+
       color: ${({ theme }) => theme.palette.text.primary};
     }
   }
