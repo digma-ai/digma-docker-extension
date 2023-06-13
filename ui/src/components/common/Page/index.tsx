@@ -6,7 +6,7 @@ import { ddClient } from "../../../dockerDesktopClient";
 import {
   JETBRAINS_PLUGIN_URL,
   PAGES,
-  SLACK_CHANNEL_URL,
+  SLACK_WORKSPACE_URL,
 } from "../../App/constants";
 import { IntellijLogoIcon } from "../icons/IntellijLogoIcon";
 import { SlackLogoIcon } from "../icons/SlackLogoIcon";
@@ -17,7 +17,7 @@ import { PageProps } from "./types";
 const MIN_WIDTH = 830; // in pixels
 
 const handleSlackButtonClick = () => {
-  ddClient.host.openExternal(SLACK_CHANNEL_URL);
+  ddClient.host.openExternal(SLACK_WORKSPACE_URL);
 };
 
 const openJetBrainsPluginPage = () => {
