@@ -10,14 +10,27 @@ export const MenuButton = styled(Button)`
   background: none;
   padding: 11px 16px 11px 0px;
 
-  color: ${({ theme }) =>
-    theme.palette.mode === "light" ? "#677285" : "#fff"};
+  color: ${({ theme }) => {
+    switch (theme.palette.mode) {
+      case "light":
+        return "#677285";
+      case "dark":
+        return "#fff";
+    }
+  }};
 
   &:hover,
   &:focus {
-    color: ${({ theme }) =>
-      theme.palette.mode === "light" ? "#677285" : "#fff"};
     background: none;
+
+    color: ${({ theme }) => {
+      switch (theme.palette.mode) {
+        case "light":
+          return "#677285";
+        case "dark":
+          return "#fff";
+      }
+    }};
   }
 `;
 
@@ -44,6 +57,13 @@ export const Title = styled(Typography)`
   display: flex;
   align-items: center;
   letter-spacing: 0.02em;
-  color: ${({ theme }) =>
-    theme.palette.mode === "light" ? "#677285" : "#adbecb"};
+
+  color: ${({ theme }) => {
+    switch (theme.palette.mode) {
+      case "light":
+        return "#677285";
+      case "dark":
+        return "#adbecb";
+    }
+  }};
 `;

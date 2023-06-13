@@ -19,6 +19,7 @@ import { EndpointNPlusOneInsight } from "./EndpointNPlusOneInsight";
 import { ErrorsInsight } from "./ErrorsInsight";
 import { InsightCard } from "./InsightCard";
 import { NPlusOneInsight } from "./NPlusOneInsight";
+import { RequestBreakdownInsight } from "./RequestBreakdownInsight";
 import { ScalingIssueInsight } from "./ScalingIssueInsight";
 import { SlowEndpointInsight } from "./SlowEndpointInsight";
 import { SpanBottleneckInsight } from "./SpanBottleneckInsight";
@@ -28,6 +29,7 @@ import * as s from "./styles";
 import {
   isCodeObjectErrorsInsight,
   isCodeObjectHotSpotInsight,
+  isEndpointBreakdownInsight,
   isEndpointDurationSlowdownInsight,
   isEndpointHighUsageInsight,
   isEndpointLowUsageInsight,
@@ -74,6 +76,7 @@ export const getInsightTypeOrderPriority = (type: string): number => {
     [InsightType.HighUsage]: 10,
     [InsightType.SlowEndpoint]: 20,
     [InsightType.EndpointDurationSlowdown]: 25,
+    [InsightType.EndpointBreakdown]: 5,
   };
 
   return insightOrderPriorityMap[type] || Infinity;
@@ -84,7 +87,7 @@ const renderInsightCard = (
   assets: AssetsData,
   asset: ExtendedAssetEntry,
   onAssetSelect: (asset: ExtendedAssetEntry) => void
-): JSX.Element => {
+): JSX.Element | undefined => {
   if (isSpanDurationsInsight(insight)) {
     return <DurationInsight key={insight.type} insight={insight} />;
   }
@@ -203,7 +206,9 @@ const renderInsightCard = (
     );
   }
 
-  return <InsightCard key={insight.type} data={insight} />;
+  if (isEndpointBreakdownInsight(insight)) {
+    return <RequestBreakdownInsight key={insight.type} insight={insight} />;
+  }
 };
 
 export const AssetInsights = (props: AssetInsightsProps) => {

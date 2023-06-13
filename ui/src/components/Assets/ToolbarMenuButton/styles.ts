@@ -7,10 +7,32 @@ export const Button = styled(MuiButton)`
   gap: 10px;
   padding: 10px 20px 10px 16px;
   width: 175px;
-  color: ${({ theme }) =>
-    theme.palette.mode === "light" ? "#677285" : "#7794ab"};
-  background: ${({ theme }) =>
-    theme.palette.mode === "light" ? "#fff" : "#1C262d"};
+
+  color: ${({ theme }) => {
+    switch (theme.palette.mode) {
+      case "light":
+        return "#677285";
+      case "dark":
+        return "#7794ab";
+    }
+  }};
+
+  background: ${({ theme }) => {
+    switch (theme.palette.mode) {
+      case "light":
+        return "#fff";
+      case "dark":
+        return "#1c262d";
+    }
+  }};
+
   border: 1.5px solid
-    ${({ theme }) => (theme.palette.mode === "light" ? "#e1e2e6" : "#364754")};
+    ${({ theme }) => {
+      switch (theme.palette.mode) {
+        case "light":
+          return "#e1e2e6";
+        case "dark":
+          return "#364754";
+      }
+    }};
 `;

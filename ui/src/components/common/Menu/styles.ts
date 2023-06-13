@@ -3,10 +3,17 @@ import styled from "styled-components";
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  background: ${({ theme }) =>
-    theme.palette.mode === "light" ? "#fff" : "#27343e"};
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.12);
   border-radius: 2px;
+
+  background: ${({ theme }) => {
+    switch (theme.palette.mode) {
+      case "light":
+        return "#fff";
+      case "dark":
+        return "#27343e";
+    }
+  }};
 `;
 
 export const Header = styled.div`
