@@ -31,12 +31,30 @@ app.post("/environments/:environmentId/assets", async function (req, res) {
   }
 });
 
-app.post("/insights", async function (req, res) {
+app.get(
+  "/environments/:environmentId/assets/:assetId/insights",
+  async function (req, res) {
+    try {
+      const insights = await analyticsProvider.getInsightsOfSingle(
+        req.params.assetId,
+        req.params.environmentId
+      );
+
+      res.send(insights);
+    } catch (e) {
+      console.log(e);
+      res.sendStatus(500);
+    }
+  }
+);
+
+app.post("/environments/:environmentId/insights", async function (req, res) {
   try {
     const insights = await analyticsProvider.getInsights(
-      req.body.spanCodeObjectId,
-      req.body.environment
+      req.body.codeObjectIds,
+      req.params.environmentId
     );
+
     res.send(insights);
   } catch (e) {
     console.log(e);

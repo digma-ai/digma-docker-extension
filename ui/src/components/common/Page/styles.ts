@@ -1,4 +1,5 @@
 import Button from "@mui/material/Button";
+import ButtonGroup from "@mui/material/ButtonGroup";
 import MuiDivider from "@mui/material/Divider";
 import MuiLink from "@mui/material/Link";
 import styled from "styled-components";
@@ -16,18 +17,19 @@ export const Container = styled.div`
 
 export const Header = styled.header`
   display: flex;
-  height: 112px;
+  min-height: 112px;
   align-items: center;
-  gap: 16px;
-  padding: 0 40px;
+  padding: 16px 40px;
   flex-shrink: 0;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 `;
 
 export const Divider = styled(MuiDivider)`
   margin: 0;
 
   &.MuiDivider-vertical {
-    margin: 0;
+    margin: 16px 0;
   }
 `;
 
@@ -39,10 +41,8 @@ export const MainContainer = styled.main`
   overflow: auto;
 `;
 
-export const NavigationButtonsContainer = styled.div`
-  margin-left: auto;
-  display: flex;
-  gap: 16px;
+export const NavigationButtonGroup = styled(ButtonGroup)`
+  margin-left: 16px;
 `;
 
 export const NavigationButton = styled(Button)<NavigationButtonProps>`
@@ -83,15 +83,11 @@ export const NavigationButton = styled(Button)<NavigationButtonProps>`
 //   }
 // `;
 
-export const LinksContainer = styled.div<{ minWidth: number }>`
+export const LinksContainer = styled.div`
+  margin-left: auto;
   display: flex;
   gap: 16px;
-
-  @media (max-width: ${({ minWidth }) => minWidth}px) {
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-end;
-  }
+  margin-right: 16px;
 `;
 
 export const LinkTooltipTextContainer = styled.div`

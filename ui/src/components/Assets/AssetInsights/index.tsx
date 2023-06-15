@@ -243,10 +243,11 @@ export const AssetInsights = (props: AssetInsightsProps) => {
   };
 
   const fetchInsights = async () => {
-    const response = (await ddClient.extension.vm?.service?.post("/insights", {
-      spanCodeObjectId,
-      environment: props.environment,
-    })) as GetInsightsResponse;
+    const response = (await ddClient.extension.vm?.service?.get(
+      `/environments/${encodeURIComponent(
+        props.environment
+      )}/assets/${encodeURIComponent(spanCodeObjectId)}/insights`
+    )) as GetInsightsResponse;
 
     console.debug(
       `Insights for asset with id "${spanCodeObjectId}" have been fetched:`,

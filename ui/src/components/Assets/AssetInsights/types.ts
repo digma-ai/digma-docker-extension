@@ -29,6 +29,7 @@ export interface GetInsightsResponse {
   accountId: string;
   environment: string;
   spanCodeObjectId: string;
+  spanInfo: SpanInfo | null;
   insights: CodeObjectInsight[];
 }
 

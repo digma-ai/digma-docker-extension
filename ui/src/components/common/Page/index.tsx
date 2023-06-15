@@ -1,6 +1,4 @@
 import ExtensionIcon from "@mui/icons-material/Extension";
-import { useMediaQuery } from "@mui/material";
-import ButtonGroup from "@mui/material/ButtonGroup";
 import Tooltip from "@mui/material/Tooltip";
 import { ddClient } from "../../../dockerDesktopClient";
 import {
@@ -14,8 +12,6 @@ import { StackIcon } from "../icons/StackIcon";
 import * as s from "./styles";
 import { PageProps } from "./types";
 
-const MIN_WIDTH = 830; // in pixels
-
 const handleSlackButtonClick = () => {
   ddClient.host.openExternal(SLACK_WORKSPACE_URL);
 };
@@ -28,7 +24,7 @@ const getNavigationButtonIconColor = (currentPage: string, page: string) =>
   currentPage === page ? "#fff" : "#7794ab";
 
 const renderLinks = () => (
-  <s.LinksContainer minWidth={MIN_WIDTH}>
+  <s.LinksContainer>
     <Tooltip
       title={
         <s.LinkTooltipTextContainer>
@@ -57,8 +53,6 @@ const renderLinks = () => (
 );
 
 export const Page = (props: PageProps) => {
-  const isSmallView = useMediaQuery(`(min-width:${MIN_WIDTH}px)`);
-
   const handlePageSelect = (page: string) => {
     props.onPageChange(page);
   };
@@ -92,35 +86,29 @@ export const Page = (props: PageProps) => {
     <s.Container>
       <s.Header>
         {props.header}
-        <s.NavigationButtonsContainer>
-          {renderLinks()}
-          <s.Divider orientation={"vertical"} flexItem />
-          <ButtonGroup
-            variant={"contained"}
-            orientation={isSmallView ? "horizontal" : "vertical"}
-            disableElevation
-          >
-            {pageButtons.map((x) => {
-              const isSelected = props.currentPage === x.pageId;
+        {renderLinks()}
+        <s.Divider orientation={"vertical"} flexItem />
+        <s.NavigationButtonGroup variant={"contained"} disableElevation>
+          {pageButtons.map((x) => {
+            const isSelected = props.currentPage === x.pageId;
 
-              return (
-                <s.NavigationButton
-                  key={x.pageId}
-                  selected={isSelected}
-                  disabled={isSelected}
-                  onClick={() => handlePageSelect(x.pageId)}
-                  startIcon={
-                    // <s.Badge variant={"dot"} invisible={!x.isBadgeVisible}>
-                    x.icon
-                    // </s.Badge>
-                  }
-                >
-                  {x.label}
-                </s.NavigationButton>
-              );
-            })}
-          </ButtonGroup>
-        </s.NavigationButtonsContainer>
+            return (
+              <s.NavigationButton
+                key={x.pageId}
+                selected={isSelected}
+                disabled={isSelected}
+                onClick={() => handlePageSelect(x.pageId)}
+                startIcon={
+                  // <s.Badge variant={"dot"} invisible={!x.isBadgeVisible}>
+                  x.icon
+                  // </s.Badge>
+                }
+              >
+                {x.label}
+              </s.NavigationButton>
+            );
+          })}
+        </s.NavigationButtonGroup>
       </s.Header>
       <s.Divider />
       <s.MainContainer>{props.main}</s.MainContainer>

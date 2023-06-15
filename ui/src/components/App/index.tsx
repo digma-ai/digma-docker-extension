@@ -10,6 +10,7 @@ import {
   ExtendedAssetEntry,
   GetAssetsResponse,
 } from "../Assets/types";
+import { findAssetBySpanCodeObjectId } from "../Assets/utils/findAssetBySpanCodeObjectId";
 import { GettingStarted } from "../GettingStarted";
 import { Jaeger } from "../Jaeger";
 import { Loader } from "../common/Loader";
@@ -46,7 +47,7 @@ export const App = () => {
 
   const fetchAssets = async (environment: string) => {
     const assets = (await ddClient.extension.vm?.service?.post(
-      `/environments/${environment}/assets`,
+      `/environments/${encodeURIComponent(environment)}/assets`,
       { serviceNames: [] }
     )) as GetAssetsResponse;
     console.debug(
@@ -159,6 +160,22 @@ export const App = () => {
     setSelectedTraces(undefined);
   };
 
+  const handleSpanSelect = (spanCodeObjectId: string) => {
+    if (!assets) {
+      return;
+    }
+
+    const asset = findAssetBySpanCodeObjectId(
+      assets,
+      spanCodeObjectId,
+      // TODO: add serviceName tag to spans in the Jaeger to support multi-service apps
+      assets.serviceAssetsEntries[0].serviceName
+    );
+    if (asset) {
+      setSelectedAsset(asset);
+    }
+  };
+
   console.debug("State:", {
     assets,
     environments,
@@ -168,12 +185,13 @@ export const App = () => {
     isRedirectedToAssets,
     selectedAsset,
     assetNavigateTo,
+    selectedTraces,
   });
 
   const pages: Record<string, PageContent> = {
     [PAGES.GETTING_STARTED]: {
       header: (
-        <>
+        <s.GettingStartedHeader>
           <s.DigmaLogoContainer>
             <DigmaLogoIcon size={52} />
           </s.DigmaLogoContainer>
@@ -185,7 +203,7 @@ export const App = () => {
               Getting Started with Digma
             </Typography>
           </s.TitleContainer>
-        </>
+        </s.GettingStartedHeader>
       ),
       main: <GettingStarted />,
     },
@@ -243,9 +261,11 @@ export const App = () => {
           <Typography>Initializing...</Typography>
         </s.LoaderContainer>
       )}
-      {selectedTraces && (
+      {selectedTraces && selectedEnvironment && (
         <s.JaegerContainer>
           <Jaeger
+            environment={selectedEnvironment}
+            onSpanSelect={handleSpanSelect}
             traces={selectedTraces}
             onClose={handleJaegerCloseButtonClick}
           />

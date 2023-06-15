@@ -17,6 +17,12 @@ export const Container = styled.div`
   flex-grow: 1;
 `;
 
+export const GettingStartedHeader = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 16px;
+`;
+
 export const DigmaLogoContainer = styled.div`
   flex-shrink: 0;
 `;
