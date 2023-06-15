@@ -4,7 +4,7 @@ export interface JaegerProps {
   traces: Trace[];
   environment: string;
   onClose: () => void;
-  onSpanSelect: (spanCodeObjectId: string) => void;
+  onSpanSelect: (span: SpanData) => void;
 }
 
 export interface JaegerMessageData {
@@ -16,6 +16,7 @@ export interface SpanData {
   id: string;
   name: string;
   instrumentationLibrary: string;
+  serviceName: string;
   function?: string;
   namespace?: string;
   spanCodeObjectId?: string;

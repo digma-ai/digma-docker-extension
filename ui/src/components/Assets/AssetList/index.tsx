@@ -103,8 +103,8 @@ const AssetListComponent = (
   props: AssetListProps,
   ref: ForwardedRef<HTMLUListElement>
 ) => {
-  const handleAssetLinkClick = (entry: ExtendedAssetEntryWithServices) => {
-    props.onAssetLinkClick(entry);
+  const handleAssetEntryClick = (entry: ExtendedAssetEntryWithServices) => {
+    props.onAssetEntryClick(entry);
   };
 
   const entries: ExtendedAssetEntryWithServices[] = useMemo(
@@ -166,7 +166,7 @@ const AssetListComponent = (
             key={id}
             id={id}
             entry={entry}
-            onAssetLinkClick={handleAssetLinkClick}
+            onClick={handleAssetEntryClick}
           />
         );
       })}

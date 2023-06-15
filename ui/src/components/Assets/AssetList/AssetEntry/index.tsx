@@ -14,8 +14,8 @@ const AssetEntryComponent = (
 ) => {
   const theme = useTheme();
 
-  const handleLinkClick = () => {
-    props.onAssetLinkClick(props.entry);
+  const handleContainerClick = () => {
+    props.onClick(props.entry);
   };
 
   const name = props.entry.span.displayName;
@@ -37,16 +37,21 @@ const AssetEntryComponent = (
   const assetTypeInfo = getAssetTypeInfo(props.entry.assetType);
 
   return (
-    <s.Container elevation={0} id={props.id} ref={ref}>
+    <s.Container
+      elevation={0}
+      id={props.id}
+      ref={ref}
+      onClick={handleContainerClick}
+    >
       <s.Header>
         {assetTypeInfo?.icon && (
           <s.AssetTypeIconContainer>
             <assetTypeInfo.icon size={20} color={"#7891d0"} />
           </s.AssetTypeIconContainer>
         )}
-        <s.Link onClick={() => handleLinkClick()} title={name}>
+        <s.Name noWrap={true} title={name}>
           {name}
-        </s.Link>
+        </s.Name>
         <s.InsightIconsContainer>
           {sortedInsights.map((insight) => {
             const insightTypeInfo = getInsightTypeInfo(insight.type);

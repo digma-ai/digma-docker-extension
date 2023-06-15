@@ -101,10 +101,7 @@ export const Jaeger = (props: JaegerProps) => {
             sendDigmaMessage(jaegerWindow, actions.SET_SPANS_DATA, payload);
             break;
           case actions.GO_TO_INSIGHTS:
-            const spanData = e.data.payload as SpanData;
-            if (spanData.spanCodeObjectId) {
-              props.onSpanSelect(spanData.spanCodeObjectId);
-            }
+            props.onSpanSelect(e.data.payload as SpanData);
             break;
         }
       }

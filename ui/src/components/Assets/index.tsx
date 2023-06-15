@@ -110,7 +110,7 @@ export const Assets = (props: AssetsProps) => {
     setSelectedAssetTypeId(assetTypeId);
   };
 
-  const handleAssetLinkClick = (entry: ExtendedAssetEntry) => {
+  const handleAssetEntryClick = (entry: ExtendedAssetEntry) => {
     props.onAssetSelect(entry);
   };
 
@@ -183,7 +183,7 @@ export const Assets = (props: AssetsProps) => {
         {data[selectedAssetTypeId] ? (
           <AssetList
             ref={assetListRef}
-            onAssetLinkClick={handleAssetLinkClick}
+            onAssetEntryClick={handleAssetEntryClick}
             assetTypeId={selectedAssetTypeId}
             entries={data[selectedAssetTypeId]}
             sorting={sorting}

@@ -13,6 +13,7 @@ import {
 import { findAssetBySpanCodeObjectId } from "../Assets/utils/findAssetBySpanCodeObjectId";
 import { GettingStarted } from "../GettingStarted";
 import { Jaeger } from "../Jaeger";
+import { SpanData } from "../Jaeger/types";
 import { Loader } from "../common/Loader";
 import { Page } from "../common/Page";
 import { PageContent } from "../common/Page/types";
@@ -160,16 +161,15 @@ export const App = () => {
     setSelectedTraces(undefined);
   };
 
-  const handleSpanSelect = (spanCodeObjectId: string) => {
-    if (!assets) {
+  const handleSpanSelect = (span: SpanData) => {
+    if (!assets || !span.spanCodeObjectId) {
       return;
     }
 
     const asset = findAssetBySpanCodeObjectId(
       assets,
-      spanCodeObjectId,
-      // TODO: add serviceName tag to spans in the Jaeger to support multi-service apps
-      assets.serviceAssetsEntries[0].serviceName
+      span.spanCodeObjectId,
+      span.serviceName
     );
     if (asset) {
       setSelectedAsset(asset);

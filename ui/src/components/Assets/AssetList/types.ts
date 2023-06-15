@@ -7,7 +7,7 @@ export interface ExtendedAssetEntryWithServices extends ExtendedAssetEntry {
 export interface AssetListProps {
   assetTypeId: string;
   entries: { [key: string]: ExtendedAssetEntry[] };
-  onAssetLinkClick: (entry: ExtendedAssetEntryWithServices) => void;
+  onAssetEntryClick: (entry: ExtendedAssetEntryWithServices) => void;
   sorting: Sorting;
   onAssetNavigate: () => void;
   assetNavigateTo?: ExtendedAssetEntry;

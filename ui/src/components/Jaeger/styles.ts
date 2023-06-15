@@ -11,8 +11,16 @@ export const Header = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #27343e;
   padding: 0 12px;
+
+  background: ${({ theme }) => {
+    switch (theme.palette.mode) {
+      case "light":
+        return "#fff";
+      case "dark":
+        return "#27343e";
+    }
+  }};
 `;
 
 export const Title = styled.span`
@@ -22,7 +30,15 @@ export const Title = styled.span`
   font-weight: 500;
   font-size: 16px;
   line-height: 19px;
-  color: #dadada;
+
+  color: ${({ theme }) => {
+    switch (theme.palette.mode) {
+      case "light":
+        return "#000";
+      case "dark":
+        return "#dadada";
+    }
+  }};
 `;
 
 export const Iframe = styled.iframe`
