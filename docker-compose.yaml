@@ -3,9 +3,7 @@ services:
     image: ${DESKTOP_PLUGIN_IMAGE}
 
   nginx:
-    build: https://github.com/digma-ai/jaeger-ui.git#feature/docker
-    # build:
-      # context: /Users/kshmidt/Documents/Projects/Digma/jaeger-ui/
+    image: digmaai/jaeger-ui:pr-20
     ports:
       - "8080:80"
     restart: unless-stopped
