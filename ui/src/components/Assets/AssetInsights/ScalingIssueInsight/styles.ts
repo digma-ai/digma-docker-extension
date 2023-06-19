@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Button as CommonButton } from "../../../common/Button";
 
 export const Stats = styled.span`
   display: flex;
@@ -45,4 +46,14 @@ export const List = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
+`;
+
+export const RootCause = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+export const Button = styled(CommonButton)`
+  height: fit-content;
 `;

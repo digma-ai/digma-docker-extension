@@ -13,7 +13,7 @@ class AnalyticsProvider {
     try {
       const response = await this.send("GET", `/CodeAnalytics/environments`);
       return response;
-    } catch (error) {
+    } catch (e) {
       console.log(e);
       throw new Error(e);
     }
@@ -37,7 +37,7 @@ class AnalyticsProvider {
     }
   }
 
-  async getInsights(spanCodeObjectId, environment) {
+  async getInsightsOfSingle(spanCodeObjectId, environment) {
     try {
       const response = await this.send(
         "POST",
@@ -45,6 +45,24 @@ class AnalyticsProvider {
         undefined,
         {
           spanCodeObjectId,
+          environment,
+        }
+      );
+      return response;
+    } catch (e) {
+      console.log(e);
+      throw new Error(e);
+    }
+  }
+
+  async getInsights(codeObjectIds, environment) {
+    try {
+      const response = await this.send(
+        "POST",
+        `/CodeAnalytics/codeObjects/insights`,
+        undefined,
+        {
+          codeObjectIds,
           environment,
         }
       );

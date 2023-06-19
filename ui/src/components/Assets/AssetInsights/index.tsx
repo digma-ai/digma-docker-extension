@@ -51,6 +51,7 @@ import {
   GetInsightsResponse,
   InsightGroup,
   SpanInsight,
+  Trace,
 } from "./types";
 
 const REFRESH_INTERVAL = 10 * 1000; // in milliseconds
@@ -86,10 +87,17 @@ const renderInsightCard = (
   insight: CodeObjectInsight,
   assets: AssetsData,
   asset: ExtendedAssetEntry,
-  onAssetSelect: (asset: ExtendedAssetEntry) => void
+  onAssetSelect: (asset: ExtendedAssetEntry) => void,
+  onTracesSelect: (traces: Trace[]) => void
 ): JSX.Element | undefined => {
   if (isSpanDurationsInsight(insight)) {
-    return <DurationInsight key={insight.type} insight={insight} />;
+    return (
+      <DurationInsight
+        onTracesSelect={onTracesSelect}
+        key={insight.type}
+        insight={insight}
+      />
+    );
   }
   if (isSpanDurationBreakdownInsight(insight)) {
     return (
@@ -110,6 +118,7 @@ const renderInsightCard = (
         assets={assets}
         asset={asset}
         onAssetSelect={onAssetSelect}
+        onTraceSelect={(trace) => onTracesSelect([trace])}
       />
     );
   }
@@ -156,6 +165,7 @@ const renderInsightCard = (
         assets={assets}
         asset={asset}
         onAssetSelect={onAssetSelect}
+        onTraceSelect={(trace) => onTracesSelect([trace])}
       />
     );
   }
@@ -167,6 +177,7 @@ const renderInsightCard = (
         assets={assets}
         asset={asset}
         onAssetSelect={onAssetSelect}
+        onTraceSelect={(trace) => onTracesSelect([trace])}
       />
     );
   }
@@ -178,6 +189,7 @@ const renderInsightCard = (
         assets={assets}
         asset={asset}
         onAssetSelect={onAssetSelect}
+        onTraceSelect={(trace) => onTracesSelect([trace])}
       />
     );
   }
@@ -226,19 +238,20 @@ export const AssetInsights = (props: AssetInsightsProps) => {
     props.onGoToAssetsPage(props.assetEntry);
   };
 
-  const handleSelectAsset = (asset: ExtendedAssetEntry) => {
+  const handleAssetSelect = (asset: ExtendedAssetEntry) => {
     props.onAssetSelect(asset);
   };
 
   const fetchInsights = async () => {
-    const response = (await ddClient.extension.vm?.service?.post("/insights", {
-      spanCodeObjectId,
-      environment: props.environment,
-    })) as GetInsightsResponse;
+    const response = (await ddClient.extension.vm?.service?.get(
+      `/environments/${encodeURIComponent(
+        props.environment
+      )}/assets/${encodeURIComponent(spanCodeObjectId)}/insights`
+    )) as GetInsightsResponse;
 
     console.debug(
       `Insights for asset with id "${spanCodeObjectId}" have been fetched:`,
-      insights
+      response.insights
     );
 
     const sortedInsights = [...response.insights].sort(
@@ -361,32 +374,35 @@ export const AssetInsights = (props: AssetInsightsProps) => {
           </s.Breadcrumb>
         </s.Breadcrumbs>
       </s.Header>
-      {insights ? (
-        <s.InsightsContainer ref={insightsContainerRef}>
-          {insights.map((x) => (
-            <s.InsightGroup key={x.name || "__ungrouped"}>
-              {x.name && (
-                <s.InsightGroupName>
-                  {x.icon && <x.icon size={20} />} {x.name}
-                </s.InsightGroupName>
-              )}
-              {x.insights.map((insight) =>
-                renderInsightCard(
-                  insight,
-                  props.assets,
-                  props.assetEntry,
-                  handleSelectAsset
-                )
-              )}
-            </s.InsightGroup>
-          ))}
-        </s.InsightsContainer>
-      ) : (
-        <NoData
-          icon={<Loader status={"pending"} size={86} />}
-          title={"Loading Insights..."}
-        />
-      )}
+      <s.ContentContainer>
+        {insights ? (
+          <s.InsightsContainer ref={insightsContainerRef}>
+            {insights.map((x) => (
+              <s.InsightGroup key={x.name || "__ungrouped"}>
+                {x.name && (
+                  <s.InsightGroupName>
+                    {x.icon && <x.icon size={20} />} {x.name}
+                  </s.InsightGroupName>
+                )}
+                {x.insights.map((insight) =>
+                  renderInsightCard(
+                    insight,
+                    props.assets,
+                    props.assetEntry,
+                    handleAssetSelect,
+                    props.onTracesSelect
+                  )
+                )}
+              </s.InsightGroup>
+            ))}
+          </s.InsightsContainer>
+        ) : (
+          <NoData
+            icon={<Loader status={"pending"} size={86} />}
+            title={"Loading Insights..."}
+          />
+        )}
+      </s.ContentContainer>
     </s.Container>
   );
 };

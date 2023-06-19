@@ -17,6 +17,7 @@ export const Span = styled.span`
   font-size: 14px;
   line-height: 17px;
   font-weight: 500;
+  word-break: break-all;
 
   color: ${({ theme }) => {
     switch (theme.palette.mode) {

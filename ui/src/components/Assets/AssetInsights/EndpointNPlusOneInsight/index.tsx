@@ -1,9 +1,11 @@
 import { roundTo } from "../../../../utils/roundTo";
+import { CrosshairIcon } from "../../../common/icons/CrosshairIcon";
 import { ExtendedAssetEntry } from "../../types";
 import { findAssetBySpanCodeObjectId } from "../../utils/findAssetBySpanCodeObjectId";
 import { InsightCard } from "../InsightCard";
 import { Pagination } from "../Pagination";
 import { Link } from "../styles";
+import { Trace } from "../types";
 import * as s from "./styles";
 import { EndpointNPlusOneInsightProps } from "./types";
 
@@ -14,6 +16,10 @@ export const EndpointNPlusOneInsight = (
 ) => {
   const handleSpanLinkClick = (asset: ExtendedAssetEntry) => {
     props.onAssetSelect(asset);
+  };
+
+  const handleTraceButtonClick = (trace: Trace) => {
+    props.onTraceSelect(trace);
   };
 
   return (
@@ -64,6 +70,17 @@ export const EndpointNPlusOneInsight = (
                         </span>
                       </s.Stat>
                     </s.Stats>
+                    <s.Button
+                      icon={{ component: CrosshairIcon, size: 16 }}
+                      onClick={() =>
+                        handleTraceButtonClick({
+                          name: spanName,
+                          id: span.traceId,
+                        })
+                      }
+                    >
+                      Trace
+                    </s.Button>
                   </s.Span>
                 );
               })}

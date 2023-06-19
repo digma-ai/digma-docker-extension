@@ -1,4 +1,4 @@
-export const SLACK_CHANNEL_URL =
+export const SLACK_WORKSPACE_URL =
   "https://join.slack.com/t/continuous-feedback/shared_invite/zt-1hk5rbjow-yXOIxyyYOLSXpCZ4RXstgA";
 
 export const JETBRAINS_PLUGIN_URL =

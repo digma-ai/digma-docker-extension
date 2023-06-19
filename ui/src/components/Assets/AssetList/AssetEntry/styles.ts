@@ -7,6 +7,7 @@ export const Container = styled(Paper)`
   flex-direction: column;
   gap: 8px;
   padding: 16px;
+  cursor: pointer;
 
   background: ${({ theme }) => {
     switch (theme.palette.mode) {
@@ -44,23 +45,11 @@ export const AssetTypeIconContainer = styled.div`
   flex-shrink: 0;
 `;
 
-export const Link = styled.a`
-  color: #7891d0;
-  text-decoration: none;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 19px;
-  cursor: pointer;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-`;
-
 export const Name = styled(Typography)`
   font-weight: 500;
   font-size: 16px;
   line-height: 19px;
+  color: #7891d0;
 `;
 
 export const InsightIconsContainer = styled.div`

@@ -20,6 +20,13 @@ export enum InsightType {
   EndpointBreakdown = "EndpointBreakdown",
 }
 
+export enum SORTING_CRITERION {
+  CRITICAL_INSIGHTS = "Critical insights",
+  PERFORMANCE = "Performance",
+  LATEST = "Latest",
+  NAME = "Name",
+}
+
 export interface ExtendedAssetEntry extends AssetEntry {
   id: string;
 }

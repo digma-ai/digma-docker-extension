@@ -1,4 +1,4 @@
-import { ExtendedAssetEntry } from "../types";
+import { ExtendedAssetEntry, SORTING_CRITERION } from "../types";
 
 export interface ExtendedAssetEntryWithServices extends ExtendedAssetEntry {
   relatedServices: string[];
@@ -7,13 +7,13 @@ export interface ExtendedAssetEntryWithServices extends ExtendedAssetEntry {
 export interface AssetListProps {
   assetTypeId: string;
   entries: { [key: string]: ExtendedAssetEntry[] };
-  onAssetLinkClick: (entry: ExtendedAssetEntryWithServices) => void;
+  onAssetEntryClick: (entry: ExtendedAssetEntryWithServices) => void;
   sorting: Sorting;
   onAssetNavigate: () => void;
   assetNavigateTo?: ExtendedAssetEntry;
 }
 
 export interface Sorting {
-  criterion: string;
+  criterion: SORTING_CRITERION;
   isDesc: boolean;
 }

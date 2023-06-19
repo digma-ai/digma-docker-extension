@@ -1,11 +1,10 @@
 import ExtensionIcon from "@mui/icons-material/Extension";
-import ButtonGroup from "@mui/material/ButtonGroup";
 import Tooltip from "@mui/material/Tooltip";
 import { ddClient } from "../../../dockerDesktopClient";
 import {
   JETBRAINS_PLUGIN_URL,
   PAGES,
-  SLACK_CHANNEL_URL,
+  SLACK_WORKSPACE_URL,
 } from "../../App/constants";
 import { IntellijLogoIcon } from "../icons/IntellijLogoIcon";
 import { SlackLogoIcon } from "../icons/SlackLogoIcon";
@@ -14,7 +13,7 @@ import * as s from "./styles";
 import { PageProps } from "./types";
 
 const handleSlackButtonClick = () => {
-  ddClient.host.openExternal(SLACK_CHANNEL_URL);
+  ddClient.host.openExternal(SLACK_WORKSPACE_URL);
 };
 
 const openJetBrainsPluginPage = () => {
@@ -87,31 +86,29 @@ export const Page = (props: PageProps) => {
     <s.Container>
       <s.Header>
         {props.header}
-        <s.NavigationButtonsContainer>
-          {renderLinks()}
-          <s.Divider orientation={"vertical"} flexItem />
-          <ButtonGroup variant={"contained"} disableElevation>
-            {pageButtons.map((x) => {
-              const isSelected = props.currentPage === x.pageId;
+        {renderLinks()}
+        <s.Divider orientation={"vertical"} flexItem />
+        <s.NavigationButtonGroup variant={"contained"} disableElevation>
+          {pageButtons.map((x) => {
+            const isSelected = props.currentPage === x.pageId;
 
-              return (
-                <s.NavigationButton
-                  key={x.pageId}
-                  selected={isSelected}
-                  disabled={isSelected}
-                  onClick={() => handlePageSelect(x.pageId)}
-                  startIcon={
-                    // <s.Badge variant={"dot"} invisible={!x.isBadgeVisible}>
-                    x.icon
-                    // </s.Badge>
-                  }
-                >
-                  {x.label}
-                </s.NavigationButton>
-              );
-            })}
-          </ButtonGroup>
-        </s.NavigationButtonsContainer>
+            return (
+              <s.NavigationButton
+                key={x.pageId}
+                selected={isSelected}
+                disabled={isSelected}
+                onClick={() => handlePageSelect(x.pageId)}
+                startIcon={
+                  // <s.Badge variant={"dot"} invisible={!x.isBadgeVisible}>
+                  x.icon
+                  // </s.Badge>
+                }
+              >
+                {x.label}
+              </s.NavigationButton>
+            );
+          })}
+        </s.NavigationButtonGroup>
       </s.Header>
       <s.Divider />
       <s.MainContainer>{props.main}</s.MainContainer>
