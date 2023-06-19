@@ -1,4 +1,6 @@
 import Typography from "@mui/material/Typography";
+import { Allotment } from "allotment";
+import "allotment/dist/style.css";
 import { useEffect, useState } from "react";
 import { ddClient } from "../../dockerDesktopClient";
 import { Assets } from "../Assets";
@@ -246,31 +248,40 @@ export const App = () => {
   return (
     <s.Container>
       <s.GlobalStyles />
-      {currentPage && (
-        <Page
-          header={pages[currentPage].header}
-          main={pages[currentPage].main}
-          onPageChange={handlePageChange}
-          currentPage={currentPage}
-          isSidePanelOpen={Boolean(selectedTraces)}
-        />
-      )}
-      {!currentPage && (
-        <s.LoaderContainer>
-          <Loader size={100} status={"pending"} />
-          <Typography>Initializing...</Typography>
-        </s.LoaderContainer>
-      )}
-      {selectedTraces && selectedEnvironment && (
-        <s.JaegerContainer>
-          <Jaeger
-            environment={selectedEnvironment}
-            onSpanSelect={handleSpanSelect}
-            traces={selectedTraces}
-            onClose={handleJaegerCloseButtonClick}
-          />
-        </s.JaegerContainer>
-      )}
+      <Allotment defaultSizes={[50, 50]}>
+        <Allotment.Pane>
+          {currentPage && (
+            <Page
+              header={pages[currentPage].header}
+              main={pages[currentPage].main}
+              onPageChange={handlePageChange}
+              currentPage={currentPage}
+              isSidePanelOpen={Boolean(selectedTraces)}
+            />
+          )}
+          {!currentPage && (
+            <s.LoaderContainer>
+              <Loader size={100} status={"pending"} />
+              <Typography>Initializing...</Typography>
+            </s.LoaderContainer>
+          )}
+        </Allotment.Pane>
+        <Allotment.Pane
+          minSize={450}
+          visible={Boolean(selectedTraces && selectedEnvironment)}
+        >
+          {selectedTraces && selectedEnvironment && (
+            <s.JaegerContainer>
+              <Jaeger
+                environment={selectedEnvironment}
+                onSpanSelect={handleSpanSelect}
+                traces={selectedTraces}
+                onClose={handleJaegerCloseButtonClick}
+              />
+            </s.JaegerContainer>
+          )}
+        </Allotment.Pane>
+      </Allotment>
     </s.Container>
   );
 };

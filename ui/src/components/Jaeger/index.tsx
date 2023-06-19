@@ -13,7 +13,7 @@ import {
   SpanInsight,
 } from "./types";
 
-const JAEGER_QUERY_HOSTNAME = "http://localhost:8080";
+const JAEGER_QUERY_HOSTNAME = "http://localhost:5180";
 
 const MAX_SPAN_COUNT_TO_FETCH = 500;
 
@@ -131,8 +131,8 @@ export const Jaeger = (props: JaegerProps) => {
 
   const url =
     traces.length > 1
-      ? `${JAEGER_QUERY_HOSTNAME}/trace/${traces[0].id}...${traces[1].id}?cohort=${traces[0].id}&cohort=${traces[1].id}`
-      : `${JAEGER_QUERY_HOSTNAME}/trace/${traces[0].id}`;
+      ? `${JAEGER_QUERY_HOSTNAME}/trace/${traces[0].id}...${traces[1].id}?cohort=${traces[0].id}&cohort=${traces[1].id}&uiEmbed=v0`
+      : `${JAEGER_QUERY_HOSTNAME}/trace/${traces[0].id}?uiEmbed=v0`;
 
   return (
     <s.Container>

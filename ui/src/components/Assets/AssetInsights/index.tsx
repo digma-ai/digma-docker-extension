@@ -251,7 +251,7 @@ export const AssetInsights = (props: AssetInsightsProps) => {
 
     console.debug(
       `Insights for asset with id "${spanCodeObjectId}" have been fetched:`,
-      insights
+      response.insights
     );
 
     const sortedInsights = [...response.insights].sort(

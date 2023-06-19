@@ -5,8 +5,15 @@ import "../../../assets/styles.css";
 export const GlobalStyles = () => (
   <MuiGlobalStyles
     styles={{
+      html: {
+        height: "100%",
+      },
       body: {
         padding: 0,
+        height: "100%",
+      },
+      "#root": {
+        height: "100%",
       },
     }}
   />
@@ -14,7 +21,7 @@ export const GlobalStyles = () => (
 
 export const Container = styled.div`
   display: flex;
-  flex-grow: 1;
+  height: 100%;
 `;
 
 export const GettingStartedHeader = styled.div`
@@ -45,6 +52,6 @@ export const LoaderContainer = styled.div`
 export const JaegerContainer = styled.div`
   display: flex;
   overflow: auto;
-  flex-shrink: 0;
-  width: 50%;
+  height: 100%;
+  width: 100%;
 `;

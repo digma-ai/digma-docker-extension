@@ -23,8 +23,7 @@ export const ScalingIssueInsight = (props: ScalingIssueInsightProps) => {
       content={
         <s.ContentContainer>
           <s.Description>
-            Significant performance degradation at{" "}
-            {props.insight.turningPointConcurrency} executions/second
+            {props.insight.shortDisplayInfo.description}
           </s.Description>
           <s.Stats>
             <s.Stat>

@@ -33,7 +33,9 @@ export const DurationInsight = (props: DurationInsightProps) => {
             <>
               <s.PercentileList>
                 {sortedPercentiles.map((percentile) => {
-                  traceIds.push(percentile.traceIds[0]);
+                  if (traceIds.length > 0) {
+                    traceIds.push(percentile.traceIds[0]);
+                  }
 
                   return (
                     <s.Percentile key={percentile.percentile}>

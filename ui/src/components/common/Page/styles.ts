@@ -8,11 +8,9 @@ import { NavigationButtonProps } from "./types";
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  max-width: 100%;
-  min-width: 50%;
+  height: 100%;
+  width: 100%;
   overflow: auto;
-  flex-grow: 1;
 `;
 
 export const Header = styled.header`
