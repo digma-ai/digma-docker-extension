@@ -2,6 +2,6 @@ import { ExtendedAssetEntryWithServices } from "../types";
 
 export interface AssetEntryProps {
   entry: ExtendedAssetEntryWithServices;
-  onAssetLinkClick: (entry: ExtendedAssetEntryWithServices) => void;
+  onClick: (entry: ExtendedAssetEntryWithServices) => void;
   id: string;
 }

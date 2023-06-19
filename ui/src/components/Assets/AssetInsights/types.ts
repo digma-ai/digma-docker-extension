@@ -16,6 +16,7 @@ export interface AssetInsightsProps {
   onGoToAssetsPage: (asset?: ExtendedAssetEntry) => void;
   environment: string;
   onAssetSelect: (asset: ExtendedAssetEntry) => void;
+  onTracesSelect: (traces: Trace[]) => void;
 }
 
 export interface InsightWithLinksProps {
@@ -28,6 +29,7 @@ export interface GetInsightsResponse {
   accountId: string;
   environment: string;
   spanCodeObjectId: string;
+  spanInfo: SpanInfo | null;
   insights: CodeObjectInsight[];
 }
 
@@ -35,6 +37,11 @@ export interface InsightGroup {
   insights: CodeObjectInsight[];
   name?: string;
   icon?: MemoExoticComponent<(props: IconProps) => JSX.Element>;
+}
+
+export interface Trace {
+  name?: string;
+  id: string;
 }
 
 export enum InsightScope {

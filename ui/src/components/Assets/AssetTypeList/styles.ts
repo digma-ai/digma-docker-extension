@@ -4,6 +4,8 @@ import styled from "styled-components";
 
 export const Tabs = styled(MuiTabs)`
   min-height: 40px;
+  margin-bottom: 28px;
+
   & .MuiTabs-indicator {
     height: 3px;
 
@@ -19,8 +21,8 @@ export const Tabs = styled(MuiTabs)`
 
   & .MuiTabs-flexContainer {
     gap: 37px;
+    align-items: center;
   }
-  margin-bottom: 28px;
 `;
 
 export const Tab = styled(MuiTab)`

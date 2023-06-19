@@ -8,6 +8,7 @@ export interface PageContent {
 export interface PageProps extends PageContent {
   currentPage: string;
   onPageChange: (page: string) => void;
+  isSidePanelOpen: boolean;
 }
 
 export interface NavigationButtonProps {

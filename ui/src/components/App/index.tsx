@@ -1,15 +1,21 @@
 import Typography from "@mui/material/Typography";
+import { Allotment } from "allotment";
+import "allotment/dist/style.css";
 import { useEffect, useState } from "react";
 import { ddClient } from "../../dockerDesktopClient";
 import { Assets } from "../Assets";
 import { AssetInsights } from "../Assets/AssetInsights";
+import { Trace } from "../Assets/AssetInsights/types";
 import { Menu } from "../Assets/Menu";
 import {
   AssetsData,
   ExtendedAssetEntry,
   GetAssetsResponse,
 } from "../Assets/types";
+import { findAssetBySpanCodeObjectId } from "../Assets/utils/findAssetBySpanCodeObjectId";
 import { GettingStarted } from "../GettingStarted";
+import { Jaeger } from "../Jaeger";
+import { SpanData } from "../Jaeger/types";
 import { Loader } from "../common/Loader";
 import { Page } from "../common/Page";
 import { PageContent } from "../common/Page/types";
@@ -27,6 +33,7 @@ export const App = () => {
   const [isRedirectedToAssets, setIsRedirectedToAssets] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState<ExtendedAssetEntry>();
   const [assetNavigateTo, setAssetNavigateTo] = useState<ExtendedAssetEntry>();
+  const [selectedTraces, setSelectedTraces] = useState<Trace[]>();
   // const [isBadgeVisible, setIsBadgeVisible] = useState<boolean>(false);
 
   // const isBadgeEnabled = ["true", null].includes(
@@ -43,7 +50,7 @@ export const App = () => {
 
   const fetchAssets = async (environment: string) => {
     const assets = (await ddClient.extension.vm?.service?.post(
-      `/environments/${environment}/assets`,
+      `/environments/${encodeURIComponent(environment)}/assets`,
       { serviceNames: [] }
     )) as GetAssetsResponse;
     console.debug(
@@ -148,6 +155,29 @@ export const App = () => {
     setCurrentPage(page);
   };
 
+  const handleTracesSelect = (traces: Trace[]) => {
+    setSelectedTraces(traces);
+  };
+
+  const handleJaegerCloseButtonClick = () => {
+    setSelectedTraces(undefined);
+  };
+
+  const handleSpanSelect = (span: SpanData) => {
+    if (!assets || !span.spanCodeObjectId) {
+      return;
+    }
+
+    const asset = findAssetBySpanCodeObjectId(
+      assets,
+      span.spanCodeObjectId,
+      span.serviceName
+    );
+    if (asset) {
+      setSelectedAsset(asset);
+    }
+  };
+
   console.debug("State:", {
     assets,
     environments,
@@ -157,13 +187,16 @@ export const App = () => {
     isRedirectedToAssets,
     selectedAsset,
     assetNavigateTo,
+    selectedTraces,
   });
 
   const pages: Record<string, PageContent> = {
     [PAGES.GETTING_STARTED]: {
       header: (
-        <>
-          <DigmaLogoIcon size={52} />
+        <s.GettingStartedHeader>
+          <s.DigmaLogoContainer>
+            <DigmaLogoIcon size={52} />
+          </s.DigmaLogoContainer>
           <s.TitleContainer>
             <Typography variant={"h3"} component={"h1"}>
               Digma
@@ -172,7 +205,7 @@ export const App = () => {
               Getting Started with Digma
             </Typography>
           </s.TitleContainer>
-        </>
+        </s.GettingStartedHeader>
       ),
       main: <GettingStarted />,
     },
@@ -196,6 +229,7 @@ export const App = () => {
             environment={selectedEnvironment}
             onGoToAssetsPage={handleGoToAssetPage}
             onAssetSelect={handleAssetSelect}
+            onTracesSelect={handleTracesSelect}
           />
         ) : (
           <Assets
@@ -212,22 +246,42 @@ export const App = () => {
   };
 
   return (
-    <>
+    <s.Container>
       <s.GlobalStyles />
-      {currentPage && (
-        <Page
-          header={pages[currentPage].header}
-          main={pages[currentPage].main}
-          onPageChange={handlePageChange}
-          currentPage={currentPage}
-        />
-      )}
-      {!currentPage && (
-        <s.LoaderContainer>
-          <Loader size={100} status={"pending"} />
-          <Typography>Initializing...</Typography>
-        </s.LoaderContainer>
-      )}
-    </>
+      <Allotment defaultSizes={[50, 50]}>
+        <Allotment.Pane>
+          {currentPage && (
+            <Page
+              header={pages[currentPage].header}
+              main={pages[currentPage].main}
+              onPageChange={handlePageChange}
+              currentPage={currentPage}
+              isSidePanelOpen={Boolean(selectedTraces)}
+            />
+          )}
+          {!currentPage && (
+            <s.LoaderContainer>
+              <Loader size={100} status={"pending"} />
+              <Typography>Initializing...</Typography>
+            </s.LoaderContainer>
+          )}
+        </Allotment.Pane>
+        <Allotment.Pane
+          minSize={450}
+          visible={Boolean(selectedTraces && selectedEnvironment)}
+        >
+          {selectedTraces && selectedEnvironment && (
+            <s.JaegerContainer>
+              <Jaeger
+                environment={selectedEnvironment}
+                onSpanSelect={handleSpanSelect}
+                traces={selectedTraces}
+                onClose={handleJaegerCloseButtonClick}
+              />
+            </s.JaegerContainer>
+          )}
+        </Allotment.Pane>
+      </Allotment>
+    </s.Container>
   );
 };

@@ -1,7 +1,4 @@
 {
-  "gopls": {
-    "ui.semanticTokens": true
-  },
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.organizeImports": true

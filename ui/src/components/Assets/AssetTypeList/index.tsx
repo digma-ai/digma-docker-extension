@@ -25,7 +25,8 @@ export const AssetTypeList = (props: AssetListProps) => {
       value={ASSET_TYPE_IDS.indexOf(props.selectedAssetTypeId)}
       onChange={handleAssetTypeChange}
       variant={"scrollable"}
-      scrollButtons={"auto"}
+      scrollButtons={true}
+      allowScrollButtonsMobile
     >
       {ASSET_TYPE_IDS.map((assetTypeId, i) => {
         const assetTypeInfo = getAssetTypeInfo(assetTypeId);

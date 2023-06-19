@@ -6,7 +6,7 @@ import * as s from "./styles";
 import { RequestBreakdownInsightProps } from "./types";
 
 const PIE_CHART_RADIUS = 42;
-const PIE_CHART_ARC_WIDTH = 2;
+const PIE_CHART_ARC_WIDTH = 4;
 
 const componentTypeColors = {
   [ComponentType.Internal]: "#53aeb4",

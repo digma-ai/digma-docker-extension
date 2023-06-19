@@ -1,5 +1,6 @@
-import { SpanDurationsInsight } from "../types";
+import { SpanDurationsInsight, Trace } from "../types";
 
 export interface DurationInsightProps {
   insight: SpanDurationsInsight;
+  onTracesSelect: (traces: Trace[]) => void;
 }

@@ -1,15 +1,21 @@
 import { roundTo } from "../../../../utils/roundTo";
+import { CrosshairIcon } from "../../../common/icons/CrosshairIcon";
 import { ExtendedAssetEntry } from "../../types";
 import { findAssetBySpanCodeObjectId } from "../../utils/findAssetBySpanCodeObjectId";
 import { InsightCard } from "../InsightCard";
 import { Pagination } from "../Pagination";
 import { Link } from "../styles";
+import { Trace } from "../types";
 import * as s from "./styles";
 import { TopUsageInsightProps } from "./types";
 
 export const TopUsageInsight = (props: TopUsageInsightProps) => {
   const handleServiceLinkClick = (asset: ExtendedAssetEntry) => {
     props.onAssetSelect(asset);
+  };
+
+  const handleTraceButtonClick = (trace: Trace) => {
+    props.onTraceSelect(trace);
   };
 
   return (
@@ -35,31 +41,62 @@ export const TopUsageInsight = (props: TopUsageInsightProps) => {
                 );
               const lastServiceName = `${flow.lastService?.service}:${flow.lastService?.span}`;
 
+              const traceId = flow.sampleTraceIds[0];
+
               return (
                 <s.Flow key={i}>
-                  {roundTo(flow.percentage, 2)}%{" "}
-                  {firstServiceAsset ? (
-                    <Link
-                      onClick={() => handleServiceLinkClick(firstServiceAsset)}
+                  <s.FlowData>
+                    <span>
+                      {roundTo(flow.percentage, 2)}%{" "}
+                      {firstServiceAsset ? (
+                        <Link
+                          onClick={() =>
+                            handleServiceLinkClick(firstServiceAsset)
+                          }
+                        >
+                          {firstServiceName}
+                        </Link>
+                      ) : (
+                        firstServiceName
+                      )}
+                    </span>
+                    <span>
+                      {flow.intermediateSpan && (
+                        <> -&gt; {flow.intermediateSpan}</>
+                      )}
+                    </span>
+                    <span>
+                      {flow.lastService ? (
+                        lastServiceAsset ? (
+                          <Link
+                            onClick={() =>
+                              handleServiceLinkClick(lastServiceAsset)
+                            }
+                          >
+                            {lastServiceName}
+                          </Link>
+                        ) : (
+                          lastServiceName
+                        )
+                      ) : null}
+                      {flow.lastServiceSpan && (
+                        <> -&gt; {flow.lastServiceSpan}</>
+                      )}
+                    </span>
+                  </s.FlowData>
+                  {traceId && (
+                    <s.Button
+                      icon={{ component: CrosshairIcon, size: 16 }}
+                      onClick={() =>
+                        handleTraceButtonClick({
+                          name: firstServiceName,
+                          id: traceId,
+                        })
+                      }
                     >
-                      {firstServiceName}
-                    </Link>
-                  ) : (
-                    firstServiceName
+                      Trace
+                    </s.Button>
                   )}
-                  {flow.intermediateSpan && <> -&gt; {flow.intermediateSpan}</>}
-                  {flow.lastService ? (
-                    lastServiceAsset ? (
-                      <Link
-                        onClick={() => handleServiceLinkClick(lastServiceAsset)}
-                      >
-                        {lastServiceName}
-                      </Link>
-                    ) : (
-                      lastServiceName
-                    )
-                  ) : null}
-                  {flow.lastServiceSpan && <> -&gt; {flow.lastServiceSpan}</>}
                 </s.Flow>
               );
             })}
