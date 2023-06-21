@@ -65,15 +65,23 @@ export const Jaeger = (props: JaegerProps) => {
             }
 
             const codeObjectIdsToFetch = spans
-              .filter((x) => typeof x.spanCodeObjectId === "string")
-              .map((x) => x.spanCodeObjectId) as string[];
+              .map((x) =>
+                [
+                  x.spanCodeObjectId,
+                  x.methodCodeObjectId && `method:${x.methodCodeObjectId}`,
+                ].filter((x) => typeof x === "string")
+              )
+              .flat() as string[];
 
             const insights = await fetchInsights(
               codeObjectIdsToFetch,
               props.environment
             );
 
-            const groupedInsights = groupBy(insights, "prefixedCodeObjectId");
+            const groupedInsights = groupBy(insights, [
+              "spanInfo",
+              "spanCodeObjectId",
+            ]);
 
             const payload = spans.reduce((acc, curr) => {
               let insights: SpanInsight[] = [];
