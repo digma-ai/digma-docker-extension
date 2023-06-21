@@ -29,7 +29,7 @@ export const EndpointNPlusOneInsight = (
         <s.ContentContainer>
           <s.Description>Check the following locations:</s.Description>
           <s.SpanList>
-            <Pagination>
+            <Pagination assetId={props.asset.id}>
               {props.insight.spans.map((span) => {
                 const spanInfo = span.internalSpan || span.clientSpan;
                 const asset = findAssetBySpanCodeObjectId(

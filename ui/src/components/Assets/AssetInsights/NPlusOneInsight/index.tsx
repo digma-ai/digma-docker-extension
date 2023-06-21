@@ -69,6 +69,32 @@ export const NPlusOneInsight = (props: NPlusOneInsightProps) => {
               </span>
             </s.Stat>
           </s.Stats>
+          <s.Description>Affected endpoints:</s.Description>
+          <div>
+            {props.insight.endpoints.map((x) => {
+              const asset = findAssetBySpanCodeObjectId(
+                props.assets,
+                x.endpointInfo.entrySpanCodeObjectId,
+                x.endpointInfo.serviceName
+              );
+
+              return (
+                <s.Endpoint key={x.endpointInfo.entrySpanCodeObjectId}>
+                  {asset ? (
+                    <Link onClick={() => handleSpanLinkClick(asset)}>
+                      {x.endpointInfo.route}
+                    </Link>
+                  ) : (
+                    x.endpointInfo.route
+                  )}
+                  <s.Stat>
+                    <s.Description>Repeats</s.Description>
+                    <span>{x.occurrences} (median)</span>
+                  </s.Stat>
+                </s.Endpoint>
+              );
+            })}
+          </div>
         </s.ContentContainer>
       }
     />

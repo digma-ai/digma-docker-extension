@@ -1,14 +1,46 @@
-import { useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
+import { usePrevious } from "../../../../hooks/usePrevious";
 import * as s from "./styles";
 import { PaginationProps } from "./types";
 
 const DEFAULT_PAGE_SIZE = 3;
 
+const calculatePageCount = (children: ReactNode[], pageSize: number) =>
+  Math.ceil(children.length / pageSize);
+
 export const Pagination = (props: PaginationProps) => {
   const [currentPage, setCurrentPage] = useState(0);
-
   const pageSize = props.pageSize || DEFAULT_PAGE_SIZE;
-  const pageCount = Math.ceil(props.children.length / pageSize);
+  const [pageCount, setPageCount] = useState(
+    calculatePageCount(props.children, pageSize)
+  );
+  const previousChildren = usePrevious(props.children);
+  const previousAssetId = usePrevious(props.assetId);
+
+  useEffect(() => {
+    if (previousAssetId && previousAssetId !== props.assetId) {
+      setCurrentPage(0);
+    }
+  }, [previousAssetId, props.assetId]);
+
+  useEffect(() => {
+    if (
+      previousAssetId === props.assetId &&
+      previousChildren &&
+      previousChildren.length < props.children.length
+    ) {
+      const newPageCount = calculatePageCount(props.children, pageSize);
+      setCurrentPage(newPageCount - 1);
+      setPageCount(newPageCount);
+    }
+  }, [
+    previousAssetId,
+    props.assetId,
+    previousChildren,
+    props.children,
+    pageSize,
+    currentPage,
+  ]);
 
   if (pageCount === 1) {
     return <>{props.children}</>;

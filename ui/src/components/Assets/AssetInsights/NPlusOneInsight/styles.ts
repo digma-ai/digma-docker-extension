@@ -50,3 +50,9 @@ export const SpanContainer = styled.div`
 export const Button = styled(CommonButton)`
   height: fit-content;
 `;
+
+export const Endpoint = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
