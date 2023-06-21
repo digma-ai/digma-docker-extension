@@ -173,6 +173,7 @@ export const App = () => {
       span.spanCodeObjectId,
       span.serviceName
     );
+
     if (asset) {
       setSelectedAsset(asset);
     }

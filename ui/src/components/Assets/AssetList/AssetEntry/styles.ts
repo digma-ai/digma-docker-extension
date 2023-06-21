@@ -75,7 +75,7 @@ export const InsightIconContainer = styled(AssetTypeIconContainer)`
 export const StatsContainer = styled.div`
   display: flex;
   font-size: 14px;
-  line-height: 20px;
+  line-height: 17px;
   gap: 40px;
 `;
 
@@ -144,10 +144,7 @@ export const ServiceName = styled.div`
 
 export const ValueContainer = styled.div`
   display: flex;
-  align-items: flex-end;
   gap: 2px;
-  font-size: 12px;
-  line-height: 14px;
   font-weight: 500;
 
   color: ${({ theme }) => {
@@ -161,9 +158,7 @@ export const ValueContainer = styled.div`
 `;
 
 export const Suffix = styled.span`
-  font-weight: 500;
   font-size: 11px;
-  line-height: 14px;
 
   color: ${({ theme }) => {
     switch (theme.palette.mode) {
