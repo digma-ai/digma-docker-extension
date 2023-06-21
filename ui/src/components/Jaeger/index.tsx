@@ -2,6 +2,7 @@ import IconButton from "@mui/material/IconButton";
 import { useEffect, useRef } from "react";
 import { ddClient } from "../../dockerDesktopClient";
 import { groupBy } from "../../utils/groupBy";
+import { isSpanInsight } from "../Assets/AssetInsights/typeGuards";
 import { CodeObjectInsight } from "../Assets/AssetInsights/types";
 import { CrossIcon } from "../common/icons/CrossIcon";
 import * as s from "./styles";
@@ -10,7 +11,6 @@ import {
   JaegerMessageData,
   JaegerProps,
   SpanData,
-  SpanInsight,
 } from "./types";
 
 const JAEGER_QUERY_HOSTNAME = "http://localhost:5180";
@@ -78,22 +78,35 @@ export const Jaeger = (props: JaegerProps) => {
               props.environment
             );
 
-            const groupedInsights = groupBy(insights, [
+            const spanInsights = insights.filter(isSpanInsight);
+            const methodInsights = insights.filter((x) => !isSpanInsight(x));
+
+            const groupedSpanInsights = groupBy(spanInsights, [
               "spanInfo",
               "spanCodeObjectId",
             ]);
+            const groupedMethodInsights = groupBy(
+              methodInsights,
+              "codeObjectId"
+            );
 
             const payload = spans.reduce((acc, curr) => {
-              let insights: SpanInsight[] = [];
+              let insights: CodeObjectInsight[] = [];
 
               if (curr.spanCodeObjectId) {
-                const spanInsights = groupedInsights[curr.spanCodeObjectId];
+                const spanInsights = groupedSpanInsights[curr.spanCodeObjectId];
 
                 if (spanInsights) {
-                  insights = spanInsights.map((x) => ({
-                    type: x.type,
-                    importance: x.importance,
-                  }));
+                  insights.push(...spanInsights);
+                }
+              }
+
+              if (curr.methodCodeObjectId) {
+                const methodInsights =
+                  groupedMethodInsights[curr.methodCodeObjectId];
+
+                if (methodInsights) {
+                  insights.push(...methodInsights);
                 }
               }
 
@@ -101,7 +114,10 @@ export const Jaeger = (props: JaegerProps) => {
                 ...acc,
                 [curr.id]: {
                   hasResolvedCodeLocation: false,
-                  insights,
+                  insights: insights.map((x) => ({
+                    type: x.type,
+                    importance: x.importance,
+                  })),
                 },
               };
             }, {});
