@@ -1,7 +1,11 @@
+import CloseIcon from "@mui/icons-material/Close";
 import ExtensionIcon from "@mui/icons-material/Extension";
+import SearchIcon from "@mui/icons-material/Search";
 import { useTheme } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
 import Typography from "@mui/material/Typography";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 import { usePrevious } from "../../hooks/usePrevious";
 import { groupBy } from "../../utils/groupBy";
 import { Loader } from "../common/Loader";
@@ -62,6 +66,7 @@ export const Assets = (props: AssetsProps) => {
     criterion: SORTING_CRITERION.CRITICAL_INSIGHTS,
     isDesc: true,
   });
+  const [searchInputValue, setSearchInputValue] = useState("");
 
   const assetListRef = useRef<HTMLUListElement>(null);
 
@@ -112,6 +117,14 @@ export const Assets = (props: AssetsProps) => {
 
   const handleAssetEntryClick = (entry: ExtendedAssetEntry) => {
     props.onAssetSelect(entry);
+  };
+
+  const handleSearchInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearchInputValue(e.target.value);
+  };
+
+  const handleSearchInputClearIconClick = () => {
+    setSearchInputValue("");
   };
 
   const handleSortingMenuItemSelect = (value: string) => {
@@ -187,6 +200,7 @@ export const Assets = (props: AssetsProps) => {
             assetTypeId={selectedAssetTypeId}
             entries={data[selectedAssetTypeId]}
             sorting={sorting}
+            searchValue={searchInputValue}
             assetNavigateTo={props.assetNavigateTo}
             onAssetNavigate={props.onAssetNavigate}
           />
@@ -213,6 +227,7 @@ export const Assets = (props: AssetsProps) => {
     props.environments,
     selectedAssetTypeId,
     sorting,
+    searchInputValue,
   ]);
 
   return (
@@ -221,6 +236,27 @@ export const Assets = (props: AssetsProps) => {
         <Typography variant={"h4"} component={"h2"}>
           Assets ({assetsCount})
         </Typography>
+        <s.SearchTextField
+          placeholder={"Search"}
+          value={searchInputValue}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                {searchInputValue ? (
+                  <IconButton
+                    onClick={handleSearchInputClearIconClick}
+                    disableFocusRipple={true}
+                  >
+                    <CloseIcon />
+                  </IconButton>
+                ) : (
+                  <SearchIcon />
+                )}
+              </InputAdornment>
+            ),
+          }}
+          onChange={handleSearchInputChange}
+        />
         <Menu
           value={sorting.criterion}
           title={"Sort by"}

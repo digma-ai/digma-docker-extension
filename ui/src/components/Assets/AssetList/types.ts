@@ -9,6 +9,7 @@ export interface AssetListProps {
   entries: { [key: string]: ExtendedAssetEntry[] };
   onAssetEntryClick: (entry: ExtendedAssetEntryWithServices) => void;
   sorting: Sorting;
+  searchValue: string;
   onAssetNavigate: () => void;
   assetNavigateTo?: ExtendedAssetEntry;
 }
