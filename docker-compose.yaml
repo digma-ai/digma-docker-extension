@@ -3,7 +3,7 @@ services:
     image: ${DESKTOP_PLUGIN_IMAGE}
 
   nginx:
-    image: digmaai/jaeger-ui:1.29.1-digma.0.1.1
+    image: digmaai/jaeger-ui:1.29.1-digma.0.1.3
     ports:
       - "5180:80"
     restart: unless-stopped

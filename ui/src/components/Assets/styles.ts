@@ -1,4 +1,5 @@
 import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
 import styled from "styled-components";
 
 export const Circle = styled.div`
@@ -46,4 +47,59 @@ export const Header = styled.div`
   align-items: center;
   height: 96px;
   flex-shrink: 0;
+  gap: 12px;
+`;
+
+export const SearchTextField = styled(TextField)`
+  margin: 0;
+  margin-left: auto;
+  width: 244px;
+
+  & .MuiInputBase-root {
+    height: 40px;
+
+    &.Mui-focused,
+    &:hover {
+      .MuiOutlinedInput-notchedOutline {
+        border: 1.5px solid
+          ${({ theme }) => {
+            switch (theme.palette.mode) {
+              case "light":
+                return "#677285";
+              case "dark":
+                return "#7794ab";
+            }
+          }};
+      }
+    }
+  }
+
+  & .MuiInputAdornment-root {
+    color: #677285;
+  }
+
+  & .MuiOutlinedInput-notchedOutline {
+    border: 1.5px solid
+      ${({ theme }) => {
+        switch (theme.palette.mode) {
+          case "light":
+            return "#e1e2e6";
+          case "dark":
+            return "#364754";
+        }
+      }};
+  }
+
+  & .MuiInputBase-input {
+    ::placeholder {
+      color: ${({ theme }) => {
+        switch (theme.palette.mode) {
+          case "light":
+            return "#677285";
+          case "dark":
+            return "#7794ab";
+        }
+      }};
+    }
+  }
 `;

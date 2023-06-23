@@ -127,10 +127,13 @@ const AssetListComponent = (
 
   const entriesRef = useRef<Record<string, HTMLDivElement | null>>({});
 
-  const sortedEntries = useMemo(
-    () => sortEntries(entries, props.sorting),
-    [entries, props.sorting]
-  );
+  const sortedEntries = useMemo(() => {
+    const filteredEntries = entries.filter((x) =>
+      x.span.displayName.toLocaleLowerCase().includes(props.searchValue)
+    );
+
+    return sortEntries(filteredEntries, props.sorting);
+  }, [entries, props.sorting, props.searchValue]);
 
   useEffect(() => {
     if (props.assetNavigateTo) {
