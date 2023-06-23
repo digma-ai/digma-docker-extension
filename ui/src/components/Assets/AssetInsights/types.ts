@@ -397,10 +397,11 @@ export interface SpanNPlusOneInsight extends SpanInsight {
   clientSpanCodeObjectId: string | null;
   duration: Duration;
   endpoints: {
-    info: {
+    endpointInfo: {
       route: string;
       instrumentationLibrary: string;
       spanCodeObjectId: string;
+      entrySpanCodeObjectId: string;
       serviceName: string;
     };
     occurrences: number;

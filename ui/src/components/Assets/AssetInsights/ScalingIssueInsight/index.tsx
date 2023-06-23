@@ -54,8 +54,8 @@ export const ScalingIssueInsight = (props: ScalingIssueInsightProps) => {
                 const traceId = span.sampleTraceId;
 
                 return (
-                  <s.RootCause>
-                    <span key={span.spanCodeObjectId}>
+                  <s.RootCause key={span.spanCodeObjectId}>
+                    <span>
                       {asset ? (
                         <Link onClick={() => handleLinkClick(asset)}>
                           {spanName}

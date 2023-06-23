@@ -66,7 +66,7 @@ export const DurationBreakdownInsight = (
       data={props.insight}
       content={
         <s.DurationList>
-          <Pagination>
+          <Pagination assetId={props.asset.id}>
             {sortedEntries.map((entry) => {
               const percentile = getPercentile(entry, DEFAULT_PERCENTILE);
 

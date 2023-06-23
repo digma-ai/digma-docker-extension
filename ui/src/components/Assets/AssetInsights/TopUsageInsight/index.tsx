@@ -23,7 +23,7 @@ export const TopUsageInsight = (props: TopUsageInsightProps) => {
       data={props.insight}
       content={
         <s.FlowList>
-          <Pagination>
+          <Pagination assetId={props.asset.id}>
             {props.insight.flows.map((flow, i) => {
               const firstServiceAsset = findAssetBySpanCodeObjectId(
                 props.assets,
