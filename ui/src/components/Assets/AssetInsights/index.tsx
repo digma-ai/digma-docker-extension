@@ -42,12 +42,13 @@ import {
   isSpanEndpointBottleneckInsight,
   isSpanInsight,
   isSpanNPlusOneInsight,
-  isSpanScalingInsight,
+  isSpanScalingBadlyInsight,
   isSpanUsagesInsight,
 } from "./typeGuards";
 import {
   AssetInsightsProps,
   CodeObjectInsight,
+  GenericCodeObjectInsight,
   GetInsightsResponse,
   InsightGroup,
   SpanInsight,
@@ -62,22 +63,24 @@ export const getInsightTypeOrderPriority = (type: string): number => {
     [InsightType.Errors]: 2,
     [InsightType.TopErrorFlows]: 3,
 
+    // Endpoint insights
+    [InsightType.EndpointBreakdown]: 5,
+    [InsightType.HighUsage]: 10,
+    [InsightType.SlowEndpoint]: 20,
+    [InsightType.EndpointDurationSlowdown]: 25,
+    [InsightType.LowUsage]: 30,
+    [InsightType.SlowestSpans]: 40,
+    [InsightType.NormalUsage]: 50,
+    [InsightType.EndpointSpanNPlusOne]: 55,
+
+    // Span insights
     [InsightType.SpanDurations]: 60,
     [InsightType.SpanUsages]: 61,
-    [InsightType.SpanScaling]: 63,
+    [InsightType.SpanScalingBadly]: 63,
     [InsightType.SpanNPlusOne]: 65,
     [InsightType.SpanDurationChange]: 66,
     [InsightType.SpanEndpointBottleneck]: 67,
     [InsightType.SpanDurationBreakdown]: 68,
-
-    [InsightType.EndpointSpanNPlusOne]: 55,
-    [InsightType.SlowestSpans]: 40,
-    [InsightType.LowUsage]: 30,
-    [InsightType.NormalUsage]: 50,
-    [InsightType.HighUsage]: 10,
-    [InsightType.SlowEndpoint]: 20,
-    [InsightType.EndpointDurationSlowdown]: 25,
-    [InsightType.EndpointBreakdown]: 5,
   };
 
   return insightOrderPriorityMap[type] || Infinity;
@@ -181,7 +184,7 @@ const renderInsightCard = (
       />
     );
   }
-  if (isSpanScalingInsight(insight)) {
+  if (isSpanScalingBadlyInsight(insight)) {
     return (
       <ScalingIssueInsight
         key={insight.type}
@@ -223,6 +226,12 @@ const renderInsightCard = (
   }
 };
 
+const sortInsightGroupsByName = (a: InsightGroup, b: InsightGroup) => {
+  const aName = a.name || "";
+  const bName = b.name || "";
+  return aName.localeCompare(bName);
+};
+
 export const AssetInsights = (props: AssetInsightsProps) => {
   const [insights, setInsights] = useState<InsightGroup[]>();
   const previousEnvironment = usePrevious(props.environment);
@@ -260,10 +269,10 @@ export const AssetInsights = (props: AssetInsightsProps) => {
         getInsightTypeOrderPriority(b.type)
     );
 
-    const ungroupedInsights: CodeObjectInsight[] = [];
+    const ungroupedInsights: GenericCodeObjectInsight[] = [];
     const spanInsightGroups: { [key: string]: SpanInsight[] } = {};
 
-    for (let insight of sortedInsights) {
+    for (const insight of sortedInsights) {
       // Do not show unknown insights
       const insightTypeInfo = getInsightTypeInfo(insight.type);
       if (!insightTypeInfo) {
@@ -299,12 +308,14 @@ export const AssetInsights = (props: AssetInsightsProps) => {
 
     setInsights([
       { insights: ungroupedInsights },
-      // span insight groups
-      ...Object.values(spanInsightGroups).map((x, i) => ({
-        icon: OpenTelemetryLogoIcon,
-        name: x[0].spanInfo?.displayName,
-        insights: x,
-      })),
+      // Span insight groups
+      ...Object.values(spanInsightGroups)
+        .map((x) => ({
+          icon: OpenTelemetryLogoIcon,
+          name: x[0].spanInfo?.displayName,
+          insights: x,
+        }))
+        .sort(sortInsightGroupsByName),
     ]);
   };
 

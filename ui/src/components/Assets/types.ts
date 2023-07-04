@@ -14,7 +14,9 @@ export enum InsightType {
   SpanNPlusOne = "SpaNPlusOne",
   SpanEndpointBottleneck = "SpanEndpointBottleneck",
   SpanDurations = "SpanDurations",
-  SpanScaling = "SpanScaling",
+  SpanScalingBadly = "SpanScaling",
+  SpanScalingWell = "SpanScalingWell",
+  SpanScalingInsufficientData = "SpanScalingInsufficientData",
   SpanDurationBreakdown = "SpanDurationBreakdown",
   EndpointDurationSlowdown = "EndpointDurationSlowdown",
   EndpointBreakdown = "EndpointBreakdown",
@@ -23,6 +25,7 @@ export enum InsightType {
 export enum SORTING_CRITERION {
   CRITICAL_INSIGHTS = "Critical insights",
   PERFORMANCE = "Performance",
+  SLOWEST_FIVE_PERCENT = "Slowest 5%",
   LATEST = "Latest",
   NAME = "Name",
 }
@@ -60,7 +63,7 @@ export interface SpanInfo {
   instrumentationLibrary: string;
   spanCodeObjectId: string;
   methodCodeObjectId: string | null;
-  kind: string;
+  kind: string | null;
 
   /**
    * @deprecated

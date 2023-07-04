@@ -146,7 +146,7 @@ export const Assets = (props: AssetsProps) => {
   };
 
   const renderContent = useMemo((): JSX.Element => {
-    if (!data || !props.data || assetsCount === 0) {
+    if (!data || assetsCount === 0) {
       return !props.environments || props.environments.length === 0 ? (
         <NoData
           icon={
@@ -223,7 +223,6 @@ export const Assets = (props: AssetsProps) => {
   }, [
     data,
     assetsCount,
-    props.data,
     props.environments,
     selectedAssetTypeId,
     sorting,

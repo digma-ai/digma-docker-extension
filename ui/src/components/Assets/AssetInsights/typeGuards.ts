@@ -17,7 +17,7 @@ import {
   SpanEndpointBottleneckInsight,
   SpanInsight,
   SpanNPlusOneInsight,
-  SpanScalingInsight,
+  SpanScalingBadlyInsight,
   SpanUsagesInsight,
 } from "./types";
 
@@ -76,9 +76,10 @@ export const isEndpointSuspectedNPlusOneInsight = (
 ): insight is EndpointSuspectedNPlusOneInsight =>
   insight.type === InsightType.EndpointSpanNPlusOne;
 
-export const isSpanScalingInsight = (
+export const isSpanScalingBadlyInsight = (
   insight: CodeObjectInsight
-): insight is SpanScalingInsight => insight.type === InsightType.SpanScaling;
+): insight is SpanScalingBadlyInsight =>
+  insight.type === InsightType.SpanScalingBadly;
 
 export const isCodeObjectErrorsInsight = (
   insight: CodeObjectInsight

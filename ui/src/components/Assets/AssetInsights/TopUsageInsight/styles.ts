@@ -44,8 +44,25 @@ export const FlowData = styled.span`
   }};
 `;
 
+export const FullSpanName = styled.span`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+`;
+
+export const Description = styled.span`
+  color: ${({ theme }) => {
+    switch (theme.palette.mode) {
+      case "light":
+        return "#828797";
+      case "dark":
+        return "#9b9b9b";
+    }
+  }};
+`;
+
 export const Button = styled(CommonButton)`
   margin-left: auto;
   height: fit-content;
-  align-self: flex-start;
+  align-self: flex-end;
 `;
