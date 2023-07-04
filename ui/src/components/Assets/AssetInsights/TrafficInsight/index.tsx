@@ -40,7 +40,7 @@ const getDescription = (insightType: InsightType): string => {
 };
 
 export const TrafficInsight = (props: TrafficInsightProps) => {
-  let valueString = getValueString(props.insight.maxCallsIn1Min);
+  const valueString = getValueString(props.insight.maxCallsIn1Min);
 
   return (
     <InsightCard

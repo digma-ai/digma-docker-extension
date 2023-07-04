@@ -10,6 +10,27 @@ import {
   SpanInstanceInfo,
 } from "../types";
 
+export type GenericCodeObjectInsight =
+  | SpanUsageStatusInsight
+  | SpanDurationsInsight
+  | SpanUsagesInsight
+  | SpanEndpointBottleneckInsight
+  | SpanDurationBreakdownInsight
+  | EndpointLowUsageInsight
+  | EndpointNormalUsageInsight
+  | EndpointHighUsageInsight
+  | EndpointSlowestSpansInsight
+  | SlowEndpointInsight
+  | SpanScalingBadlyInsight
+  | SpanNPlusOneInsight
+  | EndpointSuspectedNPlusOneInsight
+  | CodeObjectHotSpotInsight
+  | CodeObjectErrorsInsight
+  | EndpointDurationSlowdownInsight
+  | EndpointBreakdownInsight
+  | SpanScalingWellInsight
+  | SpanScalingInsufficientDataInsight;
+
 export interface AssetInsightsProps {
   assets: AssetsData;
   assetEntry: ExtendedAssetEntry;
@@ -30,11 +51,11 @@ export interface GetInsightsResponse {
   environment: string;
   spanCodeObjectId: string;
   spanInfo: SpanInfo | null;
-  insights: CodeObjectInsight[];
+  insights: GenericCodeObjectInsight[];
 }
 
 export interface InsightGroup {
-  insights: CodeObjectInsight[];
+  insights: GenericCodeObjectInsight[];
   name?: string;
   icon?: MemoExoticComponent<(props: IconProps) => JSX.Element>;
 }
@@ -78,6 +99,11 @@ export enum InsightImportance {
   ShowStopper = 1,
 }
 
+export interface Trace {
+  name?: string;
+  id: string;
+}
+
 export interface Insight {
   category: string;
   type: InsightType;
@@ -99,7 +125,7 @@ export interface CodeObjectInsight extends Insight {
   name: string;
   scope: InsightScope;
   codeObjectId: string;
-  decorators: CodeObjectDecorator[];
+  decorators: CodeObjectDecorator[] | null;
   environment: string;
   importance: InsightImportance;
   severity: number;
@@ -146,13 +172,13 @@ export interface SpanUsagesInsight extends SpanInsight {
   specifity: InsightSpecificity.OwnInsight;
   isRecalculateEnabled: true;
   importance: InsightImportance.Interesting;
-  sampleTrace: string;
+  sampleTrace: string | null;
   flows: {
     sampleTraceIds: string[];
     percentage: number;
     firstService: FlowSpan;
     intermediateSpan: string | null;
-    lastService?: FlowSpan;
+    lastService: FlowSpan | null;
     lastServiceSpan: string | null;
   }[];
 
@@ -202,6 +228,18 @@ export interface SpanEndpointBottleneckInsight extends SpanInsight {
   /**
    * @deprecated
    */
+  p50: Percentile;
+  /**
+   * @deprecated
+   */
+  p95: Percentile;
+  /**
+   * @deprecated
+   */
+  p99: Percentile;
+  /**
+   * @deprecated
+   */
   span: SpanInfo;
 }
 
@@ -216,7 +254,7 @@ export interface SpanDurationBreakdownEntry {
   spanInstrumentationLibrary: string;
   spanCodeObjectId: string;
   percentiles: DurationPercentile[];
-  codeObjectId: string;
+  codeObjectId: string | null;
 }
 
 export interface SpanDurationBreakdownInsight extends SpanInsight {
@@ -257,8 +295,8 @@ export interface EndpointLowUsageInsight extends EndpointInsight {
   type: InsightType.LowUsage;
   category: InsightCategory.Usage;
   specifity: InsightSpecificity.OwnInsight;
-  insightImportance: InsightImportance.Info;
-  decorators: CodeObjectDecorator[];
+  importance: InsightImportance.Info;
+  decorators: CodeObjectDecorator[] | null;
   maxCallsIn1Min: number;
 }
 
@@ -267,7 +305,7 @@ export interface EndpointNormalUsageInsight extends EndpointInsight {
   type: InsightType.NormalUsage;
   category: InsightCategory.Usage;
   specifity: InsightSpecificity.OwnInsight;
-  insightImportance: InsightImportance.NotInteresting;
+  importance: InsightImportance.NotInteresting;
   decorators: CodeObjectDecorator[];
   maxCallsIn1Min: number;
 }
@@ -277,7 +315,7 @@ export interface EndpointHighUsageInsight extends EndpointInsight {
   type: InsightType.HighUsage;
   category: InsightCategory.Usage;
   specifity: InsightSpecificity.OwnInsight;
-  insightImportance: InsightImportance.Interesting;
+  importance: InsightImportance.Interesting;
   decorators: CodeObjectDecorator[];
   maxCallsIn1Min: number;
 }
@@ -313,7 +351,7 @@ export interface SlowEndpointInsight extends EndpointInsight {
   type: InsightType.SlowEndpoint;
   category: InsightCategory.Performance;
   specifity: InsightSpecificity.Symptomatic;
-  insightImportance: InsightImportance.Critical;
+  importance: InsightImportance.Critical;
   decorators: CodeObjectDecorator[];
   endpointsMedian: Duration;
   endpointsMedianOfMedians: Duration;
@@ -362,9 +400,9 @@ interface AffectedEndpoint extends SpanInfo {
   flowHash: string;
 }
 
-export interface SpanScalingInsight extends SpanInsight {
+export interface SpanScalingBadlyInsight extends SpanInsight {
   name: "Scaling Issue Found";
-  type: InsightType.SpanScaling;
+  type: InsightType.SpanScalingBadly;
   category: InsightCategory.Performance;
   specifity: InsightSpecificity.OwnInsight;
   importance: InsightImportance.Critical;
@@ -420,7 +458,7 @@ export interface EndpointSuspectedNPlusOneInsight extends EndpointInsight {
   specifity: InsightSpecificity.TargetAndReasonFound;
   importance: InsightImportance.HighlyImportant;
   spans: {
-    occurrences: string;
+    occurrences: number;
     internalSpan: SpanInfo | null;
     clientSpan: SpanInfo;
     traceId: string;
@@ -490,10 +528,35 @@ export interface EndpointBreakdownInsight extends EndpointInsight {
   type: InsightType.EndpointBreakdown;
   category: InsightCategory.Usage;
   specifity: InsightSpecificity.OwnInsight;
-  insightImportance: InsightImportance.Info;
+  importance: InsightImportance.Info;
   isRecalculateEnabled: true;
   components: {
     type: ComponentType;
     fraction: number;
+  }[];
+}
+
+export type SpanUsageStatusInsight = SpanInsight;
+
+export interface SpanScalingWellInsight extends SpanInsight {
+  name: "Scaling Well";
+  type: InsightType.SpanScalingWell;
+  category: InsightCategory.Performance;
+  specifity: InsightSpecificity.OwnInsight;
+  importance: InsightImportance.Interesting;
+  maxConcurrency: number;
+  minDuration: Duration;
+  maxDuration: Duration;
+}
+
+export interface SpanScalingInsufficientDataInsight extends SpanInsight {
+  name: "Scaling Insufficient Data";
+  type: InsightType.SpanScalingInsufficientData;
+  category: InsightCategory.Performance;
+  specifity: InsightSpecificity.OwnInsight;
+  importance: InsightImportance.Interesting;
+  concurrencies: {
+    calls: number;
+    meanDuration: Duration;
   }[];
 }

@@ -1,6 +1,10 @@
-import { InsightWithLinksProps, SpanScalingInsight, Trace } from "../types";
+import {
+  InsightWithLinksProps,
+  SpanScalingBadlyInsight,
+  Trace,
+} from "../types";
 
 export interface ScalingIssueInsightProps extends InsightWithLinksProps {
-  insight: SpanScalingInsight;
+  insight: SpanScalingBadlyInsight;
   onTraceSelect: (trace: Trace) => void;
 }

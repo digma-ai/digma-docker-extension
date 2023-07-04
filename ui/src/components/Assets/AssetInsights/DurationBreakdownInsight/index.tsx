@@ -40,13 +40,13 @@ const getTitle = (breakdownEntry: SpanDurationBreakdownEntry) => {
 export const DurationBreakdownInsight = (
   props: DurationBreakdownInsightProps
 ) => {
-  let filteredEntries = props.insight.breakdownEntries.filter((entry) =>
+  const filteredEntries = props.insight.breakdownEntries.filter((entry) =>
     entry.percentiles.some(
       (percentile) => percentile.percentile === DEFAULT_PERCENTILE
     )
   );
 
-  let sortedEntries = [...filteredEntries].sort((a, b) => {
+  const sortedEntries = [...filteredEntries].sort((a, b) => {
     const aPercentile = getPercentile(a, DEFAULT_PERCENTILE);
     const bPercentile = getPercentile(b, DEFAULT_PERCENTILE);
 

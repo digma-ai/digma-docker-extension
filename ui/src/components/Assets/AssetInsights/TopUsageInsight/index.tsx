@@ -39,15 +39,15 @@ export const TopUsageInsight = (props: TopUsageInsightProps) => {
                   flow.lastService.spanCodeObjectId,
                   flow.lastService.service
                 );
-              const lastServiceName = `${flow.lastService?.service}:${flow.lastService?.span}`;
 
               const traceId = flow.sampleTraceIds[0];
 
               return (
                 <s.Flow key={i}>
                   <s.FlowData>
-                    <span>
-                      {roundTo(flow.percentage, 2)}%{" "}
+                    <span>{roundTo(flow.percentage, 2)}% </span>
+                    <s.FullSpanName>
+                      <s.Description>{flow.firstService.service}</s.Description>
                       {firstServiceAsset ? (
                         <Link
                           onClick={() =>
@@ -59,30 +59,32 @@ export const TopUsageInsight = (props: TopUsageInsightProps) => {
                       ) : (
                         firstServiceName
                       )}
-                    </span>
+                    </s.FullSpanName>
                     <span>
                       {flow.intermediateSpan && (
                         <> -&gt; {flow.intermediateSpan}</>
                       )}
                     </span>
-                    <span>
-                      {flow.lastService ? (
-                        lastServiceAsset ? (
+                    {flow.lastService ? (
+                      <s.FullSpanName>
+                        <s.Description>
+                          {flow.lastService.service}
+                        </s.Description>
+                        {lastServiceAsset ? (
                           <Link
                             onClick={() =>
                               handleServiceLinkClick(lastServiceAsset)
                             }
                           >
-                            {lastServiceName}
+                            {flow.lastService.span}
                           </Link>
                         ) : (
-                          lastServiceName
-                        )
-                      ) : null}
-                      {flow.lastServiceSpan && (
-                        <> -&gt; {flow.lastServiceSpan}</>
-                      )}
-                    </span>
+                          flow.lastService.span
+                        )}
+                      </s.FullSpanName>
+                    ) : null}
+
+                    {flow.lastServiceSpan && <> -&gt; {flow.lastServiceSpan}</>}
                   </s.FlowData>
                   {traceId && (
                     <s.Button

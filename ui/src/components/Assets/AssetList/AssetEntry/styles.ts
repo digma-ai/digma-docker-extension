@@ -105,6 +105,10 @@ export const Stats = styled.div`
   &:nth-child(3) {
     width: 15%;
   }
+
+  &:nth-child(4) {
+    width: 20%;
+  }
 `;
 
 export const ServicesContainer = styled.div`

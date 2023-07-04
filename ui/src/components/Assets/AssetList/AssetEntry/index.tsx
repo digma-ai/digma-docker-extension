@@ -26,6 +26,10 @@ const AssetEntryComponent = (
     (duration) => duration.percentile === 0.5
   )?.currentDuration;
 
+  const slowestFivePercentDuration = props.entry.durationPercentiles.find(
+    (duration) => duration.percentile === 0.95
+  )?.currentDuration;
+
   const lastSeenDateTime = props.entry.lastSpanInstanceInfo.startTime;
 
   const sortedInsights = [...props.entry.insights].sort(
@@ -101,6 +105,17 @@ const AssetEntryComponent = (
           <s.ValueContainer title={new Date(lastSeenDateTime).toString()}>
             {timeAgo(lastSeenDateTime)}
             <s.Suffix>ago</s.Suffix>
+          </s.ValueContainer>
+        </s.Stats>
+        <s.Stats>
+          <span>Slowest 5%</span>
+          <s.ValueContainer>
+            {slowestFivePercentDuration
+              ? slowestFivePercentDuration.value
+              : "N/A"}
+            {slowestFivePercentDuration && (
+              <s.Suffix>{slowestFivePercentDuration.unit}</s.Suffix>
+            )}
           </s.ValueContainer>
         </s.Stats>
       </s.StatsContainer>
