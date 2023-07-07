@@ -27,7 +27,7 @@ class AnalyticsProvider {
         undefined,
         {
           environment,
-          serviceNames,
+          serviceNames
         }
       );
       return response;
@@ -45,7 +45,7 @@ class AnalyticsProvider {
         undefined,
         {
           spanCodeObjectId,
-          environment,
+          environment
         }
       );
       return response;
@@ -63,7 +63,7 @@ class AnalyticsProvider {
         undefined,
         {
           codeObjectIds,
-          environment,
+          environment
         }
       );
       return response;
@@ -110,7 +110,7 @@ class AnalyticsProvider {
       agent: agent,
       method: method,
       headers: requestHeaders,
-      body: body ? JSON.stringify(body) : undefined,
+      body: body ? JSON.stringify(body) : undefined
     });
 
     if (!response.ok) {
@@ -135,5 +135,5 @@ class HttpError extends Error {
 }
 
 module.exports = {
-  AnalyticsProvider,
+  AnalyticsProvider
 };

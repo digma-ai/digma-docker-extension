@@ -9,7 +9,6 @@ export const Circle = styled.div`
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-
   background: ${({ theme }) => {
     switch (theme.palette.mode) {
       case "light":
@@ -22,7 +21,6 @@ export const Circle = styled.div`
 
 export const GettingStartedButton = styled(Button)`
   font-weight: 500;
-
   background: ${({ theme }) => {
     switch (theme.palette.mode) {
       case "light":
@@ -55,6 +53,18 @@ export const SearchTextField = styled(TextField)`
   margin-left: auto;
   width: 244px;
 
+  & .MuiOutlinedInput-notchedOutline {
+    border: 1.5px solid
+      ${({ theme }) => {
+        switch (theme.palette.mode) {
+          case "light":
+            return "#e1e2e6";
+          case "dark":
+            return "#364754";
+        }
+      }};
+  }
+
   & .MuiInputBase-root {
     height: 40px;
 
@@ -76,18 +86,6 @@ export const SearchTextField = styled(TextField)`
 
   & .MuiInputAdornment-root {
     color: #677285;
-  }
-
-  & .MuiOutlinedInput-notchedOutline {
-    border: 1.5px solid
-      ${({ theme }) => {
-        switch (theme.palette.mode) {
-          case "light":
-            return "#e1e2e6";
-          case "dark":
-            return "#364754";
-        }
-      }};
   }
 
   & .MuiInputBase-input {

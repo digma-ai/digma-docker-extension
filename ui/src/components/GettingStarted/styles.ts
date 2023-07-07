@@ -18,7 +18,6 @@ export const Card = styled.div`
   gap: 40px;
   padding: 20px;
   border-radius: 8px;
-
   background: ${({ theme }) => {
     switch (theme.palette.mode) {
       case "light":
@@ -44,7 +43,6 @@ export const CardIllustration = styled.div`
 export const SectionTitleContainer = styled.div`
   display: flex;
   gap: 8px;
-
   color: ${({ theme }) => {
     switch (theme.palette.mode) {
       case "light":
@@ -65,7 +63,6 @@ export const SectionTitle = styled(Typography)<
 
 export const SectionText = styled(Typography)`
   margin-top: 4px;
-
   color: ${({ theme }) => {
     switch (theme.palette.mode) {
       case "light":
@@ -110,7 +107,6 @@ export const Tabs = styled(MuiTabs)`
 
   & .MuiTabs-indicator {
     height: 3px;
-
     background: ${({ theme }) => {
       switch (theme.palette.mode) {
         case "light":
@@ -129,7 +125,6 @@ export const Tab = styled(MuiTab)`
 
   &.Mui-selected {
     font-weight: 500;
-
     color: ${({ theme }) => theme.palette.text.primary};
   }
 `;

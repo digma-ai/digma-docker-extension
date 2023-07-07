@@ -7,7 +7,6 @@ export const LastCall = styled.span`
   line-height: 17px;
   font-weight: 500;
   margin-bottom: 8px;
-
   color: ${({ theme }) => {
     switch (theme.palette.mode) {
       case "light":
@@ -31,7 +30,6 @@ export const Percentile = styled.span`
   font-size: 14px;
   line-height: 17px;
   font-weight: 500;
-
   color: ${({ theme }) => {
     switch (theme.palette.mode) {
       case "light":

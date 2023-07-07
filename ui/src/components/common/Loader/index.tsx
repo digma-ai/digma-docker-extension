@@ -348,7 +348,7 @@ const LoaderComponent = (props: LoaderProps) => {
             <CircleLoader
               size={22.75}
               colors={{
-                start: "rgba(53, 56, 205, 0)",
+                start: "rgb(53 56 205 / 0%)",
                 end: "#3538cd",
                 background: "#f3f3f3",
               }}
@@ -358,7 +358,7 @@ const LoaderComponent = (props: LoaderProps) => {
             <CircleLoader
               size={22.75}
               colors={{
-                start: "rgba(53, 56, 205, 0)",
+                start: "rgb(53 56 205 / 0%)",
                 end: "#3538cd",
                 background: "#f3f3f3",
               }}

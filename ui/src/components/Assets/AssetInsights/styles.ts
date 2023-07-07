@@ -35,7 +35,6 @@ export const Breadcrumbs = styled(MuiBreadcrumbs)`
 
     &:last-child {
       overflow: hidden;
-
       color: ${({ theme }) => theme.palette.text.primary};
     }
   }
@@ -78,7 +77,6 @@ export const InsightsContainer = styled.div`
 export const Description = styled.span`
   font-size: 12px;
   line-height: 14px;
-
   color: ${({ theme }) => {
     switch (theme.palette.mode) {
       case "light":
@@ -108,7 +106,6 @@ export const InsightGroupName = styled.div`
   font-size: 16px;
   line-height: 19px;
   height: 28px;
-
   color: ${({ theme }) => {
     switch (theme.palette.mode) {
       case "light":

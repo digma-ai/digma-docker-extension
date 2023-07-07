@@ -14,7 +14,6 @@ export const Flow = styled.div`
   gap: 4px;
   padding: 8px 12px;
   border-radius: 4px;
-
   background: ${({ theme }) => {
     switch (theme.palette.mode) {
       case "light":
@@ -33,7 +32,6 @@ export const FlowData = styled.span`
   line-height: 17px;
   font-weight: 500;
   word-break: break-all;
-
   color: ${({ theme }) => {
     switch (theme.palette.mode) {
       case "light":

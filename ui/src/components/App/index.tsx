@@ -1,7 +1,7 @@
 import Typography from "@mui/material/Typography";
 import { Allotment } from "allotment";
 import "allotment/dist/style.css";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ddClient } from "../../dockerDesktopClient";
 import { Assets } from "../Assets";
 import { AssetInsights } from "../Assets/AssetInsights";
@@ -10,7 +10,7 @@ import { Menu } from "../Assets/Menu";
 import {
   AssetsData,
   ExtendedAssetEntry,
-  GetAssetsResponse,
+  GetAssetsResponse
 } from "../Assets/types";
 import { findAssetBySpanCodeObjectId } from "../Assets/utils/findAssetBySpanCodeObjectId";
 import { GettingStarted } from "../GettingStarted";
@@ -40,15 +40,15 @@ export const App = () => {
   //   localStorage.getItem("isBadgeEnabled")
   // );
 
-  const fetchEnvironments = async () => {
+  const fetchEnvironments = useCallback(async () => {
     const environments = (await ddClient.extension.vm?.service?.get(
       "/environments"
     )) as string[];
     console.debug("Environments have been fetched:", environments);
     setEnvironments(environments);
-  };
+  }, []);
 
-  const fetchAssets = async (environment: string) => {
+  const fetchAssets = useCallback(async (environment: string) => {
     const assets = (await ddClient.extension.vm?.service?.post(
       `/environments/${encodeURIComponent(environment)}/assets`,
       { serviceNames: [] }
@@ -58,20 +58,23 @@ export const App = () => {
       assets
     );
     setAssets({
-      serviceAssetsEntries: assets.serviceAssetsEntries,
+      serviceAssetsEntries: assets.serviceAssetsEntries
     });
-  };
+  }, []);
 
   useEffect(() => {
-    fetchEnvironments();
-    const refreshInterval = setInterval(() => {
-      fetchEnvironments();
+    void fetchEnvironments();
+  }, [fetchEnvironments]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      void fetchEnvironments();
     }, REFRESH_INTERVAL);
 
     return () => {
-      clearInterval(refreshInterval);
+      clearTimeout(timer);
     };
-  }, []);
+  }, [environments, fetchEnvironments]);
 
   useEffect(() => {
     if (!selectedEnvironment && environments && environments.length > 0) {
@@ -81,9 +84,9 @@ export const App = () => {
 
   useEffect(() => {
     if (selectedEnvironment && environments && environments.length > 0) {
-      fetchAssets(selectedEnvironment);
+      void fetchAssets(selectedEnvironment);
     }
-  }, [selectedEnvironment, environments]);
+  }, [selectedEnvironment, environments, fetchAssets]);
 
   // Redirect to "Getting started" page on startup if there are no environments yet
   useEffect(() => {
@@ -188,7 +191,7 @@ export const App = () => {
     isRedirectedToAssets,
     selectedAsset,
     assetNavigateTo,
-    selectedTraces,
+    selectedTraces
   });
 
   const pages: Record<string, PageContent> = {
@@ -208,7 +211,7 @@ export const App = () => {
           </s.TitleContainer>
         </s.GettingStartedHeader>
       ),
-      main: <GettingStarted />,
+      main: <GettingStarted />
     },
     [PAGES.ASSETS]: {
       header: (
@@ -242,8 +245,8 @@ export const App = () => {
             onAssetNavigate={handleAssetNavigate}
             environment={selectedEnvironment}
           />
-        ),
-    },
+        )
+    }
   };
 
   return (

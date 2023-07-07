@@ -1,7 +1,7 @@
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { useTheme } from "@mui/material";
 import Typography from "@mui/material/Typography";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ddClient } from "../../../dockerDesktopClient";
 import { usePrevious } from "../../../hooks/usePrevious";
 import { Loader } from "../../common/Loader";
@@ -43,7 +43,7 @@ import {
   isSpanInsight,
   isSpanNPlusOneInsight,
   isSpanScalingBadlyInsight,
-  isSpanUsagesInsight,
+  isSpanUsagesInsight
 } from "./typeGuards";
 import {
   AssetInsightsProps,
@@ -52,7 +52,7 @@ import {
   GetInsightsResponse,
   InsightGroup,
   SpanInsight,
-  Trace,
+  Trace
 } from "./types";
 
 const REFRESH_INTERVAL = 10 * 1000; // in milliseconds
@@ -80,7 +80,7 @@ export const getInsightTypeOrderPriority = (type: string): number => {
     [InsightType.SpanNPlusOne]: 65,
     [InsightType.SpanDurationChange]: 66,
     [InsightType.SpanEndpointBottleneck]: 67,
-    [InsightType.SpanDurationBreakdown]: 68,
+    [InsightType.SpanDurationBreakdown]: 68
   };
 
   return insightOrderPriorityMap[type] || Infinity;
@@ -251,7 +251,7 @@ export const AssetInsights = (props: AssetInsightsProps) => {
     props.onAssetSelect(asset);
   };
 
-  const fetchInsights = async () => {
+  const fetchInsights = useCallback(async () => {
     const response = (await ddClient.extension.vm?.service?.get(
       `/environments/${encodeURIComponent(
         props.environment
@@ -289,11 +289,11 @@ export const AssetInsights = (props: AssetInsightsProps) => {
         continue;
       }
 
-      const spanCodeObjectId = insight.spanInfo?.spanCodeObjectId;
+      const insightSpanCodeObjectId = insight.spanInfo?.spanCodeObjectId;
 
       if (
-        !spanCodeObjectId ||
-        spanCodeObjectId === props.assetEntry.span.spanCodeObjectId
+        !insightSpanCodeObjectId ||
+        insightSpanCodeObjectId === spanCodeObjectId
       ) {
         ungroupedInsights.push(insight);
         continue;
@@ -313,26 +313,31 @@ export const AssetInsights = (props: AssetInsightsProps) => {
         .map((x) => ({
           icon: OpenTelemetryLogoIcon,
           name: x[0].spanInfo?.displayName,
-          insights: x,
+          insights: x
         }))
-        .sort(sortInsightGroupsByName),
+        .sort(sortInsightGroupsByName)
     ]);
-  };
+  }, [spanCodeObjectId, props.environment]);
+
+  useEffect(() => {
+    void fetchInsights();
+  }, [fetchInsights]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      void fetchInsights();
+    }, REFRESH_INTERVAL);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [insights, fetchInsights]);
 
   useEffect(() => {
     if (insightsContainerRef.current) {
       insightsContainerRef.current.scrollTop = 0;
     }
-
-    fetchInsights();
-    const refreshInterval = setInterval(() => {
-      fetchInsights();
-    }, REFRESH_INTERVAL);
-
-    return () => {
-      clearInterval(refreshInterval);
-    };
-  }, [props.assetEntry.span.spanCodeObjectId]);
+  }, [spanCodeObjectId, props.environment]);
 
   useEffect(() => {
     if (
@@ -353,7 +358,7 @@ export const AssetInsights = (props: AssetInsightsProps) => {
     if (!asset) {
       props.onGoToAssetsPage();
     }
-  }, [props.assets, props.assetEntry]);
+  }, [props.assets, props.assetEntry, props.onGoToAssetsPage]);
 
   return (
     <s.Container>

@@ -10,7 +10,7 @@ import {
   GetSpansData,
   JaegerMessageData,
   JaegerProps,
-  SpanData,
+  SpanData
 } from "./types";
 
 const JAEGER_QUERY_HOSTNAME = "http://localhost:5180";
@@ -20,7 +20,7 @@ const MAX_SPAN_COUNT_TO_FETCH = 500;
 const actions = {
   GET_SPANS_DATA: "GET_SPANS_DATA",
   SET_SPANS_DATA: "SET_SPANS_DATA",
-  GO_TO_INSIGHTS: "GO_TO_INSIGHTS",
+  GO_TO_INSIGHTS: "GO_TO_INSIGHTS"
 };
 
 const sendDigmaMessage = (
@@ -32,7 +32,7 @@ const sendDigmaMessage = (
     {
       type: "digma",
       action,
-      payload,
+      payload
     },
     "*"
   );
@@ -47,6 +47,67 @@ const fetchInsights = async (codeObjectIds: string[], environment: string) => {
   return insights;
 };
 
+const getSpansData = async (data: JaegerMessageData, environment: string) => {
+  const spans = (data.payload as GetSpansData).spans;
+
+  if (spans.length > MAX_SPAN_COUNT_TO_FETCH) {
+    return {};
+  }
+
+  const codeObjectIdsToFetch = spans
+    .map((x) =>
+      [
+        x.spanCodeObjectId,
+        x.methodCodeObjectId && `method:${x.methodCodeObjectId}`
+      ].filter((x) => typeof x === "string")
+    )
+    .flat() as string[];
+
+  const insights = await fetchInsights(codeObjectIdsToFetch, environment);
+
+  const spanInsights = insights.filter(isSpanInsight);
+  const methodInsights = insights.filter((x) => !isSpanInsight(x));
+
+  const groupedSpanInsights = groupBy(
+    spanInsights,
+    (x) => x.spanInfo?.spanCodeObjectId || "__ungrouped"
+  );
+  const groupedMethodInsights = groupBy(methodInsights, (x) => x.codeObjectId);
+
+  const payload = spans.reduce((acc, curr) => {
+    const insights: CodeObjectInsight[] = [];
+
+    if (curr.spanCodeObjectId) {
+      const spanInsights = groupedSpanInsights[curr.spanCodeObjectId];
+
+      if (spanInsights) {
+        insights.push(...spanInsights);
+      }
+    }
+
+    if (curr.methodCodeObjectId) {
+      const methodInsights = groupedMethodInsights[curr.methodCodeObjectId];
+
+      if (methodInsights) {
+        insights.push(...methodInsights);
+      }
+    }
+
+    return {
+      ...acc,
+      [curr.id]: {
+        hasResolvedCodeLocation: false,
+        insights: insights.map((x) => ({
+          type: x.type,
+          importance: x.importance
+        }))
+      }
+    };
+  }, {});
+
+  return payload;
+};
+
 export const Jaeger = (props: JaegerProps) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
@@ -57,72 +118,11 @@ export const Jaeger = (props: JaegerProps) => {
       if (e.origin === JAEGER_QUERY_HOSTNAME) {
         switch (e.data.action) {
           case actions.GET_SPANS_DATA:
-            const spans = (e.data.payload as GetSpansData).spans;
-
-            if (spans.length > MAX_SPAN_COUNT_TO_FETCH) {
-              sendDigmaMessage(jaegerWindow, actions.SET_SPANS_DATA, {});
-              break;
-            }
-
-            const codeObjectIdsToFetch = spans
-              .map((x) =>
-                [
-                  x.spanCodeObjectId,
-                  x.methodCodeObjectId && `method:${x.methodCodeObjectId}`,
-                ].filter((x) => typeof x === "string")
-              )
-              .flat() as string[];
-
-            const insights = await fetchInsights(
-              codeObjectIdsToFetch,
-              props.environment
+            sendDigmaMessage(
+              jaegerWindow,
+              actions.SET_SPANS_DATA,
+              await getSpansData(e.data, props.environment)
             );
-
-            const spanInsights = insights.filter(isSpanInsight);
-            const methodInsights = insights.filter((x) => !isSpanInsight(x));
-
-            const groupedSpanInsights = groupBy(spanInsights, [
-              "spanInfo",
-              "spanCodeObjectId",
-            ]);
-            const groupedMethodInsights = groupBy(
-              methodInsights,
-              "codeObjectId"
-            );
-
-            const payload = spans.reduce((acc, curr) => {
-              let insights: CodeObjectInsight[] = [];
-
-              if (curr.spanCodeObjectId) {
-                const spanInsights = groupedSpanInsights[curr.spanCodeObjectId];
-
-                if (spanInsights) {
-                  insights.push(...spanInsights);
-                }
-              }
-
-              if (curr.methodCodeObjectId) {
-                const methodInsights =
-                  groupedMethodInsights[curr.methodCodeObjectId];
-
-                if (methodInsights) {
-                  insights.push(...methodInsights);
-                }
-              }
-
-              return {
-                ...acc,
-                [curr.id]: {
-                  hasResolvedCodeLocation: false,
-                  insights: insights.map((x) => ({
-                    type: x.type,
-                    importance: x.importance,
-                  })),
-                },
-              };
-            }, {});
-
-            sendDigmaMessage(jaegerWindow, actions.SET_SPANS_DATA, payload);
             break;
           case actions.GO_TO_INSIGHTS:
             props.onSpanSelect(e.data.payload as SpanData);
@@ -136,7 +136,7 @@ export const Jaeger = (props: JaegerProps) => {
     return () => {
       window.removeEventListener("message", handleJaegerMessage);
     };
-  }, [iframeRef.current, props.environment]);
+  }, [iframeRef.current, props.environment, props.onSpanSelect]);
 
   const handleJaegerCloseButtonClick = () => {
     props.onClose();
@@ -144,7 +144,7 @@ export const Jaeger = (props: JaegerProps) => {
 
   const traces = props.traces.map((x) => ({
     ...x,
-    id: x.id.toLocaleLowerCase(),
+    id: x.id.toLocaleLowerCase()
   }));
 
   const title = traces

@@ -18,7 +18,6 @@ export const Description = styled.div`
   gap: 8px;
   font-size: 14px;
   line-height: 17px;
-
   color: ${({ theme }) => {
     switch (theme.palette.mode) {
       case "light":
@@ -35,7 +34,6 @@ export const EndpointName = styled.span`
   line-height: 17px;
   font-weight: 500;
   word-break: break-all;
-
   color: ${({ theme }) => {
     switch (theme.palette.mode) {
       case "light":

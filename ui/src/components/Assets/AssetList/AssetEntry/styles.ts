@@ -8,7 +8,6 @@ export const Container = styled(Paper)`
   gap: 8px;
   padding: 16px;
   cursor: pointer;
-
   background: ${({ theme }) => {
     switch (theme.palette.mode) {
       case "light":
@@ -17,7 +16,6 @@ export const Container = styled(Paper)`
         return "#27343e";
     }
   }};
-
   border: 1px solid
     ${({ theme }) => {
       switch (theme.palette.mode) {
@@ -61,7 +59,6 @@ export const InsightIconsContainer = styled.div`
 
 export const InsightIconContainer = styled(AssetTypeIconContainer)`
   border-radius: 4px;
-
   background: ${({ theme }) => {
     switch (theme.palette.mode) {
       case "light":
@@ -84,7 +81,6 @@ export const Stats = styled.div`
   flex-wrap: wrap;
   align-items: center;
   gap: 4px;
-
   color: ${({ theme }) => {
     switch (theme.palette.mode) {
       case "light":
@@ -126,7 +122,7 @@ export const ServiceName = styled.div`
   border-radius: 23px;
   overflow: hidden;
   text-overflow: ellipsis;
-
+  white-space: nowrap;
   color: ${({ theme }) => {
     switch (theme.palette.mode) {
       case "light":
@@ -135,7 +131,6 @@ export const ServiceName = styled.div`
         return "#dadada";
     }
   }};
-
   background: ${({ theme }) => {
     switch (theme.palette.mode) {
       case "light":
@@ -150,7 +145,6 @@ export const ValueContainer = styled.div`
   display: flex;
   gap: 2px;
   font-weight: 500;
-
   color: ${({ theme }) => {
     switch (theme.palette.mode) {
       case "light":
@@ -163,7 +157,6 @@ export const ValueContainer = styled.div`
 
 export const Suffix = styled.span`
   font-size: 11px;
-
   color: ${({ theme }) => {
     switch (theme.palette.mode) {
       case "light":

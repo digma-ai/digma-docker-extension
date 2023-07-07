@@ -18,7 +18,6 @@ export const Container = styled.span<ContainerProps>`
 
 export const EntryCount = styled.span<ContainerProps>`
   margin-left: auto;
-
   color: ${({ isSelected, theme }) =>
     isSelected
       ? theme.palette.mode === "light"

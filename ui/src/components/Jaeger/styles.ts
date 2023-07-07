@@ -12,7 +12,6 @@ export const Header = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 0 12px;
-
   background: ${({ theme }) => {
     switch (theme.palette.mode) {
       case "light":
@@ -30,7 +29,6 @@ export const Title = styled.span`
   font-weight: 500;
   font-size: 16px;
   line-height: 19px;
-
   color: ${({ theme }) => {
     switch (theme.palette.mode) {
       case "light":
