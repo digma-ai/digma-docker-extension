@@ -5,7 +5,7 @@ import * as s from "./styles";
 import {
   AssetListProps,
   ExtendedAssetEntryWithServices,
-  Sorting,
+  Sorting
 } from "./types";
 
 const sortEntries = (
@@ -130,7 +130,7 @@ const AssetListComponent = (
             return {
               ...entry,
               id: entryId,
-              relatedServices,
+              relatedServices
             };
           });
         })
@@ -158,12 +158,12 @@ const AssetListComponent = (
         const distanceToScroll = ref.offsetTop - ref.parentElement.offsetTop;
         ref.parentElement.scrollTo({
           top: distanceToScroll,
-          behavior: "smooth",
+          behavior: "smooth"
         });
         props.onAssetNavigate();
       }
     }
-  }, []);
+  }, [props.assetNavigateTo, props.onAssetNavigate]);
 
   return (
     <s.List ref={ref}>

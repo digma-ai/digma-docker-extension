@@ -5,8 +5,9 @@ export const Button = styled.button<ButtonElementProps>`
   font-family: inherit;
   font-weight: 500;
   font-size: 14px;
-  line-height: 17px;
-  padding: 2px 4px;
+  line-height: normal;
+  padding: 4px 8px;
+  height: 25px;
   border-radius: 2px;
   cursor: pointer;
   display: flex;
@@ -14,41 +15,28 @@ export const Button = styled.button<ButtonElementProps>`
   justify-content: center;
   width: max-content;
   user-select: none;
-
   color: ${({ theme, buttonType }) => {
     if (buttonType === "secondary") {
       switch (theme.palette.mode) {
         case "light":
           return "#3538cd";
         case "dark":
-          return "#b9c2eb";
+          return "#e2e7ff";
       }
     }
 
-    return "#b9c2eb";
+    return "#e2e7ff";
   }};
-
-  background: ${({ theme, buttonType }) => {
+  background: ${({ buttonType }) => {
     if (buttonType === "secondary") {
-      switch (theme.palette.mode) {
-        case "light":
-          return "none";
-        case "dark":
-          return "#414363";
-      }
+      return "none";
     }
 
     return "#3538cd";
   }};
-
-  border: ${({ theme, buttonType }) => {
+  border: ${({ buttonType }) => {
     if (buttonType === "secondary") {
-      switch (theme.palette.mode) {
-        case "light":
-          return "1px solid #3538cd";
-        case "dark":
-          return "1px solid #5154ec";
-      }
+      return "1px solid #3538cd";
     }
 
     return "none";
@@ -66,27 +54,15 @@ export const Button = styled.button<ButtonElementProps>`
         }
       }
 
-      switch (theme.palette.mode) {
-        case "light":
-          return "#e2e7ff";
-        case "dark":
-          return "#b9c2eb";
-      }
+      return "#e2e7ff";
     }};
-
-    background: ${({ theme, buttonType }) => {
+    background: ${({ buttonType }) => {
       if (buttonType === "secondary") {
-        switch (theme.palette.mode) {
-          case "light":
-            return "#eeeefd";
-          case "dark":
-            return "#414363";
-        }
+        return "none";
       }
 
       return "#5154ec";
     }};
-
     border: ${({ buttonType }) => {
       if (buttonType === "secondary") {
         return "1px solid #5154ec";
@@ -109,33 +85,21 @@ export const Button = styled.button<ButtonElementProps>`
 
       switch (theme.palette.mode) {
         case "light":
-          return "#f1f5fa";
+          return "#fbfdff";
         case "dark":
           return "#dadada";
       }
     }};
-
-    background: ${({ theme, buttonType }) => {
+    background: ${({ buttonType }) => {
       if (buttonType === "secondary") {
-        switch (theme.palette.mode) {
-          case "light":
-            return "#eeeefd";
-          case "dark":
-            return "#414363";
-        }
+        return "none";
       }
 
       return "#3538cd";
     }};
-
-    border: ${({ theme, buttonType }) => {
+    border: ${({ buttonType }) => {
       if (buttonType === "secondary") {
-        switch (theme.palette.mode) {
-          case "light":
-            return "1px solid #3538cd";
-          case "dark":
-            return "1px solid #5154ec";
-        }
+        return "1px solid #3538cd";
       }
 
       return "none";
@@ -144,7 +108,6 @@ export const Button = styled.button<ButtonElementProps>`
 
   &:disabled {
     cursor: initial;
-
     color: ${({ theme, buttonType }) => {
       if (buttonType === "secondary") {
         switch (theme.palette.mode) {
@@ -162,7 +125,6 @@ export const Button = styled.button<ButtonElementProps>`
           return "#49494d";
       }
     }};
-
     background: ${({ theme, buttonType }) => {
       if (buttonType === "secondary") {
         return "none";
@@ -175,7 +137,6 @@ export const Button = styled.button<ButtonElementProps>`
           return "#2e2e2e";
       }
     }};
-
     border: ${({ theme, buttonType }) => {
       if (buttonType === "secondary") {
         switch (theme.palette.mode) {

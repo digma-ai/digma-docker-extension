@@ -22,7 +22,7 @@ import {
   AssetsProps,
   ExtendedAssetEntry,
   GroupedAssetEntries,
-  SORTING_CRITERION,
+  SORTING_CRITERION
 } from "./types";
 
 const groupEntries = (data: AssetsData): GroupedAssetEntries => {
@@ -31,21 +31,21 @@ const groupEntries = (data: AssetsData): GroupedAssetEntries => {
     .map((entry) =>
       entry.assetEntries.map((entry) => ({
         ...entry,
-        id: entry.span.spanCodeObjectId,
+        id: entry.span.spanCodeObjectId
       }))
     )
     .flat();
 
-  const assetTypes = groupBy<ExtendedAssetEntry>(assetEntries, "assetType");
+  const assetTypes = groupBy(assetEntries, (x) => x.assetType);
 
   const groupedAssetEntries: {
     [key: string]: { [key: string]: ExtendedAssetEntry[] };
   } = {};
 
   Object.keys(assetTypes).forEach((assetType) => {
-    groupedAssetEntries[assetType] = groupBy<ExtendedAssetEntry>(
+    groupedAssetEntries[assetType] = groupBy(
       assetTypes[assetType],
-      "id"
+      (x) => x.id
     );
   });
 
@@ -64,7 +64,7 @@ export const Assets = (props: AssetsProps) => {
     isDesc: boolean;
   }>({
     criterion: SORTING_CRITERION.CRITICAL_INSIGHTS,
-    isDesc: true,
+    isDesc: true
   });
   const [searchInputValue, setSearchInputValue] = useState("");
 
@@ -108,15 +108,11 @@ export const Assets = (props: AssetsProps) => {
     selectedAssetTypeId,
     previousSelectedAssetTypeId,
     props.environment,
-    previousEnvironment,
+    previousEnvironment
   ]);
 
   const handleAssetTypeSelect = (assetTypeId: string) => {
     setSelectedAssetTypeId(assetTypeId);
-  };
-
-  const handleAssetEntryClick = (entry: ExtendedAssetEntry) => {
-    props.onAssetSelect(entry);
   };
 
   const handleSearchInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -131,18 +127,14 @@ export const Assets = (props: AssetsProps) => {
     if (sorting.criterion === value) {
       setSorting({
         ...sorting,
-        isDesc: !sorting.isDesc,
+        isDesc: !sorting.isDesc
       });
     } else {
       setSorting({
         criterion: value as SORTING_CRITERION,
-        isDesc: false,
+        isDesc: false
       });
     }
-  };
-
-  const onGettingStartedButtonClick = () => {
-    props.onGettingStartedButtonClick();
   };
 
   const renderContent = useMemo((): JSX.Element => {
@@ -163,13 +155,13 @@ export const Assets = (props: AssetsProps) => {
           }
           additionalContent={
             <s.GettingStartedButton
-              onClick={onGettingStartedButtonClick}
+              onClick={props.onGettingStartedButtonClick}
               variant={"contained"}
               endIcon={
                 <ExtensionIcon
                   sx={{
                     width: 16,
-                    height: 16,
+                    height: 16
                   }}
                 />
               }
@@ -196,7 +188,7 @@ export const Assets = (props: AssetsProps) => {
         {data[selectedAssetTypeId] ? (
           <AssetList
             ref={assetListRef}
-            onAssetEntryClick={handleAssetEntryClick}
+            onAssetEntryClick={props.onAssetSelect}
             assetTypeId={selectedAssetTypeId}
             entries={data[selectedAssetTypeId]}
             sorting={sorting}
@@ -227,6 +219,11 @@ export const Assets = (props: AssetsProps) => {
     selectedAssetTypeId,
     sorting,
     searchInputValue,
+    props.onAssetSelect,
+    props.onGettingStartedButtonClick,
+    props.assetNavigateTo,
+    props.onAssetNavigate,
+    theme.palette.mode
   ]);
 
   return (
@@ -252,7 +249,7 @@ export const Assets = (props: AssetsProps) => {
                   <SearchIcon />
                 )}
               </InputAdornment>
-            ),
+            )
           }}
           onChange={handleSearchInputChange}
         />

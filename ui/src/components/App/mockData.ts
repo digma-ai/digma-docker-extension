@@ -2,7 +2,8 @@ import { GetAssetsResponse } from "../Assets/types";
 
 export const client = {
   host: {
-    openExternal: (url: string) => {},
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    openExternal: (url: string) => {}
   },
   extension: {
     vm: {
@@ -11,9 +12,9 @@ export const client = {
         post: (url: string, data: any): GetAssetsResponse => ({
           accountId: "",
           environment: "",
-          serviceAssetsEntries: [],
-        }),
-      },
-    },
-  },
+          serviceAssetsEntries: []
+        })
+      }
+    }
+  }
 };

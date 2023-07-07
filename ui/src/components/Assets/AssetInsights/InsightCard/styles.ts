@@ -7,7 +7,6 @@ export const Container = styled(Paper)`
   flex-direction: column;
   gap: 12px;
   box-sizing: border-box;
-
   border: 1px solid
     ${({ theme }) => {
       switch (theme.palette.mode) {
@@ -26,7 +25,6 @@ export const TitleRow = styled.div`
   font-weight: 500;
   font-size: 16px;
   line-height: 19px;
-
   color: ${({ theme }) => {
     switch (theme.palette.mode) {
       case "light":
@@ -45,7 +43,6 @@ export const InsightIconContainer = styled.span`
   height: 28px;
   flex-shrink: 0;
   border-radius: 4px;
-
   background: ${({ theme }) => {
     switch (theme.palette.mode) {
       case "light":
@@ -60,7 +57,6 @@ export const Stats = styled.span`
   margin-left: auto;
   font-size: 14px;
   line-height: 17px;
-
   color: ${({ theme }) => {
     switch (theme.palette.mode) {
       case "light":

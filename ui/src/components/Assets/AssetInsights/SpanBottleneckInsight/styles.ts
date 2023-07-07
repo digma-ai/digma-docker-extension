@@ -18,7 +18,6 @@ export const Span = styled.span`
   line-height: 17px;
   font-weight: 500;
   word-break: break-all;
-
   color: ${({ theme }) => {
     switch (theme.palette.mode) {
       case "light":
@@ -32,7 +31,6 @@ export const Span = styled.span`
 export const Description = styled.span`
   font-size: 14px;
   line-height: 17px;
-
   color: ${({ theme }) => {
     switch (theme.palette.mode) {
       case "light":

@@ -49,6 +49,7 @@ export const NavigationButton = styled(Button)<NavigationButtonProps>`
 
   &.MuiButtonGroup-grouped:not(:last-of-type) {
     border: none;
+
     &.MuiButton-containedPrimary.Mui-disabled {
       border: none;
     }
@@ -66,7 +67,6 @@ export const NavigationButton = styled(Button)<NavigationButtonProps>`
         : theme.palette.mode === "light"
         ? "#efeff2"
         : "#27343e"};
-
     color: ${({ selected }) => (selected ? "#fff" : "#7794ab")};
   }
 `;

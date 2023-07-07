@@ -44,7 +44,7 @@ const getIconColor = (
       case "light":
         return "#3538cd";
       case "dark":
-        return "#b9c2eb";
+        return "#e2e7ff";
     }
   }
 
@@ -60,22 +60,17 @@ const getIconColor = (
   if (isPressed) {
     switch (theme.palette.mode) {
       case "light":
-        return "#f1f5fa";
+        return "#fbfdff";
       case "dark":
         return "#dadada";
     }
   }
 
   if (isFocused || isHovered) {
-    switch (theme.palette.mode) {
-      case "light":
-        return "#e2e7ff";
-      case "dark":
-        return "#b9c2eb";
-    }
+    return "#e2e7ff";
   }
 
-  return "#b9c2eb";
+  return "#e2e7ff";
 };
 
 export const Button = (props: ButtonProps) => {

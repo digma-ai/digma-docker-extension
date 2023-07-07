@@ -3,7 +3,6 @@ import styled from "styled-components";
 export const Description = styled.span`
   font-size: 14px;
   line-height: 17px;
-
   color: ${({ theme }) => {
     switch (theme.palette.mode) {
       case "light":

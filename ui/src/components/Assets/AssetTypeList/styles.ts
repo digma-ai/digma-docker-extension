@@ -8,7 +8,6 @@ export const Tabs = styled(MuiTabs)`
 
   & .MuiTabs-indicator {
     height: 3px;
-
     background: ${({ theme }) => {
       switch (theme.palette.mode) {
         case "light":
@@ -29,7 +28,6 @@ export const Tab = styled(MuiTab)`
   min-height: 40px;
   padding: 0;
   font-weight: 400;
-
   color: ${({ theme }) => {
     switch (theme.palette.mode) {
       case "light":
@@ -41,7 +39,6 @@ export const Tab = styled(MuiTab)`
 
   &.Mui-selected {
     font-weight: 500;
-
     color: ${({ theme }) => {
       switch (theme.palette.mode) {
         case "light":

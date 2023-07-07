@@ -9,7 +9,7 @@ const ASSET_TYPE_IDS = [
   "DatabaseQueries",
   "CodeLocation",
   "EndpointClient",
-  "Other",
+  "Other"
 ];
 
 export const AssetTypeList = (props: AssetListProps) => {
@@ -28,7 +28,7 @@ export const AssetTypeList = (props: AssetListProps) => {
       scrollButtons={true}
       allowScrollButtonsMobile
     >
-      {ASSET_TYPE_IDS.map((assetTypeId, i) => {
+      {ASSET_TYPE_IDS.map((assetTypeId) => {
         const assetTypeInfo = getAssetTypeInfo(assetTypeId);
         const entryCount = props.data[assetTypeId]
           ? Object.values(props.data[assetTypeId]).flat().length

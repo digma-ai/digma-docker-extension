@@ -8,9 +8,8 @@ export const MenuButton = styled(Button)`
   display: flex;
   gap: 10px;
   background: none;
-  padding: 11px 16px 11px 0px;
+  padding: 11px 16px 11px 0;
   min-width: 130px;
-
   color: ${({ theme }) => {
     switch (theme.palette.mode) {
       case "light":
@@ -23,7 +22,6 @@ export const MenuButton = styled(Button)`
   &:hover,
   &:focus {
     background: none;
-
     color: ${({ theme }) => {
       switch (theme.palette.mode) {
         case "light":
@@ -63,7 +61,6 @@ export const Title = styled(Typography)`
   display: flex;
   align-items: center;
   letter-spacing: 0.02em;
-
   color: ${({ theme }) => {
     switch (theme.palette.mode) {
       case "light":

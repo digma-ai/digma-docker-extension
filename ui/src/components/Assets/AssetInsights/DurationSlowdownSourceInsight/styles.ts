@@ -29,7 +29,6 @@ export const Source = styled.span`
   display: flex;
   gap: 8px;
   font-weight: 500;
-
   color: ${({ theme }) => {
     switch (theme.palette.mode) {
       case "light":

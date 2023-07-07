@@ -25,7 +25,6 @@ export const NoDataTextContainer = styled.div`
 
 export const NoDataText = styled(Typography)`
   text-align: center;
-
   color: ${({ theme }) => {
     switch (theme.palette.mode) {
       case "light":

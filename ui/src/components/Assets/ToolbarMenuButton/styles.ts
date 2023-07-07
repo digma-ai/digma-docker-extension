@@ -8,7 +8,6 @@ export const Button = styled(MuiButton)`
   padding: 10px 20px 10px 16px;
   width: 175px;
   height: 40px;
-
   color: ${({ theme }) => {
     switch (theme.palette.mode) {
       case "light":
@@ -17,7 +16,6 @@ export const Button = styled(MuiButton)`
         return "#7794ab";
     }
   }};
-
   background: ${({ theme }) => {
     switch (theme.palette.mode) {
       case "light":
@@ -26,7 +24,6 @@ export const Button = styled(MuiButton)`
         return "#1c262d";
     }
   }};
-
   border: 1.5px solid
     ${({ theme }) => {
       switch (theme.palette.mode) {
