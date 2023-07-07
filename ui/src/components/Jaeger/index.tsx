@@ -1,5 +1,5 @@
 import IconButton from "@mui/material/IconButton";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ddClient } from "../../dockerDesktopClient";
 import { groupBy } from "../../utils/groupBy";
 import { isSpanInsight } from "../Assets/AssetInsights/typeGuards";
@@ -109,11 +109,9 @@ const getSpansData = async (data: JaegerMessageData, environment: string) => {
 };
 
 export const Jaeger = (props: JaegerProps) => {
-  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const [jaegerWindow, setJaegerWindow] = useState<Window | null>(null);
 
   useEffect(() => {
-    const jaegerWindow = iframeRef.current?.contentWindow;
-
     const handleJaegerMessage = async (e: MessageEvent<JaegerMessageData>) => {
       if (e.origin === JAEGER_QUERY_HOSTNAME) {
         switch (e.data.action) {
@@ -136,7 +134,13 @@ export const Jaeger = (props: JaegerProps) => {
     return () => {
       window.removeEventListener("message", handleJaegerMessage);
     };
-  }, [iframeRef.current, props.environment, props.onSpanSelect]);
+  }, [jaegerWindow, props.environment, props.onSpanSelect]);
+
+  const getJaegerWindow = useCallback((ref: HTMLIFrameElement | null) => {
+    if (ref) {
+      setJaegerWindow(ref.contentWindow);
+    }
+  }, []);
 
   const handleJaegerCloseButtonClick = () => {
     props.onClose();
@@ -166,7 +170,7 @@ export const Jaeger = (props: JaegerProps) => {
           <CrossIcon size={16} color={"#9b9b9b"} />
         </IconButton>
       </s.Header>
-      <s.Iframe src={url} ref={iframeRef} />
+      <s.Iframe src={url} ref={getJaegerWindow} />
     </s.Container>
   );
 };
