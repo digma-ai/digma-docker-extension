@@ -7,11 +7,7 @@ import { Assets } from "../Assets";
 import { AssetInsights } from "../Assets/AssetInsights";
 import { Trace } from "../Assets/AssetInsights/types";
 import { Menu } from "../Assets/Menu";
-import {
-  AssetsData,
-  ExtendedAssetEntry,
-  GetAssetsResponse
-} from "../Assets/types";
+import { ExtendedAssetEntry, GetAssetsResponse } from "../Assets/types";
 import { findAssetBySpanCodeObjectId } from "../Assets/utils/findAssetBySpanCodeObjectId";
 import { GettingStarted } from "../GettingStarted";
 import { Jaeger } from "../Jaeger";
@@ -26,7 +22,7 @@ import * as s from "./styles";
 const REFRESH_INTERVAL = 10 * 1000; // in milliseconds
 
 export const App = () => {
-  const [assets, setAssets] = useState<AssetsData>();
+  const [assets, setAssets] = useState<GetAssetsResponse>();
   const [environments, setEnvironments] = useState<string[]>();
   const [selectedEnvironment, setSelectedEnvironment] = useState<string>();
   const [currentPage, setCurrentPage] = useState<string>();
@@ -34,6 +30,7 @@ export const App = () => {
   const [selectedAsset, setSelectedAsset] = useState<ExtendedAssetEntry>();
   const [assetNavigateTo, setAssetNavigateTo] = useState<ExtendedAssetEntry>();
   const [selectedTraces, setSelectedTraces] = useState<Trace[]>();
+  const [spanSelectTo, setSpanSelectTo] = useState<SpanData>();
   // const [isBadgeVisible, setIsBadgeVisible] = useState<boolean>(false);
 
   // const isBadgeEnabled = ["true", null].includes(
@@ -57,9 +54,7 @@ export const App = () => {
       `Assets for "${environment}" environment have been fetched:`,
       assets
     );
-    setAssets({
-      serviceAssetsEntries: assets.serviceAssetsEntries
-    });
+    setAssets(assets);
   }, []);
 
   useEffect(() => {
@@ -95,7 +90,7 @@ export const App = () => {
     }
   }, [currentPage, environments]);
 
-  // Redirect to corresponding page page on startup depending on assets availability
+  // Redirect to corresponding page on startup depending on assets availability
   useEffect(() => {
     if (!currentPage && assets) {
       const areAssetsAvailable =
@@ -109,6 +104,32 @@ export const App = () => {
       }
     }
   }, [assets, currentPage]);
+
+  useEffect(() => {
+    if (
+      spanSelectTo &&
+      assets &&
+      [assets.environment, selectedEnvironment].every(
+        (x) =>
+          x &&
+          spanSelectTo.environment &&
+          x === spanSelectTo.environment.toUpperCase()
+      ) &&
+      spanSelectTo.spanCodeObjectId
+    ) {
+      const asset = findAssetBySpanCodeObjectId(
+        assets,
+        spanSelectTo.spanCodeObjectId,
+        spanSelectTo.serviceName
+      );
+
+      if (asset) {
+        setSelectedAsset(asset);
+      }
+
+      setSpanSelectTo(undefined);
+    }
+  }, [assets, spanSelectTo, selectedEnvironment]);
 
   // Show badge on "Go To Assets page" button
   // when the are environments with no assets yet
@@ -167,7 +188,22 @@ export const App = () => {
   };
 
   const handleSpanSelect = (span: SpanData) => {
-    if (!assets || !span.spanCodeObjectId) {
+    if (
+      !environments ||
+      !span.environment ||
+      !selectedEnvironment ||
+      !environments.includes(span.environment.toUpperCase()) ||
+      !assets ||
+      !span.spanCodeObjectId
+    ) {
+      return;
+    }
+
+    const spanEnvironment = span.environment.toUpperCase();
+
+    if (spanEnvironment !== selectedEnvironment) {
+      setSelectedEnvironment(spanEnvironment);
+      setSpanSelectTo(span);
       return;
     }
 
@@ -191,7 +227,8 @@ export const App = () => {
     isRedirectedToAssets,
     selectedAsset,
     assetNavigateTo,
-    selectedTraces
+    selectedTraces,
+    spanSelectTo
   });
 
   const pages: Record<string, PageContent> = {
