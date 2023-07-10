@@ -21,6 +21,7 @@ export interface SpanData {
   namespace?: string;
   spanCodeObjectId?: string;
   methodCodeObjectId?: string;
+  environment?: string;
 }
 
 export interface GetSpansData {
