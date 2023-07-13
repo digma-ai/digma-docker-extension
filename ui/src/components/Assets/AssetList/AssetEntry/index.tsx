@@ -1,6 +1,8 @@
 import { useTheme } from "@mui/material";
 import { ForwardedRef, forwardRef } from "react";
+import { DefaultTheme } from "styled-components";
 import { timeAgo } from "../../../../utils/timeAgo";
+import { GlobeIcon } from "../../../common/icons/GlobeIcon";
 import { getInsightTypeOrderPriority } from "../../AssetInsights";
 import { getAssetTypeInfo } from "../../utils/getAssetTypeInfo";
 import { getInsightImportanceColor } from "../../utils/getInsightImportanceColor";
@@ -8,11 +10,21 @@ import { getInsightTypeInfo } from "../../utils/getInsightTypeInfo";
 import * as s from "./styles";
 import { AssetEntryProps } from "./types";
 
+const getServiceIconColor = (theme: DefaultTheme) => {
+  switch (theme.palette.mode) {
+    case "light":
+      return "#4d668a";
+    case "dark":
+      return "#dadada";
+  }
+};
+
 const AssetEntryComponent = (
   props: AssetEntryProps,
   ref: ForwardedRef<HTMLDivElement>
 ) => {
   const theme = useTheme();
+  const serviceIconColor = getServiceIconColor(theme);
 
   const handleContainerClick = () => {
     props.onClick(props.entry);
@@ -81,6 +93,9 @@ const AssetEntryComponent = (
         <s.Stats>
           <span>Services</span>
           <s.ServicesContainer>
+            <s.ServiceIconContainer>
+              <GlobeIcon color={serviceIconColor} />
+            </s.ServiceIconContainer>
             <s.ServiceName title={props.entry.serviceName}>
               {props.entry.serviceName}
             </s.ServiceName>

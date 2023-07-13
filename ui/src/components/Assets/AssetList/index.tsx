@@ -1,18 +1,16 @@
 import { ForwardedRef, forwardRef, useEffect, useMemo, useRef } from "react";
-import { SORTING_CRITERION } from "../types";
+import { SORTING_CRITERION, SORTING_ORDER, Sorting } from "../types";
 import { AssetEntry as AssetEntryComponent } from "./AssetEntry";
 import * as s from "./styles";
-import {
-  AssetListProps,
-  ExtendedAssetEntryWithServices,
-  Sorting
-} from "./types";
+import { AssetListProps, ExtendedAssetEntryWithServices } from "./types";
 
 const sortEntries = (
   entries: ExtendedAssetEntryWithServices[],
   sorting: Sorting
 ): ExtendedAssetEntryWithServices[] => {
   entries = [...entries];
+
+  const isDesc = sorting.order === SORTING_ORDER.DESC;
 
   const sortByName = (
     a: ExtendedAssetEntryWithServices,
@@ -74,39 +72,31 @@ const sortEntries = (
         ).length;
 
         return (
-          (sorting.isDesc
+          (isDesc
             ? aHighestImportance - bHighestImportance
             : bHighestImportance - aHighestImportance) ||
-          (sorting.isDesc
+          (isDesc
             ? bMostImportantInsightCount - aMostImportantInsightCount
             : aMostImportantInsightCount - bMostImportantInsightCount) ||
-          sortByName(a, b, sorting.isDesc)
+          sortByName(a, b, isDesc)
         );
       });
     case SORTING_CRITERION.PERFORMANCE:
-      return entries.sort((a, b) =>
-        sortByPercentile(a, b, 0.5, sorting.isDesc)
-      );
+      return entries.sort((a, b) => sortByPercentile(a, b, 0.5, isDesc));
     case SORTING_CRITERION.SLOWEST_FIVE_PERCENT:
-      return entries.sort((a, b) =>
-        sortByPercentile(a, b, 0.95, sorting.isDesc)
-      );
+      return entries.sort((a, b) => sortByPercentile(a, b, 0.95, isDesc));
     case SORTING_CRITERION.LATEST:
       return entries.sort((a, b) => {
         const aDateTime = new Date(a.lastSpanInstanceInfo.startTime).valueOf();
         const bDateTime = new Date(b.lastSpanInstanceInfo.startTime).valueOf();
 
         return (
-          (sorting.isDesc ? bDateTime - aDateTime : aDateTime - bDateTime) ||
-          sortByName(a, b, sorting.isDesc)
+          (isDesc ? bDateTime - aDateTime : aDateTime - bDateTime) ||
+          sortByName(a, b, isDesc)
         );
       });
     case SORTING_CRITERION.NAME:
-      return entries.sort((a, b) =>
-        sorting.isDesc
-          ? sortByName(b, a, sorting.isDesc)
-          : sortByName(a, b, sorting.isDesc)
-      );
+      return entries.sort((a, b) => sortByName(a, b, isDesc));
     default:
       return entries;
   }

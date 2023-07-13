@@ -4,6 +4,7 @@ import { ChevronIcon } from "../../../common/icons/ChevronIcon";
 import { Direction } from "../../../common/icons/types";
 import { getInsightImportanceColor } from "../../utils/getInsightImportanceColor";
 import { getInsightTypeInfo } from "../../utils/getInsightTypeInfo";
+import { Link } from "../styles";
 import * as s from "./styles";
 import { InsightCardProps } from "./types";
 
@@ -57,7 +58,7 @@ export const InsightCard = (props: InsightCardProps) => {
             </PopoverContent>
           </Popover>
         )} */}
-        {props.isExpandable && (
+        {props.expandableContent && (
           <s.ExpandButton onClick={handleExpandButtonClick}>
             <ChevronIcon
               color={theme.palette.mode === "light" ? "#828797" : "#b9c2eb"}
@@ -69,6 +70,11 @@ export const InsightCard = (props: InsightCardProps) => {
       </s.TitleRow>
       {props.content && (
         <s.ContentContainer>{props.content}</s.ContentContainer>
+      )}
+      {props.expandableContent && (
+        <Link onClick={handleExpandButtonClick}>
+          Show {isExpanded ? "less" : "more"}
+        </Link>
       )}
       {isExpanded && props.expandableContent && (
         <s.ContentContainer>{props.expandableContent}</s.ContentContainer>

@@ -1,4 +1,4 @@
-import { ExtendedAssetEntry, SORTING_CRITERION } from "../types";
+import { ExtendedAssetEntry, Sorting } from "../types";
 
 export interface ExtendedAssetEntryWithServices extends ExtendedAssetEntry {
   relatedServices: string[];
@@ -12,9 +12,4 @@ export interface AssetListProps {
   searchValue: string;
   onAssetNavigate: () => void;
   assetNavigateTo?: ExtendedAssetEntry;
-}
-
-export interface Sorting {
-  criterion: SORTING_CRITERION;
-  isDesc: boolean;
 }

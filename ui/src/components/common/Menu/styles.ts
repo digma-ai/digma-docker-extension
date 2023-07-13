@@ -1,39 +1,73 @@
+import Button from "@mui/material/Button";
+import MuiMenu from "@mui/material/Menu";
+import MuiMenuItem from "@mui/material/MenuItem";
+import Typography from "@mui/material/Typography";
 import styled from "styled-components";
+import { MenuStyledComponentProps } from "./types";
 
-export const Container = styled.div`
+export const MenuButton = styled(Button)`
   display: flex;
-  flex-direction: column;
-  box-shadow: 0 4px 4px rgba(0 0 0 / 12%);
-  border-radius: 2px;
-  background: ${({ theme }) => {
+  gap: 10px;
+  background: none;
+  padding: 11px 16px 11px 0;
+  min-width: 130px;
+  color: ${({ theme }) => {
     switch (theme.palette.mode) {
       case "light":
-        return "#fff";
+        return "#677285";
       case "dark":
-        return "#27343e";
+        return "#fff";
     }
   }};
+
+  &:hover,
+  &:focus {
+    background: none;
+    color: ${({ theme }) => {
+      switch (theme.palette.mode) {
+        case "light":
+          return "#677285";
+        case "dark":
+          return "#fff";
+      }
+    }};
+  }
 `;
 
-export const Header = styled.div`
-  padding: 2px 8px;
-  font-size: 10px;
-  line-height: 14px;
+export const SelectedValue = styled.span`
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
-export const List = styled.ul`
+export const Menu = styled(MuiMenu)<MenuStyledComponentProps>`
+  & .MuiPaper-root {
+    width: ${({ width }) => width}px;
+    padding: 4px;
+  }
+`;
+
+export const MenuItem = styled(MuiMenuItem)`
   display: flex;
-  flex-direction: column;
-  margin: 0;
-  padding: 0;
+  justify-content: space-between;
+  padding: 4px;
+  gap: 2px;
+  border-radius: 4px;
 `;
 
-export const ListItem = styled.li`
-  flex-direction: row;
-  width: 100%;
-  list-style-type: none;
-  padding: 6px 8px;
-  font-size: 10px;
-  line-height: 12px;
-  cursor: pointer;
+export const Title = styled(Typography)`
+  height: 16px;
+  margin: 4px 4px 8px;
+  font-size: 12px;
+  line-height: 16px;
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.02em;
+  color: ${({ theme }) => {
+    switch (theme.palette.mode) {
+      case "light":
+        return "#677285";
+      case "dark":
+        return "#adbecb";
+    }
+  }};
 `;

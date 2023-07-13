@@ -117,8 +117,12 @@ export const ServicesContainer = styled.div`
   overflow: hidden;
 `;
 
+export const ServiceIconContainer = styled.div`
+  display: flex;
+`;
+
 export const ServiceName = styled.div`
-  padding: 4px 6px;
+  padding: 4px 0;
   border-radius: 23px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -129,14 +133,6 @@ export const ServiceName = styled.div`
         return "#49494d";
       case "dark":
         return "#dadada";
-    }
-  }};
-  background: ${({ theme }) => {
-    switch (theme.palette.mode) {
-      case "light":
-        return "#f0f0f0";
-      case "dark":
-        return "#3d4753";
     }
   }};
 `;

@@ -6,7 +6,6 @@ export const Container = styled(Paper)`
   display: flex;
   flex-direction: column;
   gap: 12px;
-  box-sizing: border-box;
   border: 1px solid
     ${({ theme }) => {
       switch (theme.palette.mode) {
@@ -71,6 +70,7 @@ export const ExpandButton = styled.button`
   padding: 0;
   border: none;
   background: none;
+  cursor: pointer;
 `;
 
 export const ContentContainer = styled.div`

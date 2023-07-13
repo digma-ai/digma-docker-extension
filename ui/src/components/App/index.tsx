@@ -6,13 +6,13 @@ import { ddClient } from "../../dockerDesktopClient";
 import { Assets } from "../Assets";
 import { AssetInsights } from "../Assets/AssetInsights";
 import { Trace } from "../Assets/AssetInsights/types";
-import { Menu } from "../Assets/Menu";
 import { ExtendedAssetEntry, GetAssetsResponse } from "../Assets/types";
 import { findAssetBySpanCodeObjectId } from "../Assets/utils/findAssetBySpanCodeObjectId";
 import { GettingStarted } from "../GettingStarted";
 import { Jaeger } from "../Jaeger";
 import { SpanData } from "../Jaeger/types";
 import { Loader } from "../common/Loader";
+import { Menu } from "../common/Menu";
 import { Page } from "../common/Page";
 import { PageContent } from "../common/Page/types";
 import { DigmaLogoIcon } from "../common/icons/DigmaLogoIcon";
@@ -260,6 +260,7 @@ export const App = () => {
           items={environments}
           onSelect={handleEnvironmentSelect}
           disabled={!environments || environments.length === 0}
+          width={202}
         />
       ),
       main:
