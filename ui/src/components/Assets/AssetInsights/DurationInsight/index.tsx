@@ -17,7 +17,7 @@ export const DurationInsight = (props: DurationInsightProps) => {
     props.onTracesSelect(traces);
   };
 
-  const traceIds: string[] = [];
+  const traces: Trace[] = [];
 
   return (
     <InsightCard
@@ -33,8 +33,11 @@ export const DurationInsight = (props: DurationInsightProps) => {
             <>
               <s.PercentileList>
                 {sortedPercentiles.map((percentile) => {
-                  if (traceIds.length > 0) {
-                    traceIds.push(percentile.traceIds[0]);
+                  if (percentile.traceIds.length > 0) {
+                    traces.push({
+                      id: percentile.traceIds[0],
+                      name: `P${percentile.percentile * 100}`
+                    });
                   }
 
                   return (
@@ -52,13 +55,10 @@ export const DurationInsight = (props: DurationInsightProps) => {
                   );
                 })}
               </s.PercentileList>
-              {traceIds.length > 1 && (
+              {traces.length > 1 && (
                 <s.Button
                   onClick={() =>
-                    handleCompareButtonClick([
-                      { id: traceIds[0] },
-                      { id: traceIds[1] },
-                    ])
+                    handleCompareButtonClick([traces[0], traces[1]])
                   }
                 >
                   Compare
