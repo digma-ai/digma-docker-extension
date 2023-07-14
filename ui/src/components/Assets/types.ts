@@ -19,7 +19,7 @@ export enum InsightType {
   SpanScalingInsufficientData = "SpanScalingInsufficientData",
   SpanDurationBreakdown = "SpanDurationBreakdown",
   EndpointDurationSlowdown = "EndpointDurationSlowdown",
-  EndpointBreakdown = "EndpointBreakdown",
+  EndpointBreakdown = "EndpointBreakdown"
 }
 
 export enum SORTING_CRITERION {
@@ -27,7 +27,12 @@ export enum SORTING_CRITERION {
   PERFORMANCE = "Performance",
   SLOWEST_FIVE_PERCENT = "Slowest 5%",
   LATEST = "Latest",
-  NAME = "Name",
+  NAME = "Name"
+}
+
+export enum SORTING_ORDER {
+  ASC = "asc",
+  DESC = "desc"
 }
 
 export interface ExtendedAssetEntry extends AssetEntry {
@@ -126,4 +131,13 @@ export interface AssetsProps {
 export interface GetAssetsResponse extends AssetsData {
   accountId: string;
   environment: string;
+}
+
+export interface Sorting {
+  criterion: SORTING_CRITERION;
+  order: SORTING_ORDER;
+}
+
+export interface SortingOrderButtonProps {
+  selected: boolean;
 }

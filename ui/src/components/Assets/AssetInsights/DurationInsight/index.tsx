@@ -1,4 +1,5 @@
 import { formatTimeDistance } from "../../../../utils/formatTimeDistance";
+import { Button } from "../../../common/Button";
 import { getPercentileLabel } from "../../utils/getPercentileLabel";
 import { DurationChange } from "../DurationChange";
 import { InsightCard } from "../InsightCard";
@@ -17,7 +18,7 @@ export const DurationInsight = (props: DurationInsightProps) => {
     props.onTracesSelect(traces);
   };
 
-  const traceIds: string[] = [];
+  const traces: Trace[] = [];
 
   return (
     <InsightCard
@@ -33,8 +34,11 @@ export const DurationInsight = (props: DurationInsightProps) => {
             <>
               <s.PercentileList>
                 {sortedPercentiles.map((percentile) => {
-                  if (traceIds.length > 0) {
-                    traceIds.push(percentile.traceIds[0]);
+                  if (percentile.traceIds.length > 0) {
+                    traces.push({
+                      id: percentile.traceIds[0],
+                      name: `P${percentile.percentile * 100}`
+                    });
                   }
 
                   return (
@@ -52,18 +56,6 @@ export const DurationInsight = (props: DurationInsightProps) => {
                   );
                 })}
               </s.PercentileList>
-              {traceIds.length > 1 && (
-                <s.Button
-                  onClick={() =>
-                    handleCompareButtonClick([
-                      { id: traceIds[0] },
-                      { id: traceIds[1] },
-                    ])
-                  }
-                >
-                  Compare
-                </s.Button>
-              )}
             </>
           ) : (
             // TODO: add hourglass icon
@@ -71,6 +63,18 @@ export const DurationInsight = (props: DurationInsightProps) => {
           )}
         </>
       }
+      buttons={[
+        ...(traces.length > 1
+          ? [
+              <Button
+                key={"compare"}
+                onClick={() => handleCompareButtonClick([traces[0], traces[1]])}
+              >
+                Compare
+              </Button>
+            ]
+          : [])
+      ]}
     />
   );
 };

@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { Button as CommonButton } from "../../../common/Button";
 
 export const LastCall = styled.span`
   display: flex;
@@ -38,8 +37,4 @@ export const Percentile = styled.span`
         return "#dadada";
     }
   }};
-`;
-
-export const Button = styled(CommonButton)`
-  margin-left: auto;
 `;

@@ -8,5 +8,4 @@ export interface InsightCardProps {
   menuItems?: string[];
   stats?: string;
   buttons?: ReactNode[];
-  isExpandable?: boolean;
 }
