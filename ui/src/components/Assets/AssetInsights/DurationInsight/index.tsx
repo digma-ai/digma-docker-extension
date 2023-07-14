@@ -1,4 +1,5 @@
 import { formatTimeDistance } from "../../../../utils/formatTimeDistance";
+import { Button } from "../../../common/Button";
 import { getPercentileLabel } from "../../utils/getPercentileLabel";
 import { DurationChange } from "../DurationChange";
 import { InsightCard } from "../InsightCard";
@@ -55,15 +56,6 @@ export const DurationInsight = (props: DurationInsightProps) => {
                   );
                 })}
               </s.PercentileList>
-              {traces.length > 1 && (
-                <s.Button
-                  onClick={() =>
-                    handleCompareButtonClick([traces[0], traces[1]])
-                  }
-                >
-                  Compare
-                </s.Button>
-              )}
             </>
           ) : (
             // TODO: add hourglass icon
@@ -71,6 +63,18 @@ export const DurationInsight = (props: DurationInsightProps) => {
           )}
         </>
       }
+      buttons={[
+        ...(traces.length > 1
+          ? [
+              <Button
+                key={"compare"}
+                onClick={() => handleCompareButtonClick([traces[0], traces[1]])}
+              >
+                Compare
+              </Button>
+            ]
+          : [])
+      ]}
     />
   );
 };
