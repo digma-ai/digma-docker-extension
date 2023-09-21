@@ -6,15 +6,15 @@ export default defineConfig({
   plugins: [react()],
   base: "./",
   build: {
-    outDir: "build",
+    outDir: "build"
   },
   resolve: {
     alias: {
-      "@mui/styled-engine": "@mui/styled-engine-sc",
-    },
+      "@mui/styled-engine": "@mui/styled-engine-sc"
+    }
   },
   server: {
     port: 3000,
-    strictPort: true,
-  },
+    strictPort: true
+  }
 });

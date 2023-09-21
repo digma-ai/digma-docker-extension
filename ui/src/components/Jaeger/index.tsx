@@ -1,6 +1,7 @@
 import IconButton from "@mui/material/IconButton";
 import { useCallback, useEffect, useState } from "react";
 import { ddClient } from "../../dockerDesktopClient";
+import { isString } from "../../typeGuards/isString";
 import { groupBy } from "../../utils/groupBy";
 import { isSpanInsight } from "../Assets/AssetInsights/typeGuards";
 import { CodeObjectInsight } from "../Assets/AssetInsights/types";
@@ -59,7 +60,7 @@ const getSpansData = async (data: JaegerMessageData, environment: string) => {
       [
         x.spanCodeObjectId,
         x.methodCodeObjectId && `method:${x.methodCodeObjectId}`
-      ].filter((x) => typeof x === "string")
+      ].filter((x) => isString(x))
     )
     .flat() as string[];
 
