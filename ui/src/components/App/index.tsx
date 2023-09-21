@@ -42,7 +42,9 @@ export const App = () => {
       "/environments"
     )) as string[];
     console.debug("Environments have been fetched:", environments);
-    const sortedEnvironments = environments.sort((a, b) => a.localeCompare(b));
+    const sortedEnvironments = [...environments].sort((a, b) =>
+      a.localeCompare(b)
+    );
     setEnvironments(sortedEnvironments);
   }, []);
 
