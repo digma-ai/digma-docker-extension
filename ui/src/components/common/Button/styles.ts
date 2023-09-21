@@ -5,7 +5,6 @@ export const Button = styled.button<ButtonElementProps>`
   font-family: inherit;
   font-weight: 500;
   font-size: 14px;
-  line-height: normal;
   padding: 4px 8px;
   height: 25px;
   border-radius: 2px;

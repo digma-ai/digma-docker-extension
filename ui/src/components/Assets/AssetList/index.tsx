@@ -116,7 +116,10 @@ const AssetListComponent = (
         .map((entryId) => {
           const entries = props.entries[entryId];
           return entries.map((entry) => {
-            const relatedServices = entries.map((entry) => entry.serviceName);
+            const relatedServices = entries
+              .map((entry) => entry.serviceName)
+              .filter((x, i, arr) => arr.indexOf(x) === i);
+
             return {
               ...entry,
               id: entryId,
@@ -132,7 +135,9 @@ const AssetListComponent = (
 
   const sortedEntries = useMemo(() => {
     const filteredEntries = entries.filter((x) =>
-      x.span.displayName.toLocaleLowerCase().includes(props.searchValue)
+      x.span.displayName
+        .toLocaleLowerCase()
+        .includes(props.searchValue.toLocaleLowerCase())
     );
 
     return sortEntries(filteredEntries, props.sorting);
@@ -158,7 +163,13 @@ const AssetListComponent = (
   return (
     <s.List ref={ref}>
       {sortedEntries.map((entry) => {
-        const id = `${entry.id}-${entry.serviceName}`;
+        const id = [
+          entry.serviceName,
+          entry.endpointCodeObjectId,
+          entry.span.spanCodeObjectId
+        ]
+          .filter(Boolean)
+          .join("|_|");
 
         return (
           <AssetEntryComponent
