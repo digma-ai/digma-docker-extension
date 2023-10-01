@@ -324,12 +324,12 @@ export const AssetInsights = (props: AssetInsightsProps) => {
   }, [fetchInsights]);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    const timer = window.setTimeout(() => {
       void fetchInsights();
     }, REFRESH_INTERVAL);
 
     return () => {
-      clearTimeout(timer);
+      window.clearTimeout(timer);
     };
   }, [insights, fetchInsights]);
 

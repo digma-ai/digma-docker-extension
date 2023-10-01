@@ -42,7 +42,10 @@ export const App = () => {
       "/environments"
     )) as string[];
     console.debug("Environments have been fetched:", environments);
-    setEnvironments(environments);
+    const sortedEnvironments = [...environments].sort((a, b) =>
+      a.localeCompare(b)
+    );
+    setEnvironments(sortedEnvironments);
   }, []);
 
   const fetchAssets = useCallback(async (environment: string) => {
@@ -62,12 +65,12 @@ export const App = () => {
   }, [fetchEnvironments]);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    const timer = window.setTimeout(() => {
       void fetchEnvironments();
     }, REFRESH_INTERVAL);
 
     return () => {
-      clearTimeout(timer);
+      window.clearTimeout(timer);
     };
   }, [environments, fetchEnvironments]);
 
@@ -78,8 +81,14 @@ export const App = () => {
   }, [selectedEnvironment, environments]);
 
   useEffect(() => {
-    if (selectedEnvironment && environments && environments.length > 0) {
-      void fetchAssets(selectedEnvironment);
+    if (selectedEnvironment && environments) {
+      if (environments.includes(selectedEnvironment)) {
+        void fetchAssets(selectedEnvironment);
+      } else {
+        setSelectedEnvironment(undefined);
+        setAssets(undefined);
+        setSelectedAsset(undefined);
+      }
     }
   }, [selectedEnvironment, environments, fetchAssets]);
 

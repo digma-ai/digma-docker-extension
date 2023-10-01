@@ -11,17 +11,15 @@ import { IntellijLogoIcon } from "../common/icons/IntellijLogoIcon";
 import { CodeSnippet } from "./CodeSnippet";
 import * as s from "./styles";
 
-const DOCKER_INSTRUMENTATION_COMMANDS = `curl --create-dirs -O -L --output-dir ./otel
-https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/latest/download/opentelemetry-javaagent.jar
+const DOCKER_INSTRUMENTATION_COMMANDS = `curl --create-dirs -O -L --output-dir ./otel https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/download/v1.29.0/opentelemetry-javaagent.jar
 
-curl --create-dirs -O -L --output-dir ./otel
-https://github.com/digma-ai/otel-java-instrumentation/releases/latest/download/digma-otel-agent-extension.jar
+curl --create-dirs -O -L --output-dir ./otel https://github.com/digma-ai/otel-java-instrumentation/releases/latest/download/digma-otel-agent-extension.jar
 
 export JAVA_TOOL_OPTIONS="-javaagent:/otel/javaagent.jar -Dotel.exporter.otlp.endpoint=http://localhost:5050 -Dotel.javaagent.extensions=/otel/digma-otel-agent-extension.jar"
 export OTEL_SERVICE_NAME={--ENTER YOUR SERVICE NAME HERE--}
-export DEPLOYMENT_ENV=LOCAL_DOCKER
+export OTEL_RESOURCE_ATTRIBUTES=digma.environment=LOCAL_DOCKER
 
-docker run -d -v "/$(pwd)/otel:/otel" --env JAVA_TOOL_OPTIONS --env OTEL_SERVICE_NAME --env DEPLOYMENT_ENV {-- APPEND PARAMS AND REPO/IMAGE --}`;
+docker run -d -v "/$(pwd)/otel:/otel" --env JAVA_TOOL_OPTIONS --env OTEL_SERVICE_NAME --env OTEL_RESOURCE_ATTRIBUTES {-- APPEND PARAMS AND REPO/IMAGE --}`;
 
 const SAMPLE_APPLICATION_COMMANDS = `docker run -d -p 9753:9753 --name petshop-sample digmaai/petshop-app:latest
 docker run --rm digmaai/petshop-app-tester:latest`;
