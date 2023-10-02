@@ -39,10 +39,12 @@ export interface ExtendedAssetEntry extends AssetEntry {
   id: string;
 }
 
+export interface ExtendedAssetEntryWithServices extends ExtendedAssetEntry {
+  relatedServices: string[];
+}
+
 export interface GroupedAssetEntries {
-  [key: string]: {
-    [key: string]: ExtendedAssetEntry[];
-  };
+  [key: string]: ExtendedAssetEntryWithServices[];
 }
 
 export interface Insight {
@@ -119,12 +121,12 @@ export interface AssetsData {
 }
 
 export interface AssetsProps {
-  data?: AssetsData;
+  data?: GroupedAssetEntries;
   environments?: string[];
   onGettingStartedButtonClick: () => void;
-  onAssetSelect: (entry: ExtendedAssetEntry) => void;
+  onAssetSelect: (asset: ExtendedAssetEntryWithServices) => void;
   onAssetNavigate: () => void;
-  assetNavigateTo?: ExtendedAssetEntry;
+  assetNavigateTo?: ExtendedAssetEntryWithServices;
   environment?: string;
 }
 

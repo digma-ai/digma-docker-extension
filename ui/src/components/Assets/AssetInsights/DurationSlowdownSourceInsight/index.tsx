@@ -1,4 +1,4 @@
-import { ExtendedAssetEntry } from "../../types";
+import { ExtendedAssetEntryWithServices } from "../../types";
 import { findAssetBySpanCodeObjectId } from "../../utils/findAssetBySpanCodeObjectId";
 import { DurationChange } from "../DurationChange";
 import { InsightCard } from "../InsightCard";
@@ -10,7 +10,7 @@ import { DurationSlowdownSourceInsightProps } from "./types";
 export const DurationSlowdownSourceInsight = (
   props: DurationSlowdownSourceInsightProps
 ) => {
-  const handleSpanLinkClick = (asset: ExtendedAssetEntry) => {
+  const handleSpanLinkClick = (asset: ExtendedAssetEntryWithServices) => {
     props.onAssetSelect(asset);
   };
 
@@ -27,8 +27,7 @@ export const DurationSlowdownSourceInsight = (
       {sources.map((x) => {
         const asset = findAssetBySpanCodeObjectId(
           props.assets,
-          x.spanInfo.spanCodeObjectId,
-          props.asset.serviceName
+          x.spanInfo.spanCodeObjectId
         );
 
         const spanName = x.spanInfo.displayName;

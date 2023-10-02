@@ -1,6 +1,7 @@
+import { usePagination } from "../../../../hooks/usePagination";
 import { roundTo } from "../../../../utils/roundTo";
 import { CrosshairIcon } from "../../../common/icons/CrosshairIcon";
-import { ExtendedAssetEntry } from "../../types";
+import { ExtendedAssetEntryWithServices } from "../../types";
 import { findAssetBySpanCodeObjectId } from "../../utils/findAssetBySpanCodeObjectId";
 import { InsightCard } from "../InsightCard";
 import { Pagination } from "../Pagination";
@@ -10,11 +11,18 @@ import * as s from "./styles";
 import { EndpointNPlusOneInsightProps } from "./types";
 
 const FRACTION_MIN_LIMIT = 0.01;
+const PAGE_SIZE = 3;
 
 export const EndpointNPlusOneInsight = (
   props: EndpointNPlusOneInsightProps
 ) => {
-  const handleSpanLinkClick = (asset: ExtendedAssetEntry) => {
+  const [pageItems, page, setPage] = usePagination(
+    props.insight.spans,
+    PAGE_SIZE,
+    props.insight.codeObjectId
+  );
+
+  const handleSpanLinkClick = (asset: ExtendedAssetEntryWithServices) => {
     props.onAssetSelect(asset);
   };
 
@@ -29,62 +37,65 @@ export const EndpointNPlusOneInsight = (
         <s.ContentContainer>
           <s.Description>Check the following locations:</s.Description>
           <s.SpanList>
-            <Pagination assetId={props.asset.id}>
-              {props.insight.spans.map((span) => {
-                const spanInfo = span.internalSpan || span.clientSpan;
-                const asset = findAssetBySpanCodeObjectId(
-                  props.assets,
-                  spanInfo.spanCodeObjectId,
-                  props.asset.serviceName
-                );
+            {pageItems.map((span) => {
+              const spanInfo = span.internalSpan || span.clientSpan;
+              const asset = findAssetBySpanCodeObjectId(
+                props.assets,
+                spanInfo.spanCodeObjectId
+              );
 
-                const spanName = spanInfo.displayName;
+              const spanName = spanInfo.displayName;
 
-                const fraction =
-                  span.fraction < FRACTION_MIN_LIMIT
-                    ? "minimal"
-                    : `${roundTo(span.fraction, 2)} of request`;
+              const fraction =
+                span.fraction < FRACTION_MIN_LIMIT
+                  ? "minimal"
+                  : `${roundTo(span.fraction, 2)} of request`;
 
-                return (
-                  <s.Span key={spanName}>
-                    {asset ? (
-                      <Link onClick={() => handleSpanLinkClick(asset)}>
-                        {spanName}
-                      </Link>
-                    ) : (
-                      spanName
-                    )}
-                    <s.Stats>
-                      <s.Stat>
-                        <s.Description>Impact</s.Description>
-                        <span>{fraction}</span>
-                      </s.Stat>
-                      <s.Stat>
-                        <s.Description>Repeats</s.Description>
-                        <span>{span.occurrences}</span>
-                      </s.Stat>
-                      <s.Stat>
-                        <s.Description>Duration</s.Description>
-                        <span>
-                          {span.duration.value} {span.duration.unit}
-                        </span>
-                      </s.Stat>
-                    </s.Stats>
-                    <s.Button
-                      icon={{ component: CrosshairIcon, size: 16 }}
-                      onClick={() =>
-                        handleTraceButtonClick({
-                          name: spanName,
-                          id: span.traceId,
-                        })
-                      }
-                    >
-                      Trace
-                    </s.Button>
-                  </s.Span>
-                );
-              })}
-            </Pagination>
+              return (
+                <s.Span key={spanName}>
+                  {asset ? (
+                    <Link onClick={() => handleSpanLinkClick(asset)}>
+                      {spanName}
+                    </Link>
+                  ) : (
+                    spanName
+                  )}
+                  <s.Stats>
+                    <s.Stat>
+                      <s.Description>Impact</s.Description>
+                      <span>{fraction}</span>
+                    </s.Stat>
+                    <s.Stat>
+                      <s.Description>Repeats</s.Description>
+                      <span>{span.occurrences}</span>
+                    </s.Stat>
+                    <s.Stat>
+                      <s.Description>Duration</s.Description>
+                      <span>
+                        {span.duration.value} {span.duration.unit}
+                      </span>
+                    </s.Stat>
+                  </s.Stats>
+                  <s.Button
+                    icon={{ component: CrosshairIcon, size: 16 }}
+                    onClick={() =>
+                      handleTraceButtonClick({
+                        name: spanName,
+                        id: span.traceId
+                      })
+                    }
+                  >
+                    Trace
+                  </s.Button>
+                </s.Span>
+              );
+            })}
+            <Pagination
+              itemsCount={props.insight.spans.length}
+              page={page}
+              pageSize={PAGE_SIZE}
+              onPageChange={setPage}
+            />
           </s.SpanList>
         </s.ContentContainer>
       }

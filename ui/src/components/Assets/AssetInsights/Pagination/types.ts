@@ -1,5 +1,6 @@
 export interface PaginationProps {
-  pageSize?: number;
-  children: React.ReactNode[];
-  assetId: string;
+  itemsCount: number;
+  page: number;
+  onPageChange: (page: number) => void;
+  pageSize: number;
 }

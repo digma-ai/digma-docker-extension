@@ -1,4 +1,5 @@
-import { ExtendedAssetEntry } from "../../types";
+import { usePagination } from "../../../../hooks/usePagination";
+import { ExtendedAssetEntryWithServices } from "../../types";
 import { findAssetBySpanCodeObjectId } from "../../utils/findAssetBySpanCodeObjectId";
 import { getPercentileLabel } from "../../utils/getPercentileLabel";
 import { InsightCard } from "../InsightCard";
@@ -9,6 +10,7 @@ import * as s from "./styles";
 import { DurationBreakdownInsightProps } from "./types";
 
 const DEFAULT_PERCENTILE = 0.5;
+const PAGE_SIZE = 3;
 
 const getPercentile = (
   entry: SpanDurationBreakdownEntry,
@@ -57,7 +59,13 @@ export const DurationBreakdownInsight = (
     return 0;
   });
 
-  const handleSpanLinkClick = (asset: ExtendedAssetEntry) => {
+  const [pageItems, page, setPage] = usePagination(
+    sortedEntries,
+    PAGE_SIZE,
+    props.insight.codeObjectId
+  );
+
+  const handleSpanLinkClick = (asset: ExtendedAssetEntryWithServices) => {
     props.onAssetSelect(asset);
   };
 
@@ -66,35 +74,33 @@ export const DurationBreakdownInsight = (
       data={props.insight}
       content={
         <s.DurationList>
-          <Pagination assetId={props.asset.id}>
-            {sortedEntries.map((entry) => {
-              const percentile = getPercentile(entry, DEFAULT_PERCENTILE);
+          {pageItems.map((entry) => {
+            const percentile = getPercentile(entry, DEFAULT_PERCENTILE);
 
-              const asset = findAssetBySpanCodeObjectId(
-                props.assets,
-                entry.spanCodeObjectId,
-                props.asset.serviceName
-              );
+            const asset = findAssetBySpanCodeObjectId(
+              props.assets,
+              entry.spanCodeObjectId
+            );
 
-              const name = entry.spanDisplayName;
+            const name = entry.spanDisplayName;
 
-              return percentile ? (
-                <s.Duration
-                  title={getTitle(entry)}
-                  key={entry.spanCodeObjectId}
-                >
-                  {asset ? (
-                    <Link onClick={() => handleSpanLinkClick(asset)}>
-                      {name}
-                    </Link>
-                  ) : (
-                    name
-                  )}{" "}
-                  {`${percentile.duration.value} ${percentile.duration.unit}`}
-                </s.Duration>
-              ) : null;
-            })}
-          </Pagination>
+            return percentile ? (
+              <s.Duration title={getTitle(entry)} key={entry.spanCodeObjectId}>
+                {asset ? (
+                  <Link onClick={() => handleSpanLinkClick(asset)}>{name}</Link>
+                ) : (
+                  name
+                )}{" "}
+                {`${percentile.duration.value} ${percentile.duration.unit}`}
+              </s.Duration>
+            ) : null;
+          })}
+          <Pagination
+            itemsCount={sortedEntries.length}
+            page={page}
+            pageSize={PAGE_SIZE}
+            onPageChange={setPage}
+          />
         </s.DurationList>
       }
     />
