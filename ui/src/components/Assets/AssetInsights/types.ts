@@ -1,13 +1,13 @@
 import { MemoExoticComponent } from "react";
 import { IconProps } from "../../common/icons/types";
 import {
-  AssetsData,
   Duration,
   DurationPercentileWithChange,
-  ExtendedAssetEntry,
+  ExtendedAssetEntryWithServices,
+  GroupedAssetEntries,
   InsightType,
   SpanInfo,
-  SpanInstanceInfo,
+  SpanInstanceInfo
 } from "../types";
 
 export type GenericCodeObjectInsight =
@@ -32,18 +32,18 @@ export type GenericCodeObjectInsight =
   | SpanScalingInsufficientDataInsight;
 
 export interface AssetInsightsProps {
-  assets: AssetsData;
-  assetEntry: ExtendedAssetEntry;
-  onGoToAssetsPage: (asset?: ExtendedAssetEntry) => void;
+  assets: GroupedAssetEntries;
+  assetEntry: ExtendedAssetEntryWithServices;
+  onGoToAssetsPage: (asset?: ExtendedAssetEntryWithServices) => void;
   environment: string;
-  onAssetSelect: (asset: ExtendedAssetEntry) => void;
+  onAssetSelect: (asset: ExtendedAssetEntryWithServices) => void;
   onTracesSelect: (traces: Trace[]) => void;
 }
 
 export interface InsightWithLinksProps {
-  asset: ExtendedAssetEntry;
-  assets: AssetsData;
-  onAssetSelect: (asset: ExtendedAssetEntry) => void;
+  asset: ExtendedAssetEntryWithServices;
+  assets: GroupedAssetEntries;
+  onAssetSelect: (asset: ExtendedAssetEntryWithServices) => void;
 }
 
 export interface GetInsightsResponse {
@@ -69,13 +69,13 @@ export enum InsightScope {
   EntrySpan = "EntrySpan",
   Span = "Span",
   Function = "Function",
-  ChildSpan = "ChildSpan",
+  ChildSpan = "ChildSpan"
 }
 
 export enum InsightCategory {
   Performance = "Performance",
   Errors = "Errors",
-  Usage = "Usage",
+  Usage = "Usage"
 }
 
 export enum InsightSpecificity {
@@ -84,7 +84,7 @@ export enum InsightSpecificity {
   OwnInsight = 4,
   TargetFound = 3,
   TargetAndReasonFound = 2,
-  PinPoint = 1,
+  PinPoint = 1
 }
 
 export enum InsightImportance {
@@ -96,7 +96,7 @@ export enum InsightImportance {
   Important = 4,
   HighlyImportant = 3,
   Critical = 2,
-  ShowStopper = 1,
+  ShowStopper = 1
 }
 
 export interface Trace {
@@ -520,7 +520,7 @@ export enum ComponentType {
   Internal = "Internal",
   DbQueries = "DB Queries",
   HttpClients = "HTTP Clients",
-  Rendering = "Rendering",
+  Rendering = "Rendering"
 }
 
 export interface EndpointBreakdownInsight extends EndpointInsight {

@@ -3,10 +3,17 @@ import { Allotment } from "allotment";
 import "allotment/dist/style.css";
 import { useCallback, useEffect, useState } from "react";
 import { ddClient } from "../../dockerDesktopClient";
+import { groupBy } from "../../utils/groupBy";
 import { Assets } from "../Assets";
 import { AssetInsights } from "../Assets/AssetInsights";
 import { Trace } from "../Assets/AssetInsights/types";
-import { ExtendedAssetEntry, GetAssetsResponse } from "../Assets/types";
+import {
+  AssetsData,
+  ExtendedAssetEntry,
+  ExtendedAssetEntryWithServices,
+  GetAssetsResponse,
+  GroupedAssetEntries
+} from "../Assets/types";
 import { findAssetBySpanCodeObjectId } from "../Assets/utils/findAssetBySpanCodeObjectId";
 import { GettingStarted } from "../GettingStarted";
 import { Jaeger } from "../Jaeger";
@@ -19,16 +26,66 @@ import { DigmaLogoIcon } from "../common/icons/DigmaLogoIcon";
 import { PAGES } from "./constants";
 import * as s from "./styles";
 
+const dedupeEntries = (groupedEntries: {
+  [key: string]: ExtendedAssetEntry[];
+}): ExtendedAssetEntryWithServices[] =>
+  Object.keys(groupedEntries).map((entryId) => {
+    const entries = groupedEntries[entryId];
+
+    const latestEntry = entries.reduce(
+      (acc, cur) =>
+        new Date(cur.lastSpanInstanceInfo.startTime).valueOf() >
+        new Date(acc.lastSpanInstanceInfo.startTime).valueOf()
+          ? cur
+          : acc,
+      entries[0]
+    );
+
+    const relatedServices = entries.map((entry) => entry.serviceName).sort();
+
+    return {
+      ...latestEntry,
+      relatedServices
+    };
+  });
+
+const groupEntries = (data: AssetsData): GroupedAssetEntries => {
+  const assetEntries: ExtendedAssetEntry[] = data.serviceAssetsEntries
+    .flat()
+    .map((entry) =>
+      entry.assetEntries.map((entry) => ({
+        ...entry,
+        id: entry.span.spanCodeObjectId
+      }))
+    )
+    .flat();
+
+  const assetTypes = groupBy(assetEntries, (x) => x.assetType);
+
+  const groupedAssetEntries: GroupedAssetEntries = {};
+
+  Object.keys(assetTypes).forEach((assetType) => {
+    const assetTypeGroups = groupBy(assetTypes[assetType], (x) => x.id);
+    console.debug("Assets dictionary: ", assetTypeGroups);
+
+    groupedAssetEntries[assetType] = dedupeEntries(assetTypeGroups);
+  });
+
+  return groupedAssetEntries;
+};
+
 const REFRESH_INTERVAL = 10 * 1000; // in milliseconds
 
 export const App = () => {
-  const [assets, setAssets] = useState<GetAssetsResponse>();
+  const [assets, setAssets] = useState<GroupedAssetEntries>();
   const [environments, setEnvironments] = useState<string[]>();
   const [selectedEnvironment, setSelectedEnvironment] = useState<string>();
   const [currentPage, setCurrentPage] = useState<string>();
   const [isRedirectedToAssets, setIsRedirectedToAssets] = useState(false);
-  const [selectedAsset, setSelectedAsset] = useState<ExtendedAssetEntry>();
-  const [assetNavigateTo, setAssetNavigateTo] = useState<ExtendedAssetEntry>();
+  const [selectedAsset, setSelectedAsset] =
+    useState<ExtendedAssetEntryWithServices>();
+  const [assetNavigateTo, setAssetNavigateTo] =
+    useState<ExtendedAssetEntryWithServices>();
   const [selectedTraces, setSelectedTraces] = useState<Trace[]>();
   const [spanSelectTo, setSpanSelectTo] = useState<SpanData>();
   // const [isBadgeVisible, setIsBadgeVisible] = useState<boolean>(false);
@@ -57,7 +114,10 @@ export const App = () => {
       `Assets for "${environment}" environment have been fetched:`,
       assets
     );
-    setAssets(assets);
+
+    const groupedAssetEntries = assets ? groupEntries(assets) : undefined;
+
+    setAssets(groupedAssetEntries);
   }, []);
 
   useEffect(() => {
@@ -102,9 +162,9 @@ export const App = () => {
   // Redirect to corresponding page on startup depending on assets availability
   useEffect(() => {
     if (!currentPage && assets) {
-      const areAssetsAvailable =
-        assets.serviceAssetsEntries.map((x) => x.assetEntries).flat().length >
-        0;
+      const areAssetsAvailable = Object.values(assets).some(
+        (x) => x.length > 0
+      );
       if (areAssetsAvailable) {
         setCurrentPage(PAGES.ASSETS);
         setIsRedirectedToAssets(true);
@@ -128,8 +188,7 @@ export const App = () => {
     ) {
       const asset = findAssetBySpanCodeObjectId(
         assets,
-        spanSelectTo.spanCodeObjectId,
-        spanSelectTo.serviceName
+        spanSelectTo.spanCodeObjectId
       );
 
       if (asset) {
@@ -156,7 +215,7 @@ export const App = () => {
     setSelectedEnvironment(environment);
   };
 
-  const handleGoToAssetPage = (asset?: ExtendedAssetEntry) => {
+  const handleGoToAssetPage = (asset?: ExtendedAssetEntryWithServices) => {
     goToAssetPage(asset);
   };
 
@@ -164,7 +223,7 @@ export const App = () => {
     setAssetNavigateTo(undefined);
   };
 
-  const goToAssetPage = (assetNavigateTo?: ExtendedAssetEntry) => {
+  const goToAssetPage = (assetNavigateTo?: ExtendedAssetEntryWithServices) => {
     setSelectedAsset(undefined);
     setAssetNavigateTo(assetNavigateTo);
 
@@ -180,7 +239,7 @@ export const App = () => {
     setCurrentPage(PAGES.GETTING_STARTED);
   };
 
-  const handleAssetSelect = (asset: ExtendedAssetEntry) => {
+  const handleAssetSelect = (asset: ExtendedAssetEntryWithServices) => {
     setSelectedAsset(asset);
   };
 
@@ -216,11 +275,7 @@ export const App = () => {
       return;
     }
 
-    const asset = findAssetBySpanCodeObjectId(
-      assets,
-      span.spanCodeObjectId,
-      span.serviceName
-    );
+    const asset = findAssetBySpanCodeObjectId(assets, span.spanCodeObjectId);
 
     if (asset) {
       setSelectedAsset(asset);

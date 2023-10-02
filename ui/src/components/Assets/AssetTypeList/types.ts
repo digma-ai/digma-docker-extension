@@ -1,7 +1,7 @@
-import { ExtendedAssetEntry } from "../types";
+import { GroupedAssetEntries } from "../types";
 
 export interface AssetListProps {
-  data: { [key: string]: { [key: string]: ExtendedAssetEntry[] } };
+  data: GroupedAssetEntries;
   selectedAssetTypeId: string;
   onAssetTypeSelect: (assetTypeId: string) => void;
 }

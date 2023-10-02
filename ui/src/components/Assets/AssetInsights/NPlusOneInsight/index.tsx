@@ -1,5 +1,5 @@
 import { CrosshairIcon } from "../../../common/icons/CrosshairIcon";
-import { ExtendedAssetEntry } from "../../types";
+import { ExtendedAssetEntryWithServices } from "../../types";
 import { findAssetBySpanCodeObjectId } from "../../utils/findAssetBySpanCodeObjectId";
 import { InsightCard } from "../InsightCard";
 import { Link } from "../styles";
@@ -8,7 +8,7 @@ import * as s from "./styles";
 import { NPlusOneInsightProps } from "./types";
 
 export const NPlusOneInsight = (props: NPlusOneInsightProps) => {
-  const handleSpanLinkClick = (asset: ExtendedAssetEntry) => {
+  const handleSpanLinkClick = (asset: ExtendedAssetEntryWithServices) => {
     props.onAssetSelect(asset);
   };
 
@@ -19,8 +19,7 @@ export const NPlusOneInsight = (props: NPlusOneInsightProps) => {
   const asset = props.insight.clientSpanCodeObjectId
     ? findAssetBySpanCodeObjectId(
         props.assets,
-        props.insight.clientSpanCodeObjectId,
-        props.asset.serviceName
+        props.insight.clientSpanCodeObjectId
       )
     : undefined;
 
@@ -48,7 +47,7 @@ export const NPlusOneInsight = (props: NPlusOneInsightProps) => {
                 onClick={() =>
                   handleTraceButtonClick({
                     name: spanName,
-                    id: traceId,
+                    id: traceId
                   })
                 }
                 icon={{ component: CrosshairIcon, size: 16 }}
@@ -74,8 +73,7 @@ export const NPlusOneInsight = (props: NPlusOneInsightProps) => {
             {props.insight.endpoints.map((x) => {
               const asset = findAssetBySpanCodeObjectId(
                 props.assets,
-                x.endpointInfo.entrySpanCodeObjectId,
-                x.endpointInfo.serviceName
+                x.endpointInfo.entrySpanCodeObjectId
               );
 
               return (

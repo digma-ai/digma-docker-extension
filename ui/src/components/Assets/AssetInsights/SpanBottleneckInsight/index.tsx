@@ -1,5 +1,5 @@
 import { roundTo } from "../../../../utils/roundTo";
-import { ExtendedAssetEntry } from "../../types";
+import { ExtendedAssetEntryWithServices } from "../../types";
 import { findAssetBySpanCodeObjectId } from "../../utils/findAssetBySpanCodeObjectId";
 import { InsightCard } from "../InsightCard";
 import { Link } from "../styles";
@@ -7,7 +7,7 @@ import * as s from "./styles";
 import { SpanBottleneckInsightProps } from "./types";
 
 export const SpanBottleneckInsight = (props: SpanBottleneckInsightProps) => {
-  const handleSpanLinkClick = (asset: ExtendedAssetEntry) => {
+  const handleSpanLinkClick = (asset: ExtendedAssetEntryWithServices) => {
     props.onAssetSelect(asset);
   };
 
@@ -23,8 +23,7 @@ export const SpanBottleneckInsight = (props: SpanBottleneckInsightProps) => {
             {props.insight.spans.map((span) => {
               const asset = findAssetBySpanCodeObjectId(
                 props.assets,
-                span.spanInfo.spanCodeObjectId,
-                props.asset.serviceName
+                span.spanInfo.spanCodeObjectId
               );
 
               const spanName = span.spanInfo.displayName;

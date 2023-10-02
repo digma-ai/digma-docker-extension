@@ -1,5 +1,5 @@
 import { CrosshairIcon } from "../../../common/icons/CrosshairIcon";
-import { ExtendedAssetEntry } from "../../types";
+import { ExtendedAssetEntryWithServices } from "../../types";
 import { findAssetBySpanCodeObjectId } from "../../utils/findAssetBySpanCodeObjectId";
 import { trimEndpointScheme } from "../../utils/trimEndpointScheme";
 import { InsightCard } from "../InsightCard";
@@ -9,7 +9,7 @@ import * as s from "./styles";
 import { ScalingIssueInsightProps } from "./types";
 
 export const ScalingIssueInsight = (props: ScalingIssueInsightProps) => {
-  const handleLinkClick = (asset: ExtendedAssetEntry) => {
+  const handleLinkClick = (asset: ExtendedAssetEntryWithServices) => {
     props.onAssetSelect(asset);
   };
 
@@ -46,8 +46,7 @@ export const ScalingIssueInsight = (props: ScalingIssueInsightProps) => {
               {props.insight.rootCauseSpans.map((span) => {
                 const asset = findAssetBySpanCodeObjectId(
                   props.assets,
-                  span.spanCodeObjectId,
-                  props.asset.serviceName
+                  span.spanCodeObjectId
                 );
 
                 const spanName = span.displayName;
@@ -70,7 +69,7 @@ export const ScalingIssueInsight = (props: ScalingIssueInsightProps) => {
                         onClick={() =>
                           handleTraceButtonClick({
                             name: spanName,
-                            id: traceId,
+                            id: traceId
                           })
                         }
                       >
@@ -89,8 +88,7 @@ export const ScalingIssueInsight = (props: ScalingIssueInsightProps) => {
               {props.insight.affectedEndpoints.map((endpoint) => {
                 const asset = findAssetBySpanCodeObjectId(
                   props.assets,
-                  endpoint.spanCodeObjectId,
-                  endpoint.serviceName
+                  endpoint.spanCodeObjectId
                 );
 
                 const endpointRoute = trimEndpointScheme(endpoint.route);

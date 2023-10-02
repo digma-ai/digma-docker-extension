@@ -7,7 +7,11 @@ import { usePrevious } from "../../../hooks/usePrevious";
 import { Loader } from "../../common/Loader";
 import { OpenTelemetryLogoIcon } from "../../common/icons/OpenTelemetryLogoIcon";
 import { NoData } from "../NoData";
-import { AssetsData, ExtendedAssetEntry, InsightType } from "../types";
+import {
+  ExtendedAssetEntryWithServices,
+  GroupedAssetEntries,
+  InsightType
+} from "../types";
 import { findAssetBySpanCodeObjectId } from "../utils/findAssetBySpanCodeObjectId";
 import { getAssetTypeInfo } from "../utils/getAssetTypeInfo";
 import { getInsightTypeInfo } from "../utils/getInsightTypeInfo";
@@ -88,9 +92,9 @@ export const getInsightTypeOrderPriority = (type: string): number => {
 
 const renderInsightCard = (
   insight: CodeObjectInsight,
-  assets: AssetsData,
-  asset: ExtendedAssetEntry,
-  onAssetSelect: (asset: ExtendedAssetEntry) => void,
+  assets: GroupedAssetEntries,
+  asset: ExtendedAssetEntryWithServices,
+  onAssetSelect: (asset: ExtendedAssetEntryWithServices) => void,
   onTracesSelect: (traces: Trace[]) => void
 ): JSX.Element | undefined => {
   if (isSpanDurationsInsight(insight)) {
@@ -247,7 +251,7 @@ export const AssetInsights = (props: AssetInsightsProps) => {
     props.onGoToAssetsPage(props.assetEntry);
   };
 
-  const handleAssetSelect = (asset: ExtendedAssetEntry) => {
+  const handleAssetSelect = (asset: ExtendedAssetEntryWithServices) => {
     props.onAssetSelect(asset);
   };
 
@@ -351,8 +355,7 @@ export const AssetInsights = (props: AssetInsightsProps) => {
   useEffect(() => {
     const asset = findAssetBySpanCodeObjectId(
       props.assets,
-      props.assetEntry.span.spanCodeObjectId,
-      props.assetEntry.serviceName
+      props.assetEntry.span.spanCodeObjectId
     );
 
     if (!asset) {

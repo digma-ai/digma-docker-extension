@@ -1,8 +1,13 @@
 import { ForwardedRef, forwardRef, useEffect, useMemo, useRef } from "react";
-import { SORTING_CRITERION, SORTING_ORDER, Sorting } from "../types";
+import {
+  ExtendedAssetEntryWithServices,
+  SORTING_CRITERION,
+  SORTING_ORDER,
+  Sorting
+} from "../types";
 import { AssetEntry as AssetEntryComponent } from "./AssetEntry";
 import * as s from "./styles";
-import { AssetListProps, ExtendedAssetEntryWithServices } from "./types";
+import { AssetListProps } from "./types";
 
 const sortEntries = (
   entries: ExtendedAssetEntryWithServices[],
@@ -106,49 +111,25 @@ const AssetListComponent = (
   props: AssetListProps,
   ref: ForwardedRef<HTMLUListElement>
 ) => {
-  const handleAssetEntryClick = (entry: ExtendedAssetEntryWithServices) => {
-    props.onAssetEntryClick(entry);
+  const handleAssetEntryClick = (asset: ExtendedAssetEntryWithServices) => {
+    props.onAssetEntryClick(asset);
   };
-
-  const entries: ExtendedAssetEntryWithServices[] = useMemo(
-    () =>
-      Object.keys(props.entries)
-        .map((entryId) => {
-          const entries = props.entries[entryId];
-          return entries.map((entry) => {
-            const relatedServices = entries
-              .map((entry) => entry.serviceName)
-              .filter((x, i, arr) => arr.indexOf(x) === i);
-
-            return {
-              ...entry,
-              id: entryId,
-              relatedServices
-            };
-          });
-        })
-        .flat(),
-    [props.entries]
-  );
 
   const entriesRef = useRef<Record<string, HTMLDivElement | null>>({});
 
   const sortedEntries = useMemo(() => {
-    const filteredEntries = entries.filter((x) =>
+    const filteredEntries = props.entries.filter((x) =>
       x.span.displayName
         .toLocaleLowerCase()
         .includes(props.searchValue.toLocaleLowerCase())
     );
 
     return sortEntries(filteredEntries, props.sorting);
-  }, [entries, props.sorting, props.searchValue]);
+  }, [props.entries, props.sorting, props.searchValue]);
 
   useEffect(() => {
     if (props.assetNavigateTo) {
-      const ref =
-        entriesRef.current[
-          `${props.assetNavigateTo.id}-${props.assetNavigateTo.serviceName}`
-        ];
+      const ref = entriesRef.current[props.assetNavigateTo.id];
       if (ref && ref.parentElement) {
         const distanceToScroll = ref.offsetTop - ref.parentElement.offsetTop;
         ref.parentElement.scrollTo({
@@ -163,13 +144,7 @@ const AssetListComponent = (
   return (
     <s.List ref={ref}>
       {sortedEntries.map((entry) => {
-        const id = [
-          entry.serviceName,
-          entry.endpointCodeObjectId,
-          entry.span.spanCodeObjectId
-        ]
-          .filter(Boolean)
-          .join("|_|");
+        const id = entry.id;
 
         return (
           <AssetEntryComponent

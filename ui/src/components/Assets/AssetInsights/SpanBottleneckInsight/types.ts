@@ -1,9 +1,5 @@
-import { AssetsData, ExtendedAssetEntry } from "../../types";
-import { EndpointSlowestSpansInsight } from "../types";
+import { EndpointSlowestSpansInsight, InsightWithLinksProps } from "../types";
 
-export interface SpanBottleneckInsightProps {
+export interface SpanBottleneckInsightProps extends InsightWithLinksProps {
   insight: EndpointSlowestSpansInsight;
-  asset: ExtendedAssetEntry;
-  assets: AssetsData;
-  onAssetSelect: (asset: ExtendedAssetEntry) => void;
 }

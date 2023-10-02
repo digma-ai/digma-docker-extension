@@ -9,7 +9,6 @@ import Typography from "@mui/material/Typography";
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 import { DefaultTheme } from "styled-components";
 import { usePrevious } from "../../hooks/usePrevious";
-import { groupBy } from "../../utils/groupBy";
 import { Loader } from "../common/Loader";
 import { Menu } from "../common/Menu";
 import { CardsCircleIcon } from "../common/icons/CardsCircleIcon";
@@ -21,41 +20,11 @@ import { NoData } from "./NoData";
 import { ToolbarMenuButton } from "./ToolbarMenuButton";
 import * as s from "./styles";
 import {
-  AssetsData,
   AssetsProps,
-  ExtendedAssetEntry,
-  GroupedAssetEntries,
   SORTING_CRITERION,
   SORTING_ORDER,
   Sorting
 } from "./types";
-
-const groupEntries = (data: AssetsData): GroupedAssetEntries => {
-  const assetEntries: ExtendedAssetEntry[] = data.serviceAssetsEntries
-    .flat()
-    .map((entry) =>
-      entry.assetEntries.map((entry) => ({
-        ...entry,
-        id: entry.span.spanCodeObjectId
-      }))
-    )
-    .flat();
-
-  const assetTypes = groupBy(assetEntries, (x) => x.assetType);
-
-  const groupedAssetEntries: {
-    [key: string]: { [key: string]: ExtendedAssetEntry[] };
-  } = {};
-
-  Object.keys(assetTypes).forEach((assetType) => {
-    groupedAssetEntries[assetType] = groupBy(
-      assetTypes[assetType],
-      (x) => x.id
-    );
-  });
-
-  return groupedAssetEntries;
-};
 
 const getSortIconColor = (theme: DefaultTheme, selected: boolean) => {
   if (selected) {
@@ -102,18 +71,10 @@ export const Assets = (props: AssetsProps) => {
 
   const theme = useTheme();
 
-  const data = useMemo(() => {
-    return props.data ? groupEntries(props.data) : undefined;
-  }, [props.data]);
-
-  console.debug("Assets dictionary: ", data);
-
-  const assetsCount = useMemo(() => {
-    return (
-      props.data?.serviceAssetsEntries.map((x) => x.assetEntries).flat()
-        .length || 0
-    );
-  }, [props.data]);
+  const assetsCount = useMemo(
+    () => (props.data ? Object.values(props.data).flat().length : 0),
+    [props.data]
+  );
 
   useEffect(() => {
     if (props.assetNavigateTo) {
@@ -178,7 +139,7 @@ export const Assets = (props: AssetsProps) => {
   };
 
   const renderContent = useMemo((): JSX.Element => {
-    if (!data || assetsCount === 0) {
+    if (!props.data || assetsCount === 0) {
       return !props.environments || props.environments.length === 0 ? (
         <NoData
           icon={
@@ -222,15 +183,15 @@ export const Assets = (props: AssetsProps) => {
       <>
         <AssetTypeList
           selectedAssetTypeId={selectedAssetTypeId}
-          data={data}
+          data={props.data}
           onAssetTypeSelect={handleAssetTypeSelect}
         />
-        {data[selectedAssetTypeId] ? (
+        {props.data[selectedAssetTypeId] ? (
           <AssetList
             ref={assetListRef}
             onAssetEntryClick={props.onAssetSelect}
             assetTypeId={selectedAssetTypeId}
-            entries={data[selectedAssetTypeId]}
+            entries={props.data[selectedAssetTypeId]}
             sorting={sorting}
             searchValue={searchInputValue}
             assetNavigateTo={props.assetNavigateTo}
@@ -253,7 +214,7 @@ export const Assets = (props: AssetsProps) => {
       </>
     );
   }, [
-    data,
+    props.data,
     assetsCount,
     props.environments,
     selectedAssetTypeId,
