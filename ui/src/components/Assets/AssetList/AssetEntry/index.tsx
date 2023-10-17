@@ -34,13 +34,8 @@ const AssetEntryComponent = (
   const otherServices = props.entry.relatedServices.filter(
     (service) => service !== props.entry.serviceName
   );
-  const performanceDuration = props.entry.durationPercentiles.find(
-    (duration) => duration.percentile === 0.5
-  )?.currentDuration;
-
-  const slowestFivePercentDuration = props.entry.durationPercentiles.find(
-    (duration) => duration.percentile === 0.95
-  )?.currentDuration;
+  const performanceDuration = props.entry.p50;
+  const slowestFivePercentDuration = props.entry.p95;
 
   const lastSeenDateTime = props.entry.lastSpanInstanceInfo.startTime;
 

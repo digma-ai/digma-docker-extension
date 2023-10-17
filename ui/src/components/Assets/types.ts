@@ -22,6 +22,8 @@ export enum InsightType {
   EndpointBreakdown = "EndpointBreakdown"
 }
 
+export type PercentileKey = "p50" | "p95";
+
 export enum SORTING_CRITERION {
   CRITICAL_INSIGHTS = "Critical insights",
   PERFORMANCE = "Performance",
@@ -90,21 +92,20 @@ export interface SpanInstanceInfo {
   duration: Duration;
 }
 
-export interface DurationPercentileWithChange {
-  percentile: number;
-  currentDuration: Duration;
-  previousDuration: Duration | null;
-  changeTime: string | null;
-  changeVerified: boolean | null;
-  traceIds: string[];
-}
-
 export interface AssetEntry {
   span: AssetEntrySpanInfo;
   assetType: string;
   serviceName: string;
   endpointCodeObjectId: string | null;
-  durationPercentiles: DurationPercentileWithChange[];
+  p50: Duration | null;
+  p95: Duration | null;
+  /**
+   * @deprecated
+   */
+  durationPercentiles: {
+    percentile: number;
+    currentDuration: Duration | null;
+  }[];
   insights: Insight[];
   lastSpanInstanceInfo: SpanInstanceInfo;
   firstDataSeenTime: string;
