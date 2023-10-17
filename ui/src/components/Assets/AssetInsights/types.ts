@@ -2,7 +2,6 @@ import { MemoExoticComponent } from "react";
 import { IconProps } from "../../common/icons/types";
 import {
   Duration,
-  DurationPercentileWithChange,
   ExtendedAssetEntryWithServices,
   GroupedAssetEntries,
   InsightType,
@@ -145,7 +144,14 @@ export interface SpanDurationsInsight extends SpanInsight {
   category: InsightCategory.Performance;
   specifity: InsightSpecificity.OwnInsight;
   isRecalculateEnabled: true;
-  percentiles: DurationPercentileWithChange[];
+  percentiles: {
+    percentile: number;
+    currentDuration: Duration;
+    previousDuration: Duration | null;
+    changeTime: string | null;
+    changeVerified: boolean | null;
+    traceIds: string[];
+  }[];
   lastSpanInstanceInfo: SpanInstanceInfo;
 
   /**

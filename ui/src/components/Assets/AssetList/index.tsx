@@ -1,10 +1,12 @@
 import { ForwardedRef, forwardRef, useEffect, useMemo, useRef } from "react";
+import { isNumber } from "../../../typeGuards/isNumber";
 import {
   ExtendedAssetEntryWithServices,
   SORTING_CRITERION,
   SORTING_ORDER,
   Sorting
 } from "../types";
+import { getPercentileKey } from "../utils/getPercentileKey";
 import { AssetEntry as AssetEntryComponent } from "./AssetEntry";
 import * as s from "./styles";
 import { AssetListProps } from "./types";
@@ -32,22 +34,21 @@ const sortEntries = (
     percentile: number,
     isDesc: boolean
   ) => {
-    const aDuration = a.durationPercentiles.find(
-      (duration) => duration.percentile === percentile
-    )?.currentDuration.raw;
-    const bDuration = b.durationPercentiles.find(
-      (duration) => duration.percentile === percentile
-    )?.currentDuration.raw;
+    const aPercentile = getPercentileKey(percentile);
+    const aDuration = aPercentile && a[aPercentile]?.raw;
+
+    const bPercentile = getPercentileKey(percentile);
+    const bDuration = bPercentile && b[bPercentile]?.raw;
 
     if (!aDuration && !bDuration) {
       return 0;
     }
 
-    if (!aDuration) {
+    if (!isNumber(aDuration)) {
       return isDesc ? 1 : -1;
     }
 
-    if (!bDuration) {
+    if (!isNumber(bDuration)) {
       return isDesc ? -1 : 1;
     }
 
