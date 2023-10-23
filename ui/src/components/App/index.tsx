@@ -1,8 +1,9 @@
 import Typography from "@mui/material/Typography";
 import { Allotment } from "allotment";
 import "allotment/dist/style.css";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ddClient } from "../../dockerDesktopClient";
+import { usePrevious } from "../../hooks/usePrevious";
 import { groupBy } from "../../utils/groupBy";
 import { Assets } from "../Assets";
 import { AssetInsights } from "../Assets/AssetInsights";
@@ -81,6 +82,7 @@ export const App = () => {
   const [environments, setEnvironments] = useState<string[]>();
   const [selectedEnvironment, setSelectedEnvironment] = useState<string>();
   const [currentPage, setCurrentPage] = useState<string>();
+  const previousPage = usePrevious(currentPage);
   const [isRedirectedToAssets, setIsRedirectedToAssets] = useState(false);
   const [selectedAsset, setSelectedAsset] =
     useState<ExtendedAssetEntryWithServices>();
@@ -88,6 +90,7 @@ export const App = () => {
     useState<ExtendedAssetEntryWithServices>();
   const [selectedTraces, setSelectedTraces] = useState<Trace[]>();
   const [spanSelectTo, setSpanSelectTo] = useState<SpanData>();
+  const refreshTimerId = useRef<number>();
   // const [isBadgeVisible, setIsBadgeVisible] = useState<boolean>(false);
 
   // const isBadgeEnabled = ["true", null].includes(
@@ -125,14 +128,16 @@ export const App = () => {
   }, [fetchEnvironments]);
 
   useEffect(() => {
-    const timer = window.setTimeout(() => {
-      void fetchEnvironments();
-    }, REFRESH_INTERVAL);
-
-    return () => {
-      window.clearTimeout(timer);
-    };
-  }, [environments, fetchEnvironments]);
+    if (previousPage !== currentPage) {
+      window.clearTimeout(refreshTimerId.current);
+      if (currentPage === PAGES.ASSETS) {
+        void fetchEnvironments();
+        refreshTimerId.current = window.setTimeout(() => {
+          void fetchEnvironments();
+        }, REFRESH_INTERVAL);
+      }
+    }
+  }, [fetchEnvironments, currentPage, previousPage]);
 
   useEffect(() => {
     if (!selectedEnvironment && environments && environments.length > 0) {
