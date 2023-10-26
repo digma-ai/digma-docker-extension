@@ -105,7 +105,7 @@ const AssetEntryComponent = (
             <assetTypeInfo.icon size={20} color={"#7891d0"} />
           </s.AssetTypeIconContainer>
         )}
-        <Tooltip title={name}>
+        <Tooltip title={name} placement={"top"}>
           <s.Name noWrap={true}>{name}</s.Name>
         </Tooltip>
         <s.InsightIconsContainer>
@@ -121,6 +121,7 @@ const AssetEntryComponent = (
                 <Tooltip
                   key={insight.type}
                   title={insightTypeInfo?.label || insight.type}
+                  placement={"top"}
                 >
                   <s.InsightIconContainer>
                     <insightTypeInfo.icon color={insightIconColor} size={24} />
@@ -134,7 +135,7 @@ const AssetEntryComponent = (
       <s.StatsContainer>
         <s.Stats>
           <span>Services</span>
-          <Tooltip title={servicesTitle}>
+          <Tooltip title={servicesTitle} placement={"top"}>
             <s.ServicesContainer>
               <s.ServiceIconContainer>
                 <GlobeIcon color={serviceIconColor} />
@@ -157,7 +158,7 @@ const AssetEntryComponent = (
         </s.Stats>
         <s.Stats>
           <span>Last</span>
-          <Tooltip title={timeDistanceTitle}>
+          <Tooltip title={timeDistanceTitle} placement={"top"}>
             <s.ValueContainer>
               {timeDistanceString}
               <s.Suffix>ago</s.Suffix>
@@ -179,7 +180,10 @@ const AssetEntryComponent = (
           <>
             <s.Stats>
               <span>Performance impact</span>
-              <Tooltip title={props.entry.impactScores.ScoreExp25}>
+              <Tooltip
+                title={props.entry.impactScores.ScoreExp25}
+                placement={"top"}
+              >
                 <s.ValueContainer>
                   {getImpactScoreLabel(props.entry.impactScores.ScoreExp25)}
                   {props.sortingCriterion ===
@@ -192,7 +196,10 @@ const AssetEntryComponent = (
             </s.Stats>
             <s.Stats>
               <span>Overall impact</span>
-              <Tooltip title={props.entry.impactScores.ScoreExp1000}>
+              <Tooltip
+                title={props.entry.impactScores.ScoreExp1000}
+                placement={"top"}
+              >
                 <s.ValueContainer>
                   {getImpactScoreLabel(props.entry.impactScores.ScoreExp1000)}
                   {props.sortingCriterion ===
