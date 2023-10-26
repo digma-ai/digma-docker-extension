@@ -240,10 +240,10 @@ export const App = () => {
   const handleGoToAssetPage = () => {
     setSelectedAsset(undefined);
 
-    //   // if (isBadgeEnabled && isBadgeVisible) {
-    //   //   localStorage.setItem("isBadgeEnabled", "false");
-    //   //   setIsBadgeVisible(false);
-    //   // }
+    // if (isBadgeEnabled && isBadgeVisible) {
+    //   localStorage.setItem("isBadgeEnabled", "false");
+    //   setIsBadgeVisible(false);
+    // }
 
     setCurrentPage(PAGES.ASSETS);
   };
@@ -258,6 +258,7 @@ export const App = () => {
 
   const handleAssetSelect = (asset: AssetEntryWithServices | string) => {
     setSelectedAsset(asset);
+
     if (typeof asset === "object") {
       setAssetNavigateTo(asset.spanCodeObjectId);
     }

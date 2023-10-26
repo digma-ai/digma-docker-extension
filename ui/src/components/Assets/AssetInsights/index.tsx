@@ -354,14 +354,16 @@ export const AssetInsights = (props: AssetInsightsProps) => {
             </Typography>
           </s.Breadcrumb>
           <s.Breadcrumb>
-            {assetTypeInfo?.icon && (
-              <s.AssetTypeIconContainer>
+            <s.AssetTypeIconContainer>
+              {assetTypeInfo?.icon ? (
                 <assetTypeInfo.icon
                   size={24}
                   color={theme.palette.text.primary}
                 />
-              </s.AssetTypeIconContainer>
-            )}
+              ) : (
+                <OpenTelemetryLogoIcon size={24} />
+              )}
+            </s.AssetTypeIconContainer>
             <Typography
               title={displayName}
               variant={"h4"}

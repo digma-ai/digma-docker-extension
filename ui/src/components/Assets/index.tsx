@@ -1,10 +1,11 @@
 import CloseIcon from "@mui/icons-material/Close";
 import ExtensionIcon from "@mui/icons-material/Extension";
 import SearchIcon from "@mui/icons-material/Search";
-import { Pagination, useTheme } from "@mui/material";
+import { useTheme } from "@mui/material";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
+import Pagination from "@mui/material/Pagination";
 import Typography from "@mui/material/Typography";
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 import { DefaultTheme } from "styled-components";
