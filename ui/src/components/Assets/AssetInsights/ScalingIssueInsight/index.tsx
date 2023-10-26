@@ -1,6 +1,4 @@
 import { CrosshairIcon } from "../../../common/icons/CrosshairIcon";
-import { ExtendedAssetEntryWithServices } from "../../types";
-import { findAssetBySpanCodeObjectId } from "../../utils/findAssetBySpanCodeObjectId";
 import { trimEndpointScheme } from "../../utils/trimEndpointScheme";
 import { InsightCard } from "../InsightCard";
 import { Link } from "../styles";
@@ -9,8 +7,8 @@ import * as s from "./styles";
 import { ScalingIssueInsightProps } from "./types";
 
 export const ScalingIssueInsight = (props: ScalingIssueInsightProps) => {
-  const handleLinkClick = (asset: ExtendedAssetEntryWithServices) => {
-    props.onAssetSelect(asset);
+  const handleLinkClick = (spanCodeObjectId: string) => {
+    props.onAssetSelect(spanCodeObjectId);
   };
 
   const handleTraceButtonClick = (trace: Trace) => {
@@ -44,24 +42,16 @@ export const ScalingIssueInsight = (props: ScalingIssueInsightProps) => {
             <s.List>
               <s.Description>Caused by:</s.Description>
               {props.insight.rootCauseSpans.map((span) => {
-                const asset = findAssetBySpanCodeObjectId(
-                  props.assets,
-                  span.spanCodeObjectId
-                );
-
+                const id = span.spanCodeObjectId;
                 const spanName = span.displayName;
                 const traceId = span.sampleTraceId;
 
                 return (
-                  <s.RootCause key={span.spanCodeObjectId}>
+                  <s.RootCause key={id}>
                     <span>
-                      {asset ? (
-                        <Link onClick={() => handleLinkClick(asset)}>
-                          {spanName}
-                        </Link>
-                      ) : (
-                        spanName
-                      )}
+                      <Link onClick={() => handleLinkClick(id)}>
+                        {spanName}
+                      </Link>
                     </span>
                     {traceId && (
                       <s.Button
@@ -86,22 +76,14 @@ export const ScalingIssueInsight = (props: ScalingIssueInsightProps) => {
               <s.Description>Affected endpoints:</s.Description>
 
               {props.insight.affectedEndpoints.map((endpoint) => {
-                const asset = findAssetBySpanCodeObjectId(
-                  props.assets,
-                  endpoint.spanCodeObjectId
-                );
-
+                const id = endpoint.spanCodeObjectId;
                 const endpointRoute = trimEndpointScheme(endpoint.route);
 
                 return (
                   <span key={endpoint.route}>
-                    {asset ? (
-                      <Link onClick={() => handleLinkClick(asset)}>
-                        {endpointRoute}
-                      </Link>
-                    ) : (
-                      endpointRoute
-                    )}
+                    <Link onClick={() => handleLinkClick(id)}>
+                      {endpointRoute}
+                    </Link>
                   </span>
                 );
               })}

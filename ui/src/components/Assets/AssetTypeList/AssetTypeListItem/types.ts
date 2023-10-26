@@ -10,6 +10,8 @@ export interface AssetTypeListItemProps {
 }
 
 export interface ContainerProps {
-  isSelected: boolean;
-  hasEntries: boolean;
+  $isSelected: boolean;
+  $hasEntries: boolean;
 }
+
+export type EntryCountProps = ContainerProps;

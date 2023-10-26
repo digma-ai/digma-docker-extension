@@ -12,7 +12,7 @@ const componentTypeColors = {
   [ComponentType.Internal]: "#53aeb4",
   [ComponentType.DbQueries]: "#b180d7",
   [ComponentType.HttpClients]: "#75beff",
-  [ComponentType.Rendering]: "#f55385",
+  [ComponentType.Rendering]: "#f55385"
 };
 
 export const RequestBreakdownInsight = (
@@ -51,7 +51,7 @@ export const RequestBreakdownInsight = (
           <s.Legend>
             {data.map((x) => (
               <s.LegendItem key={x.type}>
-                <s.LegendItemDataColor color={componentTypeColors[x.type]} />
+                <s.LegendItemDataColor $color={componentTypeColors[x.type]} />
                 <s.LegendItemDataLabel>{x.type}</s.LegendItemDataLabel>
                 <s.LegendItemDataValue>
                   {roundTo(x.fraction * 100, 2)}%

@@ -30,7 +30,9 @@ export const Menu = (props: MenuProps) => {
     setIsOpen(false);
   };
 
-  const value = props.value || props.placeholder;
+  const value =
+    props.items?.find((x) => x.value === props.value)?.label ||
+    props.placeholder;
 
   const menuWidth = props.width || menuButtonRef.current?.clientWidth || 0;
 
@@ -63,17 +65,17 @@ export const Menu = (props: MenuProps) => {
         anchorEl={anchorEl}
         open={isOpen}
         onClose={handleMenuClose}
-        width={menuWidth}
+        $width={menuWidth}
       >
         <s.Title>{props.title}</s.Title>
         {props.items ? (
           props.items.map((item) => (
             <s.MenuItem
-              key={item}
-              onClick={() => handleMenuItemClick(item)}
-              title={item}
+              key={item.value}
+              onClick={() => handleMenuItemClick(item.value)}
+              title={item.label}
             >
-              <Typography noWrap={true}>{item}</Typography>
+              <Typography noWrap={true}>{item.label}</Typography>
             </s.MenuItem>
           ))
         ) : (

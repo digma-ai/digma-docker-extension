@@ -7,12 +7,7 @@ import { usePrevious } from "../../../hooks/usePrevious";
 import { Loader } from "../../common/Loader";
 import { OpenTelemetryLogoIcon } from "../../common/icons/OpenTelemetryLogoIcon";
 import { NoData } from "../NoData";
-import {
-  ExtendedAssetEntryWithServices,
-  GroupedAssetEntries,
-  InsightType
-} from "../types";
-import { findAssetBySpanCodeObjectId } from "../utils/findAssetBySpanCodeObjectId";
+import { InsightType } from "../types";
 import { getAssetTypeInfo } from "../utils/getAssetTypeInfo";
 import { getInsightTypeInfo } from "../utils/getInsightTypeInfo";
 import { BottleneckInsight } from "./BottleneckInsight";
@@ -92,9 +87,7 @@ export const getInsightTypeOrderPriority = (type: string): number => {
 
 const renderInsightCard = (
   insight: CodeObjectInsight,
-  assets: GroupedAssetEntries,
-  asset: ExtendedAssetEntryWithServices,
-  onAssetSelect: (asset: ExtendedAssetEntryWithServices) => void,
+  onAssetSelect: (spanCodeObjectId: string) => void,
   onTracesSelect: (traces: Trace[]) => void
 ): JSX.Element | undefined => {
   if (isSpanDurationsInsight(insight)) {
@@ -111,8 +104,6 @@ const renderInsightCard = (
       <DurationBreakdownInsight
         key={insight.type}
         insight={insight}
-        assets={assets}
-        asset={asset}
         onAssetSelect={onAssetSelect}
       />
     );
@@ -122,8 +113,6 @@ const renderInsightCard = (
       <TopUsageInsight
         key={insight.type}
         insight={insight}
-        assets={assets}
-        asset={asset}
         onAssetSelect={onAssetSelect}
         onTraceSelect={(trace) => onTracesSelect([trace])}
       />
@@ -134,8 +123,6 @@ const renderInsightCard = (
       <BottleneckInsight
         key={insight.type}
         insight={insight}
-        assets={assets}
-        asset={asset}
         onAssetSelect={onAssetSelect}
       />
     );
@@ -145,8 +132,6 @@ const renderInsightCard = (
       <SpanBottleneckInsight
         key={insight.type}
         insight={insight}
-        assets={assets}
-        asset={asset}
         onAssetSelect={onAssetSelect}
       />
     );
@@ -169,8 +154,6 @@ const renderInsightCard = (
       <EndpointNPlusOneInsight
         key={insight.type}
         insight={insight}
-        assets={assets}
-        asset={asset}
         onAssetSelect={onAssetSelect}
         onTraceSelect={(trace) => onTracesSelect([trace])}
       />
@@ -181,8 +164,6 @@ const renderInsightCard = (
       <NPlusOneInsight
         key={insight.type}
         insight={insight}
-        assets={assets}
-        asset={asset}
         onAssetSelect={onAssetSelect}
         onTraceSelect={(trace) => onTracesSelect([trace])}
       />
@@ -193,8 +174,6 @@ const renderInsightCard = (
       <ScalingIssueInsight
         key={insight.type}
         insight={insight}
-        assets={assets}
-        asset={asset}
         onAssetSelect={onAssetSelect}
         onTraceSelect={(trace) => onTracesSelect([trace])}
       />
@@ -218,8 +197,6 @@ const renderInsightCard = (
       <DurationSlowdownSourceInsight
         key={insight.type}
         insight={insight}
-        assets={assets}
-        asset={asset}
         onAssetSelect={onAssetSelect}
       />
     );
@@ -240,19 +217,29 @@ export const AssetInsights = (props: AssetInsightsProps) => {
   const [insights, setInsights] = useState<InsightGroup[]>();
   const previousEnvironment = usePrevious(props.environment);
   const insightsContainerRef = useRef<HTMLDivElement>(null);
-
   const theme = useTheme();
+  const [displayName, setDisplayName] = useState<string>(
+    typeof props.assetEntry === "object"
+      ? props.assetEntry.displayName
+      : props.assetEntry
+  );
 
-  const assetTypeInfo = getAssetTypeInfo(props.assetEntry.assetType);
+  const assetTypeInfo =
+    typeof props.assetEntry === "object"
+      ? getAssetTypeInfo(props.assetEntry.assetType)
+      : undefined;
 
-  const spanCodeObjectId = props.assetEntry.span.spanCodeObjectId;
+  const spanCodeObjectId =
+    typeof props.assetEntry === "object"
+      ? props.assetEntry.spanCodeObjectId
+      : props.assetEntry;
 
   const handleAssetsLinkClick = () => {
-    props.onGoToAssetsPage(props.assetEntry);
+    props.onGoToAssetsPage();
   };
 
-  const handleAssetSelect = (asset: ExtendedAssetEntryWithServices) => {
-    props.onAssetSelect(asset);
+  const handleAssetSelect = (spanCodeObjectId: string) => {
+    props.onAssetSelect(spanCodeObjectId);
   };
 
   const fetchInsights = useCallback(async () => {
@@ -266,6 +253,10 @@ export const AssetInsights = (props: AssetInsightsProps) => {
       `Insights for asset with id "${spanCodeObjectId}" have been fetched:`,
       response.insights
     );
+
+    if (response.spanInfo) {
+      setDisplayName(response.spanInfo.displayName);
+    }
 
     const sortedInsights = [...response.insights].sort(
       (a, b) =>
@@ -352,17 +343,6 @@ export const AssetInsights = (props: AssetInsightsProps) => {
     }
   }, [previousEnvironment, props.environment]);
 
-  useEffect(() => {
-    const asset = findAssetBySpanCodeObjectId(
-      props.assets,
-      props.assetEntry.span.spanCodeObjectId
-    );
-
-    if (!asset) {
-      props.onGoToAssetsPage();
-    }
-  }, [props.assets, props.assetEntry, props.onGoToAssetsPage]);
-
   return (
     <s.Container>
       <s.Header>
@@ -383,12 +363,12 @@ export const AssetInsights = (props: AssetInsightsProps) => {
               </s.AssetTypeIconContainer>
             )}
             <Typography
-              title={props.assetEntry.span.displayName}
+              title={displayName}
               variant={"h4"}
               component={"span"}
               noWrap={true}
             >
-              {props.assetEntry.span.displayName}
+              {displayName}
             </Typography>
           </s.Breadcrumb>
         </s.Breadcrumbs>
@@ -406,8 +386,6 @@ export const AssetInsights = (props: AssetInsightsProps) => {
                 {x.insights.map((insight) =>
                   renderInsightCard(
                     insight,
-                    props.assets,
-                    props.assetEntry,
                     handleAssetSelect,
                     props.onTracesSelect
                   )

@@ -1,13 +1,6 @@
 import { MemoExoticComponent } from "react";
 import { IconProps } from "../../common/icons/types";
-import {
-  Duration,
-  ExtendedAssetEntryWithServices,
-  GroupedAssetEntries,
-  InsightType,
-  SpanInfo,
-  SpanInstanceInfo
-} from "../types";
+import { AssetEntryWithServices, Duration, InsightType } from "../types";
 
 export type GenericCodeObjectInsight =
   | SpanUsageStatusInsight
@@ -31,18 +24,16 @@ export type GenericCodeObjectInsight =
   | SpanScalingInsufficientDataInsight;
 
 export interface AssetInsightsProps {
-  assets: GroupedAssetEntries;
-  assetEntry: ExtendedAssetEntryWithServices;
-  onGoToAssetsPage: (asset?: ExtendedAssetEntryWithServices) => void;
+  assets: AssetEntryWithServices[];
+  assetEntry: AssetEntryWithServices | string;
+  onGoToAssetsPage: (asset?: AssetEntryWithServices) => void;
   environment: string;
-  onAssetSelect: (asset: ExtendedAssetEntryWithServices) => void;
+  onAssetSelect: (spanCodeObjectId: string) => void;
   onTracesSelect: (traces: Trace[]) => void;
 }
 
 export interface InsightWithLinksProps {
-  asset: ExtendedAssetEntryWithServices;
-  assets: GroupedAssetEntries;
-  onAssetSelect: (asset: ExtendedAssetEntryWithServices) => void;
+  onAssetSelect: (spanCodeObjectId: string) => void;
 }
 
 export interface GetInsightsResponse {
@@ -57,6 +48,27 @@ export interface InsightGroup {
   insights: GenericCodeObjectInsight[];
   name?: string;
   icon?: MemoExoticComponent<(props: IconProps) => JSX.Element>;
+}
+
+export interface SpanInfo {
+  name: string;
+  displayName: string;
+  instrumentationLibrary: string;
+  spanCodeObjectId: string;
+  methodCodeObjectId: string | null;
+  kind: string | null;
+
+  /**
+   * @deprecated
+   */
+  codeObjectId: string | null;
+}
+
+export interface SpanInstanceInfo {
+  traceId: string;
+  spanId: string;
+  startTime: string;
+  duration: Duration;
 }
 
 export interface Trace {

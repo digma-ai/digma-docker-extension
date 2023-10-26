@@ -1,9 +1,7 @@
-import { ExtendedAssetEntryWithServices, GroupedAssetEntries } from "../types";
+import { AssetEntryWithServices } from "../types";
 
 export const findAssetBySpanCodeObjectId = (
-  assets: GroupedAssetEntries,
+  assets: AssetEntryWithServices[],
   spanCodeObjectId: string
-): ExtendedAssetEntryWithServices | undefined =>
-  Object.values(assets)
-    .flat()
-    .find((x) => x.id === spanCodeObjectId);
+): AssetEntryWithServices | undefined =>
+  assets.find((x) => x.spanCodeObjectId === spanCodeObjectId);

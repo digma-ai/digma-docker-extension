@@ -1,7 +1,11 @@
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import styled from "styled-components";
-import { SORTING_ORDER, SortingOrderButtonProps } from "./types";
+import {
+  SORTING_ORDER,
+  SortingOrderButtonProps,
+  SortingOrderIconContainerProps
+} from "./types";
 
 export const Circle = styled.div`
   width: 56px;
@@ -119,12 +123,12 @@ export const SortingOrderButton = styled(Button)<SortingOrderButtonProps>`
     }
   }
 
-  &,
-  &focus,
+  &&,
+  &:focus,
   &:hover,
   &:disabled {
-    background: ${({ theme, selected }) =>
-      selected
+    background: ${({ theme, $selected }) =>
+      $selected
         ? theme.palette.mode === "light"
           ? "#116ed0"
           : "#3391ee"
@@ -134,11 +138,16 @@ export const SortingOrderButton = styled(Button)<SortingOrderButtonProps>`
   }
 `;
 
-export const SortingOrderIconContainer = styled.div<{
-  sortingOrder: SORTING_ORDER;
-}>`
+export const SortingOrderIconContainer = styled.div<SortingOrderIconContainerProps>`
   display: flex;
   transform: scaleY(
-    ${({ sortingOrder }) => (sortingOrder === SORTING_ORDER.DESC ? -1 : 1)}
+    ${({ $sortingOrder }) => ($sortingOrder === SORTING_ORDER.DESC ? -1 : 1)}
   );
+`;
+
+export const AssetListContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow: auto;
 `;

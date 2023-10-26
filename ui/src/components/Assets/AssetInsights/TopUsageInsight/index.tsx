@@ -1,8 +1,6 @@
 import { usePagination } from "../../../../hooks/usePagination";
 import { roundTo } from "../../../../utils/roundTo";
 import { CrosshairIcon } from "../../../common/icons/CrosshairIcon";
-import { ExtendedAssetEntryWithServices } from "../../types";
-import { findAssetBySpanCodeObjectId } from "../../utils/findAssetBySpanCodeObjectId";
 import { InsightCard } from "../InsightCard";
 import { Pagination } from "../Pagination";
 import { Link } from "../styles";
@@ -19,8 +17,8 @@ export const TopUsageInsight = (props: TopUsageInsightProps) => {
     props.insight.codeObjectId
   );
 
-  const handleServiceLinkClick = (asset: ExtendedAssetEntryWithServices) => {
-    props.onAssetSelect(asset);
+  const handleServiceLinkClick = (spanCodeObjectId: string) => {
+    props.onAssetSelect(spanCodeObjectId);
   };
 
   const handleTraceButtonClick = (trace: Trace) => {
@@ -33,19 +31,10 @@ export const TopUsageInsight = (props: TopUsageInsightProps) => {
       content={
         <s.FlowList>
           {pageItems.map((flow, i) => {
-            const firstServiceAsset = findAssetBySpanCodeObjectId(
-              props.assets,
-              flow.firstService.spanCodeObjectId
-            );
+            const firstService = flow.firstService;
             const firstServiceName = `${flow.firstService.service}:${flow.firstService.span}`;
 
-            const lastServiceAsset =
-              flow.lastService &&
-              findAssetBySpanCodeObjectId(
-                props.assets,
-                flow.lastService.spanCodeObjectId
-              );
-
+            const lastService = flow.lastService;
             const traceId = flow.sampleTraceIds[0];
 
             return (
@@ -53,11 +42,11 @@ export const TopUsageInsight = (props: TopUsageInsightProps) => {
                 <s.FlowData>
                   <span>{roundTo(flow.percentage, 2)}% </span>
                   <s.FullSpanName>
-                    <s.Description>{flow.firstService.service}</s.Description>
-                    {firstServiceAsset ? (
+                    <s.Description>{firstService.service}</s.Description>
+                    {firstService ? (
                       <Link
                         onClick={() =>
-                          handleServiceLinkClick(firstServiceAsset)
+                          handleServiceLinkClick(firstService.spanCodeObjectId)
                         }
                       >
                         {firstServiceName}
@@ -71,23 +60,18 @@ export const TopUsageInsight = (props: TopUsageInsightProps) => {
                       <> -&gt; {flow.intermediateSpan}</>
                     )}
                   </span>
-                  {flow.lastService ? (
+                  {lastService ? (
                     <s.FullSpanName>
-                      <s.Description>{flow.lastService.service}</s.Description>
-                      {lastServiceAsset ? (
-                        <Link
-                          onClick={() =>
-                            handleServiceLinkClick(lastServiceAsset)
-                          }
-                        >
-                          {flow.lastService.span}
-                        </Link>
-                      ) : (
-                        flow.lastService.span
-                      )}
+                      <s.Description>{lastService.service}</s.Description>
+                      <Link
+                        onClick={() =>
+                          handleServiceLinkClick(lastService.spanCodeObjectId)
+                        }
+                      >
+                        {lastService.span}
+                      </Link>
                     </s.FullSpanName>
                   ) : null}
-
                   {flow.lastServiceSpan && <> -&gt; {flow.lastServiceSpan}</>}
                 </s.FlowData>
                 {traceId && (

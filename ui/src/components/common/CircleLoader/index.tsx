@@ -7,11 +7,11 @@ export const CircleLoader = (props: CircleLoaderProps) => {
 
   return (
     <s.OuterCircle
-      size={size}
-      startColor={props.colors.start}
-      endColor={props.colors.end}
+      $size={size}
+      $startColor={props.colors.start}
+      $endColor={props.colors.end}
     >
-      <s.InnerCircle background={props.colors.background} />
+      <s.InnerCircle $background={props.colors.background} />
     </s.OuterCircle>
   );
 };

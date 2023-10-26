@@ -18,12 +18,29 @@ app.get("/environments", async function (req, res) {
   }
 });
 
-app.post("/environments/:environmentId/assets", async function (req, res) {
+app.get("/environments/:environmentId/asset-types", async function (req, res) {
   try {
-    const assets = await analyticsProvider.getAssets(
-      req.params.environmentId,
-      req.body.serviceNames
-    );
+    const assetTypes = await analyticsProvider.getAssetTypes({
+      environment: req.params.environmentId
+    });
+    res.send(assetTypes);
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(500);
+  }
+});
+
+app.get("/environments/:environmentId/assets", async function (req, res) {
+  try {
+    const assets = await analyticsProvider.getAssets({
+      environment: req.params.environmentId,
+      sortBy: req.query.sortBy,
+      sortOrder: req.query.order,
+      assetType: req.query.type,
+      displayName: req.query.search,
+      page: req.query.page,
+      pageSize: req.query.pageSize
+    });
     res.send(assets);
   } catch (e) {
     console.log(e);

@@ -7,7 +7,7 @@ export const AssetTypeListItem = (props: AssetTypeListItemProps) => {
   const hasEntries = props.entryCount !== 0;
 
   return (
-    <s.Container isSelected={props.isSelected} hasEntries={hasEntries}>
+    <s.Container $isSelected={props.isSelected} $hasEntries={hasEntries}>
       {props.icon && (
         <props.icon
           size={20}
@@ -23,7 +23,7 @@ export const AssetTypeListItem = (props: AssetTypeListItemProps) => {
         />
       )}
       {props.label || props.id}
-      <s.EntryCount isSelected={props.isSelected} hasEntries={hasEntries}>
+      <s.EntryCount $isSelected={props.isSelected} $hasEntries={hasEntries}>
         ({props.entryCount})
       </s.EntryCount>
     </s.Container>
