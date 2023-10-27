@@ -1,8 +1,8 @@
-import { AssetEntryWithServices, SORTING_CRITERION } from "../../types";
+import { AssetEntry, SORTING_CRITERION } from "../../types";
 
 export interface AssetEntryProps {
-  entry: AssetEntryWithServices;
-  onClick: (entry: AssetEntryWithServices) => void;
+  entry: AssetEntry;
+  onClick: (entry: AssetEntry) => void;
   sortingCriterion: SORTING_CRITERION;
   id: string;
 }

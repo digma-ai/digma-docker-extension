@@ -1,5 +1,5 @@
 import { ForwardedRef, forwardRef, useEffect, useRef } from "react";
-import { AssetEntryWithServices } from "../types";
+import { AssetEntry } from "../types";
 import { AssetEntry as AssetEntryComponent } from "./AssetEntry";
 import * as s from "./styles";
 import { AssetListProps } from "./types";
@@ -8,7 +8,7 @@ const AssetListComponent = (
   props: AssetListProps,
   ref: ForwardedRef<HTMLUListElement>
 ) => {
-  const handleAssetEntryClick = (asset: AssetEntryWithServices) => {
+  const handleAssetEntryClick = (asset: AssetEntry) => {
     props.onAssetEntryClick(asset);
   };
 

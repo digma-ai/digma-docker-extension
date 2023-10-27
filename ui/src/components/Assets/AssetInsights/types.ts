@@ -1,6 +1,6 @@
 import { MemoExoticComponent } from "react";
 import { IconProps } from "../../common/icons/types";
-import { AssetEntryWithServices, Duration, InsightType } from "../types";
+import { AssetEntry, Duration, InsightType } from "../types";
 
 export type GenericCodeObjectInsight =
   | SpanUsageStatusInsight
@@ -24,9 +24,9 @@ export type GenericCodeObjectInsight =
   | SpanScalingInsufficientDataInsight;
 
 export interface AssetInsightsProps {
-  assets: AssetEntryWithServices[];
-  assetEntry: AssetEntryWithServices | string;
-  onGoToAssetsPage: (asset?: AssetEntryWithServices) => void;
+  assets: AssetEntry[];
+  assetEntry: AssetEntry | string;
+  onGoToAssetsPage: (asset?: AssetEntry) => void;
   environment: string;
   onAssetSelect: (spanCodeObjectId: string) => void;
   onTracesSelect: (traces: Trace[]) => void;

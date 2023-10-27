@@ -4,13 +4,11 @@ import "allotment/dist/style.css";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ddClient } from "../../dockerDesktopClient";
 import { usePrevious } from "../../hooks/usePrevious";
-import { groupBy } from "../../utils/groupBy";
 import { Assets, PAGE_SIZE } from "../Assets";
 import { AssetInsights } from "../Assets/AssetInsights";
 import { Trace } from "../Assets/AssetInsights/types";
 import {
   AssetEntry,
-  AssetEntryWithServices,
   AssetTypeData,
   AssetsData,
   AssetsFilters,
@@ -29,35 +27,6 @@ import { PageContent } from "../common/Page/types";
 import { DigmaLogoIcon } from "../common/icons/DigmaLogoIcon";
 import { PAGES } from "./constants";
 import * as s from "./styles";
-
-// Keep only the latest entry for every spanCodeObjectId across all services
-const removeDuplicatedEntries = (
-  data: AssetEntry[]
-): AssetEntryWithServices[] => {
-  const groupedEntries = groupBy(data, (x) => x.spanCodeObjectId);
-
-  const uniqueEntries: AssetEntryWithServices[] = [];
-
-  Object.values(groupedEntries).forEach((entries) => {
-    const latestEntry = entries.reduce(
-      (acc, cur) =>
-        new Date(cur.latestSpanTimestamp).valueOf() >
-        new Date(acc.latestSpanTimestamp).valueOf()
-          ? cur
-          : acc,
-      entries[0]
-    );
-
-    const relatedServices = entries.map((entry) => entry.service).sort();
-
-    uniqueEntries.push({
-      ...latestEntry,
-      relatedServices
-    });
-  });
-
-  return uniqueEntries;
-};
 
 const REFRESH_INTERVAL = 10 * 1000; // in milliseconds
 
@@ -78,9 +47,7 @@ export const App = () => {
   const [currentPage, setCurrentPage] = useState<string>();
   const previousPage = usePrevious(currentPage);
   const [isRedirectedToAssets, setIsRedirectedToAssets] = useState(false);
-  const [selectedAsset, setSelectedAsset] = useState<
-    AssetEntryWithServices | string
-  >();
+  const [selectedAsset, setSelectedAsset] = useState<AssetEntry | string>();
   const [assetNavigateTo, setAssetNavigateTo] = useState<string>();
   const [selectedTraces, setSelectedTraces] = useState<Trace[]>();
   const refreshTimerId = useRef<number>();
@@ -137,7 +104,7 @@ export const App = () => {
         assets
       );
 
-      setAssets({ ...assets, data: removeDuplicatedEntries(assets.data) });
+      setAssets({ ...assets, data: assets.data });
     },
     []
   );
@@ -256,7 +223,7 @@ export const App = () => {
     setCurrentPage(PAGES.GETTING_STARTED);
   };
 
-  const handleAssetSelect = (asset: AssetEntryWithServices | string) => {
+  const handleAssetSelect = (asset: AssetEntry | string) => {
     setSelectedAsset(asset);
 
     if (typeof asset === "object") {

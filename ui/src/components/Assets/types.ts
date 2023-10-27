@@ -75,11 +75,8 @@ export interface AssetEntry {
   latestSpanTimestamp: string;
   impactScores?: ImpactScores;
   service: string;
+  services: string[];
   spanCodeObjectId: string;
-}
-
-export interface AssetEntryWithServices extends AssetEntry {
-  relatedServices: string[];
 }
 
 export interface AssetsProps {
@@ -87,7 +84,7 @@ export interface AssetsProps {
   assetTypes?: AssetTypeData[];
   environments?: string[];
   onGettingStartedButtonClick: () => void;
-  onAssetSelect: (asset: AssetEntryWithServices) => void;
+  onAssetSelect: (asset: AssetEntry) => void;
   onAssetNavigate: () => void;
   assetNavigateTo?: string;
   environment?: string;
@@ -111,7 +108,7 @@ export interface GetAssetsResponse {
 }
 
 export interface AssetsData {
-  data: AssetEntryWithServices[];
+  data: AssetEntry[];
   totalCount: number;
   filteredCount: number;
 }
