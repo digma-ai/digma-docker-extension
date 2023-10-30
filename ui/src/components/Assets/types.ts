@@ -19,17 +19,30 @@ export enum InsightType {
   SpanScalingInsufficientData = "SpanScalingInsufficientData",
   SpanDurationBreakdown = "SpanDurationBreakdown",
   EndpointDurationSlowdown = "EndpointDurationSlowdown",
-  EndpointBreakdown = "EndpointBreakdown"
+  EndpointBreakdown = "EndpointBreakdown",
+  EndpointSessionInView = "EndpointSessionInView",
+  EndpointChattyApi = "EndpointChattyApi"
 }
 
 export type PercentileKey = "p50" | "p95";
 
 export enum SORTING_CRITERION {
-  CRITICAL_INSIGHTS = "Critical insights",
-  PERFORMANCE = "Performance",
-  SLOWEST_FIVE_PERCENT = "Slowest 5%",
-  LATEST = "Latest",
-  NAME = "Name"
+  CRITICAL_INSIGHTS = "criticalinsights",
+  PERFORMANCE = "p50",
+  SLOWEST_FIVE_PERCENT = "p95",
+  LATEST = "latest",
+  NAME = "displayname",
+  PERFORMANCE_IMPACT = "performanceimpact",
+  OVERALL_IMPACT = "overallimpact"
+}
+
+export interface AssetsFilters {
+  page: number;
+  pageSize: number;
+  sortBy: SORTING_CRITERION;
+  order: SORTING_ORDER;
+  search: string;
+  type: string;
 }
 
 export enum SORTING_ORDER {
@@ -37,27 +50,9 @@ export enum SORTING_ORDER {
   DESC = "desc"
 }
 
-export interface ExtendedAssetEntry extends AssetEntry {
-  id: string;
-}
-
-export interface ExtendedAssetEntryWithServices extends ExtendedAssetEntry {
-  relatedServices: string[];
-}
-
-export interface GroupedAssetEntries {
-  [key: string]: ExtendedAssetEntryWithServices[];
-}
-
 export interface Insight {
   type: string;
   importance: number;
-  shortDisplayInfo: {
-    title: string;
-    targetDisplayName: string;
-    subtitle: string;
-    description: string;
-  };
 }
 
 export interface Duration {
@@ -66,81 +61,62 @@ export interface Duration {
   raw: number;
 }
 
-export interface SpanInfo {
-  name: string;
-  displayName: string;
-  instrumentationLibrary: string;
-  spanCodeObjectId: string;
-  methodCodeObjectId: string | null;
-  kind: string | null;
-
-  /**
-   * @deprecated
-   */
-  codeObjectId: string | null;
-}
-
-export interface AssetEntrySpanInfo extends SpanInfo {
-  classification: string;
-  role: string;
-}
-
-export interface SpanInstanceInfo {
-  traceId: string;
-  spanId: string;
-  startTime: string;
-  duration: Duration;
+export interface ImpactScores {
+  ScoreExp25: number;
+  ScoreExp1000: number;
 }
 
 export interface AssetEntry {
-  span: AssetEntrySpanInfo;
   assetType: string;
-  serviceName: string;
-  endpointCodeObjectId: string | null;
   p50: Duration | null;
   p95: Duration | null;
-  /**
-   * @deprecated
-   */
-  durationPercentiles: {
-    percentile: number;
-    currentDuration: Duration | null;
-  }[];
+  displayName: string;
   insights: Insight[];
-  lastSpanInstanceInfo: SpanInstanceInfo;
-  firstDataSeenTime: string;
-}
-
-export interface AssetsData {
-  serviceAssetsEntries: {
-    itemType: string;
-    assetEntries: AssetEntry[];
-    accountId: string;
-    environment: string;
-    serviceName: string;
-  }[];
+  latestSpanTimestamp: string;
+  impactScores?: ImpactScores;
+  service: string;
+  services: string[];
+  spanCodeObjectId: string;
 }
 
 export interface AssetsProps {
-  data?: GroupedAssetEntries;
+  data?: AssetsData;
+  assetTypes?: AssetTypeData[];
   environments?: string[];
   onGettingStartedButtonClick: () => void;
-  onAssetSelect: (asset: ExtendedAssetEntryWithServices) => void;
+  onAssetSelect: (asset: AssetEntry) => void;
   onAssetNavigate: () => void;
-  assetNavigateTo?: ExtendedAssetEntryWithServices;
+  assetNavigateTo?: string;
   environment?: string;
+  onFiltersChange: (filters: AssetsFilters) => void;
+  filters: AssetsFilters;
 }
 
-export interface GetAssetsResponse extends AssetsData {
-  accountId: string;
-  environment: string;
+export interface AssetTypeData {
+  name: string;
+  count: number;
 }
 
-export interface Sorting {
-  criterion: SORTING_CRITERION;
-  order: SORTING_ORDER;
+export interface GetAssetTypesResponse {
+  assetCategories: AssetTypeData[];
+}
+
+export interface GetAssetsResponse {
+  data: AssetEntry[];
+  totalCount: number;
+  filteredCount: number;
+}
+
+export interface AssetsData {
+  data: AssetEntry[];
+  totalCount: number;
+  filteredCount: number;
 }
 
 export interface SortingOrderButtonProps {
-  selected: boolean;
+  $selected: boolean;
+}
+
+export interface SortingOrderIconContainerProps {
+  $sortingOrder: SORTING_ORDER;
 }

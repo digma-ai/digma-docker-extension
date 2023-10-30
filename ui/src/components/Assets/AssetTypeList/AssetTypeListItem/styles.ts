@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { ContainerProps } from "./types";
+import { ContainerProps, EntryCountProps } from "./types";
 
 export const Container = styled.span<ContainerProps>`
   display: flex;
@@ -12,14 +12,14 @@ export const Container = styled.span<ContainerProps>`
   user-select: none;
   border-radius: 4px;
 
-  ${({ isSelected, hasEntries }) =>
-    !isSelected && !hasEntries ? "color: #b3b3b3;" : ""}
+  ${({ $isSelected, $hasEntries }) =>
+    !$isSelected && !$hasEntries ? "color: #b3b3b3;" : ""}
 `;
 
-export const EntryCount = styled.span<ContainerProps>`
+export const EntryCount = styled.span<EntryCountProps>`
   margin-left: auto;
-  color: ${({ isSelected, theme }) =>
-    isSelected
+  color: ${({ $isSelected, theme }) =>
+    $isSelected
       ? theme.palette.mode === "light"
         ? theme.palette.primary.main
         : theme.palette.text.primary

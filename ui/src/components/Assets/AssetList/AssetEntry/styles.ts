@@ -1,6 +1,7 @@
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import styled from "styled-components";
+import { ImpactScoreIndicatorProps } from "./types";
 
 export const Container = styled(Paper)`
   display: flex;
@@ -161,4 +162,17 @@ export const Suffix = styled.span`
         return "#9b9b9b";
     }
   }};
+`;
+
+export const ImpactScoreIndicatorContainer = styled.div`
+  display: flex;
+  align-items: center;
+  padding-left: 4px;
+`;
+
+export const ImpactScoreIndicator = styled.div<ImpactScoreIndicatorProps>`
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  background: hsl(14deg 66% ${({ $score }) => 100 - 50 * $score}%);
 `;

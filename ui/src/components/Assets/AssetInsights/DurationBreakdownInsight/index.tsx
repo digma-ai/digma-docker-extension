@@ -1,6 +1,4 @@
 import { usePagination } from "../../../../hooks/usePagination";
-import { ExtendedAssetEntryWithServices } from "../../types";
-import { findAssetBySpanCodeObjectId } from "../../utils/findAssetBySpanCodeObjectId";
 import { getPercentileLabel } from "../../utils/getPercentileLabel";
 import { InsightCard } from "../InsightCard";
 import { Pagination } from "../Pagination";
@@ -65,8 +63,8 @@ export const DurationBreakdownInsight = (
     props.insight.codeObjectId
   );
 
-  const handleSpanLinkClick = (asset: ExtendedAssetEntryWithServices) => {
-    props.onAssetSelect(asset);
+  const handleSpanLinkClick = (spanCodeObjectId: string) => {
+    props.onAssetSelect(spanCodeObjectId);
   };
 
   return (
@@ -76,21 +74,12 @@ export const DurationBreakdownInsight = (
         <s.DurationList>
           {pageItems.map((entry) => {
             const percentile = getPercentile(entry, DEFAULT_PERCENTILE);
-
-            const asset = findAssetBySpanCodeObjectId(
-              props.assets,
-              entry.spanCodeObjectId
-            );
-
+            const id = entry.spanCodeObjectId;
             const name = entry.spanDisplayName;
 
             return percentile ? (
-              <s.Duration title={getTitle(entry)} key={entry.spanCodeObjectId}>
-                {asset ? (
-                  <Link onClick={() => handleSpanLinkClick(asset)}>{name}</Link>
-                ) : (
-                  name
-                )}{" "}
+              <s.Duration title={getTitle(entry)} key={id}>
+                <Link onClick={() => handleSpanLinkClick(id)}>{name}</Link>{" "}
                 {`${percentile.duration.value} ${percentile.duration.unit}`}
               </s.Duration>
             ) : null;

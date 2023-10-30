@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { LegendItemDataColorProps } from "./types";
 
 export const ContentContainer = styled.div`
   display: flex;
@@ -40,11 +41,11 @@ export const LegendItem = styled.div`
   gap: 5px;
 `;
 
-export const LegendItemDataColor = styled.div<{ color: string }>`
+export const LegendItemDataColor = styled.div<LegendItemDataColorProps>`
   height: 4px;
   width: 4px;
   border-radius: 50%;
-  background: ${({ color }) => color};
+  background: ${({ $color }) => $color};
 `;
 
 export const LegendItemDataLabel = styled.span`

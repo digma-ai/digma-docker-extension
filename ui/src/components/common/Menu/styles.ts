@@ -41,7 +41,7 @@ export const SelectedValue = styled.span`
 
 export const Menu = styled(MuiMenu)<MenuStyledComponentProps>`
   & .MuiPaper-root {
-    width: ${({ width }) => width}px;
+    width: ${({ $width }) => $width}px;
     padding: 4px;
   }
 `;

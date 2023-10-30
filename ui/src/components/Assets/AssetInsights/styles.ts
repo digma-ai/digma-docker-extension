@@ -75,8 +75,8 @@ export const InsightsContainer = styled.div`
 `;
 
 export const Description = styled.span`
-  font-size: 12px;
-  line-height: 14px;
+  font-size: 14px;
+  line-height: 17px;
   color: ${({ theme }) => {
     switch (theme.palette.mode) {
       case "light":

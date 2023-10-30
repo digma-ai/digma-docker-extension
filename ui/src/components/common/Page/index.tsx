@@ -4,7 +4,7 @@ import { ddClient } from "../../../dockerDesktopClient";
 import {
   JETBRAINS_PLUGIN_URL,
   PAGES,
-  SLACK_WORKSPACE_URL,
+  SLACK_WORKSPACE_URL
 } from "../../App/constants";
 import { IntellijLogoIcon } from "../icons/IntellijLogoIcon";
 import { SlackLogoIcon } from "../icons/SlackLogoIcon";
@@ -64,11 +64,11 @@ export const Page = (props: PageProps) => {
         <ExtensionIcon
           sx={{
             width: 16,
-            height: 16,
+            height: 16
           }}
         />
       ),
-      label: "Getting started",
+      label: "Getting started"
     },
     {
       pageId: PAGES.ASSETS,
@@ -78,8 +78,8 @@ export const Page = (props: PageProps) => {
           color={getNavigationButtonIconColor(props.currentPage, PAGES.ASSETS)}
         />
       ),
-      label: "Asset page",
-    },
+      label: "Asset page"
+    }
   ];
 
   return (
@@ -95,7 +95,7 @@ export const Page = (props: PageProps) => {
             return (
               <s.NavigationButton
                 key={x.pageId}
-                selected={isSelected}
+                $selected={isSelected}
                 disabled={isSelected}
                 onClick={() => handlePageSelect(x.pageId)}
                 startIcon={

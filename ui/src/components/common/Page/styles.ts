@@ -55,19 +55,19 @@ export const NavigationButton = styled(Button)<NavigationButtonProps>`
     }
   }
 
-  &,
-  &focus,
+  &&,
+  &:focus,
   &:hover,
   &:disabled {
-    background: ${({ theme, selected }) =>
-      selected
+    background: ${({ theme, $selected }) =>
+      $selected
         ? theme.palette.mode === "light"
           ? "#116ed0"
           : "#3391ee"
         : theme.palette.mode === "light"
         ? "#efeff2"
         : "#27343e"};
-    color: ${({ selected }) => (selected ? "#fff" : "#7794ab")};
+    color: ${({ $selected }) => ($selected ? "#fff" : "#7794ab")};
   }
 `;
 
