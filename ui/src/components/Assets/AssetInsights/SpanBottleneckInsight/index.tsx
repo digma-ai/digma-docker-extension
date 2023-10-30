@@ -1,14 +1,12 @@
 import { roundTo } from "../../../../utils/roundTo";
-import { ExtendedAssetEntryWithServices } from "../../types";
-import { findAssetBySpanCodeObjectId } from "../../utils/findAssetBySpanCodeObjectId";
 import { InsightCard } from "../InsightCard";
 import { Link } from "../styles";
 import * as s from "./styles";
 import { SpanBottleneckInsightProps } from "./types";
 
 export const SpanBottleneckInsight = (props: SpanBottleneckInsightProps) => {
-  const handleSpanLinkClick = (asset: ExtendedAssetEntryWithServices) => {
-    props.onAssetSelect(asset);
+  const handleSpanLinkClick = (spanCodeObjectId: string) => {
+    props.onAssetSelect(spanCodeObjectId);
   };
 
   return (
@@ -21,23 +19,15 @@ export const SpanBottleneckInsight = (props: SpanBottleneckInsightProps) => {
           </s.Description>
           <s.SpanList>
             {props.insight.spans.map((span) => {
-              const asset = findAssetBySpanCodeObjectId(
-                props.assets,
-                span.spanInfo.spanCodeObjectId
-              );
-
+              const id = span.spanInfo.spanCodeObjectId;
               const spanName = span.spanInfo.displayName;
 
               return (
-                <s.SpanContainer key={span.spanInfo.spanCodeObjectId}>
+                <s.SpanContainer key={id}>
                   <s.Span>
-                    {asset ? (
-                      <Link onClick={() => handleSpanLinkClick(asset)}>
-                        {spanName}
-                      </Link>
-                    ) : (
-                      spanName
-                    )}
+                    <Link onClick={() => handleSpanLinkClick(id)}>
+                      {spanName}
+                    </Link>
                   </s.Span>
                   <s.Description>
                     {`Slowing ${roundTo(

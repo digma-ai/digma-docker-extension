@@ -15,7 +15,10 @@ interface ButtonProps {
 export interface MenuProps {
   onSelect: (value: string) => void;
   placeholder?: string;
-  items?: string[];
+  items?: {
+    label: string;
+    value: string;
+  }[];
   value?: string;
   title: string;
   icon?: ReactNode;
@@ -25,5 +28,5 @@ export interface MenuProps {
 }
 
 export interface MenuStyledComponentProps {
-  width: number;
+  $width: number;
 }

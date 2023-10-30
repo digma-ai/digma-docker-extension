@@ -1,8 +1,6 @@
 import { usePagination } from "../../../../hooks/usePagination";
 import { roundTo } from "../../../../utils/roundTo";
 import { CrosshairIcon } from "../../../common/icons/CrosshairIcon";
-import { ExtendedAssetEntryWithServices } from "../../types";
-import { findAssetBySpanCodeObjectId } from "../../utils/findAssetBySpanCodeObjectId";
 import { InsightCard } from "../InsightCard";
 import { Pagination } from "../Pagination";
 import { Link } from "../styles";
@@ -22,8 +20,8 @@ export const EndpointNPlusOneInsight = (
     props.insight.codeObjectId
   );
 
-  const handleSpanLinkClick = (asset: ExtendedAssetEntryWithServices) => {
-    props.onAssetSelect(asset);
+  const handleSpanLinkClick = (spanCodeObjectId: string) => {
+    props.onAssetSelect(spanCodeObjectId);
   };
 
   const handleTraceButtonClick = (trace: Trace) => {
@@ -39,10 +37,6 @@ export const EndpointNPlusOneInsight = (
           <s.SpanList>
             {pageItems.map((span) => {
               const spanInfo = span.internalSpan || span.clientSpan;
-              const asset = findAssetBySpanCodeObjectId(
-                props.assets,
-                spanInfo.spanCodeObjectId
-              );
 
               const spanName = spanInfo.displayName;
 
@@ -53,13 +47,13 @@ export const EndpointNPlusOneInsight = (
 
               return (
                 <s.Span key={spanName}>
-                  {asset ? (
-                    <Link onClick={() => handleSpanLinkClick(asset)}>
-                      {spanName}
-                    </Link>
-                  ) : (
-                    spanName
-                  )}
+                  <Link
+                    onClick={() =>
+                      handleSpanLinkClick(spanInfo.spanCodeObjectId)
+                    }
+                  >
+                    {spanName}
+                  </Link>
                   <s.Stats>
                     <s.Stat>
                       <s.Description>Impact</s.Description>

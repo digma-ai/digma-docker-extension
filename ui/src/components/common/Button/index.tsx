@@ -118,7 +118,7 @@ export const Button = (props: ButtonProps) => {
       onFocus={handleFocus}
       onBlur={handleBlur}
       onMouseDown={handleMouseDown}
-      buttonType={buttonType}
+      $buttonType={buttonType}
     >
       <s.ContentContainer>
         {props.icon && (

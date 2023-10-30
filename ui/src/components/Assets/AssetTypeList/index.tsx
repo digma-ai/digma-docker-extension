@@ -1,7 +1,7 @@
 import { getAssetTypeInfo } from "../utils/getAssetTypeInfo";
 import { AssetTypeListItem } from "./AssetTypeListItem";
 import * as s from "./styles";
-import { AssetListProps } from "./types";
+import { AssetTypeListProps } from "./types";
 
 const ASSET_TYPE_IDS = [
   "Endpoint",
@@ -12,7 +12,7 @@ const ASSET_TYPE_IDS = [
   "Other"
 ];
 
-export const AssetTypeList = (props: AssetListProps) => {
+export const AssetTypeList = (props: AssetTypeListProps) => {
   const handleAssetTypeChange = (
     e: React.SyntheticEvent<Element, Event>,
     value: number
@@ -30,9 +30,8 @@ export const AssetTypeList = (props: AssetListProps) => {
     >
       {ASSET_TYPE_IDS.map((assetTypeId) => {
         const assetTypeInfo = getAssetTypeInfo(assetTypeId);
-        const entryCount = props.data[assetTypeId]
-          ? Object.values(props.data[assetTypeId]).flat().length
-          : 0;
+        const entryCount =
+          props.data?.find((x) => x.name === assetTypeId)?.count || 0;
 
         return (
           <s.Tab

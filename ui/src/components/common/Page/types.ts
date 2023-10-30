@@ -12,5 +12,5 @@ export interface PageProps extends PageContent {
 }
 
 export interface NavigationButtonProps {
-  selected: boolean;
+  $selected: boolean;
 }

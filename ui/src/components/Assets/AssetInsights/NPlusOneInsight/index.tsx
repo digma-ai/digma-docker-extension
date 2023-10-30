@@ -1,6 +1,4 @@
 import { CrosshairIcon } from "../../../common/icons/CrosshairIcon";
-import { ExtendedAssetEntryWithServices } from "../../types";
-import { findAssetBySpanCodeObjectId } from "../../utils/findAssetBySpanCodeObjectId";
 import { InsightCard } from "../InsightCard";
 import { Link } from "../styles";
 import { Trace } from "../types";
@@ -8,21 +6,15 @@ import * as s from "./styles";
 import { NPlusOneInsightProps } from "./types";
 
 export const NPlusOneInsight = (props: NPlusOneInsightProps) => {
-  const handleSpanLinkClick = (asset: ExtendedAssetEntryWithServices) => {
-    props.onAssetSelect(asset);
+  const handleSpanLinkClick = (spanCodeObjectId: string) => {
+    props.onAssetSelect(spanCodeObjectId);
   };
 
   const handleTraceButtonClick = (trace: Trace) => {
     props.onTraceSelect(trace);
   };
 
-  const asset = props.insight.clientSpanCodeObjectId
-    ? findAssetBySpanCodeObjectId(
-        props.assets,
-        props.insight.clientSpanCodeObjectId
-      )
-    : undefined;
-
+  const id = props.insight.clientSpanCodeObjectId;
   const spanName = props.insight.clientSpanName || undefined;
   const traceId = props.insight.traceId;
 
@@ -34,10 +26,8 @@ export const NPlusOneInsight = (props: NPlusOneInsightProps) => {
           <s.Description>Check the following SELECT statement:</s.Description>
           <s.SpanContainer>
             <span>
-              {asset ? (
-                <Link onClick={() => handleSpanLinkClick(asset)}>
-                  {spanName}
-                </Link>
+              {id ? (
+                <Link onClick={() => handleSpanLinkClick(id)}>{spanName}</Link>
               ) : (
                 spanName
               )}
@@ -71,20 +61,13 @@ export const NPlusOneInsight = (props: NPlusOneInsightProps) => {
           <s.Description>Affected endpoints:</s.Description>
           <div>
             {props.insight.endpoints.map((x) => {
-              const asset = findAssetBySpanCodeObjectId(
-                props.assets,
-                x.endpointInfo.entrySpanCodeObjectId
-              );
+              const id = x.endpointInfo.entrySpanCodeObjectId;
 
               return (
-                <s.Endpoint key={x.endpointInfo.entrySpanCodeObjectId}>
-                  {asset ? (
-                    <Link onClick={() => handleSpanLinkClick(asset)}>
-                      {x.endpointInfo.route}
-                    </Link>
-                  ) : (
-                    x.endpointInfo.route
-                  )}
+                <s.Endpoint key={id}>
+                  <Link onClick={() => handleSpanLinkClick(id)}>
+                    {x.endpointInfo.route}
+                  </Link>
                   <s.Stat>
                     <s.Description>Repeats</s.Description>
                     <span>{x.occurrences} (median)</span>

@@ -10,9 +10,9 @@ export const client = {
       service: {
         get: (url: string): string[] => [],
         post: (url: string, data: any): GetAssetsResponse => ({
-          accountId: "",
-          environment: "",
-          serviceAssetsEntries: []
+          data: [],
+          totalCount: 0,
+          filteredCount: 0
         })
       }
     }

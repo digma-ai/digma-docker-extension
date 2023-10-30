@@ -1,5 +1,3 @@
-import { ExtendedAssetEntryWithServices } from "../../types";
-import { findAssetBySpanCodeObjectId } from "../../utils/findAssetBySpanCodeObjectId";
 import { DurationChange } from "../DurationChange";
 import { InsightCard } from "../InsightCard";
 import { Link } from "../styles";
@@ -10,8 +8,8 @@ import { DurationSlowdownSourceInsightProps } from "./types";
 export const DurationSlowdownSourceInsight = (
   props: DurationSlowdownSourceInsightProps
 ) => {
-  const handleSpanLinkClick = (asset: ExtendedAssetEntryWithServices) => {
-    props.onAssetSelect(asset);
+  const handleSpanLinkClick = (spanCodeObjectId: string) => {
+    props.onAssetSelect(spanCodeObjectId);
   };
 
   const p50Sources = props.insight.durationSlowdownSources.filter(
@@ -25,20 +23,12 @@ export const DurationSlowdownSourceInsight = (
   const renderSourceList = (sources: DurationSlowdownSource[]) => (
     <s.SourceList>
       {sources.map((x) => {
-        const asset = findAssetBySpanCodeObjectId(
-          props.assets,
-          x.spanInfo.spanCodeObjectId
-        );
-
+        const id = x.spanInfo.spanCodeObjectId;
         const spanName = x.spanInfo.displayName;
 
         return (
-          <s.Source key={x.spanInfo.spanCodeObjectId}>
-            {asset ? (
-              <Link onClick={() => handleSpanLinkClick(asset)}>{spanName}</Link>
-            ) : (
-              spanName
-            )}
+          <s.Source key={id}>
+            <Link onClick={() => handleSpanLinkClick(id)}>{spanName}</Link>
             <DurationChange
               currentDuration={x.currentDuration}
               previousDuration={x.previousDuration}

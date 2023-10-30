@@ -19,16 +19,26 @@ class AnalyticsProvider {
     }
   }
 
-  async getAssets(environment, serviceNames) {
+  async getAssetTypes(params) {
     try {
       const response = await this.send(
-        "POST",
-        `/CodeAnalytics/codeObjects/assets`,
-        undefined,
-        {
-          environment,
-          serviceNames
-        }
+        "GET",
+        `/CodeAnalytics/codeObjects/asset_categories`,
+        Object.entries(params).filter(([, value]) => value !== undefined)
+      );
+      return response;
+    } catch (e) {
+      console.log(e);
+      throw new Error(e);
+    }
+  }
+
+  async getAssets(params) {
+    try {
+      const response = await this.send(
+        "GET",
+        `/CodeAnalytics/codeObjects/getAssets`,
+        Object.entries(params).filter(([, value]) => value !== undefined)
       );
       return response;
     } catch (e) {
