@@ -55,14 +55,15 @@ export const TopUsageInsight = (props: TopUsageInsightProps) => {
                       firstServiceName
                     )}
                   </s.FullSpanName>
-                  <span>
-                    {flow.intermediateSpan && (
-                      <> -&gt; {flow.intermediateSpan}</>
-                    )}
-                  </span>
-                  {lastService ? (
+                  {flow.intermediateSpan && (
+                    <span> -&gt; {flow.intermediateSpan}</span>
+                  )}
+                  {lastService && (
                     <s.FullSpanName>
-                      <s.Description>{lastService.service}</s.Description>
+                      <s.Description>
+                        {" "}
+                        -&gt; {lastService.service}
+                      </s.Description>
                       <Link
                         onClick={() =>
                           handleServiceLinkClick(lastService.spanCodeObjectId)
@@ -71,8 +72,10 @@ export const TopUsageInsight = (props: TopUsageInsightProps) => {
                         {lastService.span}
                       </Link>
                     </s.FullSpanName>
-                  ) : null}
-                  {flow.lastServiceSpan && <> -&gt; {flow.lastServiceSpan}</>}
+                  )}
+                  {flow.lastServiceSpan && (
+                    <span> -&gt; {flow.lastServiceSpan}</span>
+                  )}
                 </s.FlowData>
                 {traceId && (
                   <s.Button

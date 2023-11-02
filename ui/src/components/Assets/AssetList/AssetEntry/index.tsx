@@ -1,7 +1,7 @@
 import { Tooltip, useTheme } from "@mui/material";
 import { ForwardedRef, forwardRef } from "react";
 import { DefaultTheme } from "styled-components";
-import { timeAgo } from "../../../../utils/timeAgo";
+import { formatTimeDistance } from "../../../../utils/formatTimeDistance";
 import { GlobeIcon } from "../../../common/icons/GlobeIcon";
 import { getInsightTypeOrderPriority } from "../../AssetInsights";
 import { InsightType, SORTING_CRITERION } from "../../types";
@@ -86,10 +86,10 @@ const AssetEntryComponent = (
 
   const servicesTitle = props.entry.services.join(", ");
 
-  const timeDistance = timeAgo(lastSeenDateTime, "short");
-  const timeDistanceString = timeDistance
-    ? `${timeDistance.value}${timeDistance.unit}`
-    : "";
+  const timeDistanceString = formatTimeDistance(lastSeenDateTime, {
+    format: "short",
+    withDescriptiveWords: false
+  }).replace(" ", "");
   const timeDistanceTitle = new Date(lastSeenDateTime).toString();
 
   return (
