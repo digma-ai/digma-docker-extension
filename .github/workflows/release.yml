@@ -38,21 +38,21 @@ jobs:
           username: ${{ secrets.DOCKERHUB_DIGMAAI_USERNAME }}
           password: ${{ secrets.DOCKERHUB_DIGMAAI_TOKEN }}
 
-      - name: Install Docker Extension plugin
-        run: |
-          docker plugin install extension
+      # - name: Install Docker Extension plugin
+      #   run: |
+      #     docker plugin install extension
 
-      - name: Build and export to Docker
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./Dockerfile
-          load: true
-          tags: ${{ steps.metadata.outputs.tags }}
+      # - name: Build and export to Docker
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     context: .
+      #     file: ./Dockerfile
+      #     load: true
+      #     tags: ${{ steps.metadata.outputs.tags }}
 
-      - name: Validate
-        run: |
-          docker extension validate digmaai/digma-docker-extension:${{ steps.metadata.outputs.tags }}
+      # - name: Validate
+      #   run: |
+      #     docker extension validate digmaai/digma-docker-extension:${{ steps.metadata.outputs.tags }}
 
       - name: Docker meta
         id: metadata # you'll use this in the next step
@@ -70,8 +70,8 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
             type=sha
-            # set latest tag for digma branch
-            type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'digma') }}
+            # set latest tag for main branch
+            type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'main') }}
 
       - name: Build and push
         uses: docker/build-push-action@v5
