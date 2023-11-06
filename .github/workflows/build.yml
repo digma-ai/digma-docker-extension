@@ -1,17 +1,17 @@
-name: Publish release
+name: Build
 
-# Controls when the workflow will run
 on:
-  workflow_dispatch:
-  release:
-    types: [released]
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
 
 # permissions are needed if pushing to ghcr.io
 permissions:
   packages: write
 
 jobs:
-  release:
+  build:
     name: Build
     runs-on: ubuntu-latest
 
@@ -46,11 +46,11 @@ jobs:
           tags: |
             type=semver,pattern={{version}}
 
-      - name: Build and push
+      - name: Build
         uses: docker/build-push-action@v5
         with:
           context: .
           platforms: linux/amd64,linux/arm64
-          push: ${{ github.event_name != 'pull_request' }}
+          push: false
           tags: ${{ steps.metadata.outputs.tags }}
           labels: ${{ steps.metadata.outputs.labels }}
