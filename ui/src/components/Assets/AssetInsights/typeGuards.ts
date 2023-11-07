@@ -18,7 +18,7 @@ import {
   SpanInsight,
   SpanNPlusOneInsight,
   SpanScalingBadlyInsight,
-  SpanUsagesInsight,
+  SpanUsagesInsight
 } from "./types";
 
 export const isSpanInsight = (
