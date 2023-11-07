@@ -82,7 +82,7 @@ export const getInsightTypeOrderPriority = (type: string): number => {
     [InsightType.SpanDurationBreakdown]: 68
   };
 
-  return insightOrderPriorityMap[type] || Infinity;
+  return insightOrderPriorityMap[type] || -Infinity;
 };
 
 const renderInsightCard = (
@@ -214,7 +214,7 @@ const sortInsightGroupsByName = (a: InsightGroup, b: InsightGroup) => {
 };
 
 export const AssetInsights = (props: AssetInsightsProps) => {
-  const [insights, setInsights] = useState<InsightGroup[]>();
+  const [insightGroups, setInsightGroups] = useState<InsightGroup[]>();
   const previousEnvironment = usePrevious(props.environment);
   const insightsContainerRef = useRef<HTMLDivElement>(null);
   const theme = useTheme();
@@ -284,25 +284,24 @@ export const AssetInsights = (props: AssetInsightsProps) => {
         continue;
       }
 
-      const insightSpanCodeObjectId = insight.spanInfo?.spanCodeObjectId;
+      const insightDisplayName = insight.spanInfo?.displayName;
 
-      if (
-        !insightSpanCodeObjectId ||
-        insightSpanCodeObjectId === spanCodeObjectId
-      ) {
+      if (!insightDisplayName || insightDisplayName === displayName) {
         ungroupedInsights.push(insight);
         continue;
       }
 
-      if (!spanInsightGroups[spanCodeObjectId]) {
-        spanInsightGroups[spanCodeObjectId] = [];
+      if (!spanInsightGroups[insightDisplayName]) {
+        spanInsightGroups[insightDisplayName] = [];
       }
 
-      spanInsightGroups[spanCodeObjectId].push(insight);
+      spanInsightGroups[insightDisplayName].push(insight);
     }
 
-    setInsights([
-      { insights: ungroupedInsights },
+    setInsightGroups([
+      ...(ungroupedInsights.length > 0
+        ? [{ insights: ungroupedInsights }]
+        : []),
       // Span insight groups
       ...Object.values(spanInsightGroups)
         .map((x) => ({
@@ -312,7 +311,7 @@ export const AssetInsights = (props: AssetInsightsProps) => {
         }))
         .sort(sortInsightGroupsByName)
     ]);
-  }, [spanCodeObjectId, props.environment]);
+  }, [displayName, spanCodeObjectId, props.environment]);
 
   useEffect(() => {
     void fetchInsights();
@@ -326,7 +325,7 @@ export const AssetInsights = (props: AssetInsightsProps) => {
     return () => {
       window.clearTimeout(timer);
     };
-  }, [insights, fetchInsights]);
+  }, [insightGroups, fetchInsights]);
 
   useEffect(() => {
     if (insightsContainerRef.current) {
@@ -376,9 +375,9 @@ export const AssetInsights = (props: AssetInsightsProps) => {
         </s.Breadcrumbs>
       </s.Header>
       <s.ContentContainer>
-        {insights ? (
+        {insightGroups ? (
           <s.InsightsContainer ref={insightsContainerRef}>
-            {insights.map((x) => (
+            {insightGroups.map((x) => (
               <s.InsightGroup key={x.name || "__ungrouped"}>
                 {x.name && (
                   <s.InsightGroupName>
