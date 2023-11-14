@@ -13,7 +13,7 @@ permissions:
 jobs:
   build:
     name: Build
-    runs-on: windows-latest-l
+    runs-on: ubuntu-latest-m
 
     steps:
       - name: Checkout
