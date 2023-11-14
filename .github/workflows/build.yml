@@ -13,7 +13,7 @@ permissions:
 jobs:
   build:
     name: Build
-    runs-on: ubuntu-latest
+    runs-on: windows-latest-l
 
     steps:
       - name: Checkout
@@ -32,7 +32,7 @@ jobs:
         run: docker build -t digma-extension .
 
       - name: Install extension
-        run: docker extension install digma-extension
+        run: docker extension install digma-extension -f
 
       # https://github.com/docker/setup-qemu-action
       - name: Set up QEMU
