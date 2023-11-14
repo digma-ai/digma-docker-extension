@@ -21,6 +21,19 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set up Docker Desktop
+        id: start_desktop
+        uses: docker/desktop-action/start@v0.3.1
+
+      - name: Validate metadata
+        run: docker extension validate ./metadata.json
+
+      - name: Build extension
+        run: docker build -t digma-extension .
+
+      - name: Install extension
+        run: docker extension install digma-extension
+
       # https://github.com/docker/setup-qemu-action
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
