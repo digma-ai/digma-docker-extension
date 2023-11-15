@@ -1,6 +1,8 @@
 services:
   my-extension:
     image: ${DESKTOP_PLUGIN_IMAGE}
+    environment:
+      - PLUGIN_API_URL=https://${PLUGIN_API_URL:-digma-compound}:5051
 
   nginx:
     image: digmaai/jaeger-ui:1.29.1-digma.0.1.4
