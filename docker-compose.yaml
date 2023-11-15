@@ -103,7 +103,7 @@ services:
     restart: unless-stopped
 
   digma-ds:
-    image: digmaai/ds:0.0.12
+    image: digmaai/ds:0.0.18
     restart: unless-stopped
 
   digma-ui:
