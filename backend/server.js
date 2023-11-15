@@ -6,7 +6,7 @@ const { AnalyticsProvider } = require("./analyticsProvider");
 var app = express();
 app.use(express.json());
 
-var analyticsProvider = new AnalyticsProvider("https://digma-plugin-api:5051");
+var analyticsProvider = new AnalyticsProvider("https://digma-compound:5051");
 
 app.get("/environments", async function (req, res) {
   try {
