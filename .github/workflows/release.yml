@@ -93,4 +93,8 @@ jobs:
         uses: docker/desktop-action/start@v0.3.1
 
       - name: Validate extension
-        run: docker extension validate digmaai/digma-docker-extension:${TAG}
+        uses: nick-fields/retry@v2
+        with:
+          retry_wait_seconds: 60
+          max_attempts: 5
+          command: docker extension validate digmaai/digma-docker-extension:${TAG}
