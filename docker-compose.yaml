@@ -107,7 +107,7 @@ services:
     restart: unless-stopped
 
   digma-ui:
-    image: digmaai/digma-ui:1.0.1
+    image: digmaai/digma-ui:1.1.0
     ports:
       - "5280:80"
     environment:
