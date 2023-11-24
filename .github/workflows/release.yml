@@ -95,6 +95,7 @@ jobs:
       - name: Validate extension
         uses: nick-fields/retry@v2
         with:
+          timeout_minutes: 5
           retry_wait_seconds: 60
           max_attempts: 5
           command: docker extension validate digmaai/digma-docker-extension:${TAG}
