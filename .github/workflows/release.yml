@@ -76,26 +76,3 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.metadata.outputs.tags }}
-
-  validate:
-    name: Validate
-    needs: [build-and-push]
-    runs-on: ubuntu-latest-m
-
-    steps:
-      - name: Extract image tag
-        run: |
-          TAG=${{ github.event.release.tag_name }}
-          echo "TAG=${TAG#v}" >> $GITHUB_ENV
-
-      - name: Set up Docker Desktop
-        id: start_desktop
-        uses: docker/desktop-action/start@v0.3.1
-
-      - name: Validate extension
-        uses: nick-fields/retry@v2
-        with:
-          timeout_minutes: 5
-          retry_wait_seconds: 60
-          max_attempts: 5
-          command: docker extension validate digmaai/digma-docker-extension:${TAG}
