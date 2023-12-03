@@ -1,153 +1,112 @@
 services:
-  my-extension:
-    image: ${DESKTOP_PLUGIN_IMAGE}
-    environment:
-      - PLUGIN_API_URL=https://${PLUGIN_API_URL:-digma-compound}:5051
+    my-extension:
+        image: ${DESKTOP_PLUGIN_IMAGE}
+        environment:
+            - PLUGIN_API_URL=https://${PLUGIN_API_URL:-digma-compound}:5051
 
-  nginx:
-    image: digmaai/jaeger-ui:1.29.1-digma.0.1.4
-    ports:
-      - "5180:80"
-    restart: unless-stopped
-    environment:
-      - JAEGER_QUERY_URL=http://jaeger:16686
-    depends_on:
-      - jaeger
+    nginx:
+        image: digmaai/jaeger-ui:1.29.1-digma.0.1.4
+        ports:
+            - "5180:80"
+        restart: unless-stopped
+        environment:
+            - JAEGER_QUERY_URL=http://jaeger:16686
+        depends_on:
+            - jaeger
 
-  kafka:
-    image: bitnami/kafka:3.5.1
-    volumes:
-      - kafka_data:/bitnami/kafka
-    environment:
-      - ALLOW_PLAINTEXT_LISTENER=yes
-      - KAFKA_KRAFT_CLUSTER_ID=NTNlOGNmNjlkZjY4NDkxOT
-      - KAFKA_HEAP_OPTS=-Xms128m -Xmx256m
-      - KAFKA_CFG_LOG_ROLL_HOURS=1
-      - KAFKA_CFG_LOG_RETENTION_HOURS=1
-      - KAFKA_CFG_LOG_RETENTION_CHECK_INTERVAL_MS=300000
-      - KAFKA_CFG_NODE_ID=1
-      - KAFKA_CFG_BROKER_ID=1
-      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka:9093
-      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT
-      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
-      - KAFKA_CFG_PROCESS_ROLES=broker,controller
-      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=INTERNAL
-      - KAFKA_CFG_LISTENERS=INTERNAL://:9092,CONTROLLER://:9093
-      - KAFKA_CFG_ADVERTISED_LISTENERS=INTERNAL://kafka:9092
-    restart: unless-stopped
+    postgres:
+        image: postgres:15.2
+        expose:
+            - "5432"
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+        environment:
+            - POSTGRES_NAME=postgres
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres
+        restart: unless-stopped
+        command: postgres -c 'max_connections=315' -c 'shared_buffers=256MB'
 
-  rabbitmq:
-    image: rabbitmq:3.11.17-management-alpine
-    volumes:
-      - rabbitmq_data:/var/lib/rabbitmq/
-      - rabbitmq_log:/var/log/rabbitmq/
-    environment:
-      - RABBITMQ_DEFAULT_USER=admin
-      - RABBITMQ_DEFAULT_PASS=admin
-    restart: unless-stopped
+    redis:
+        image: redis:7.0.11-alpine
+        volumes:
+            - redis_data:/data
+        restart: unless-stopped
 
-  postgres:
-    image: postgres:15.2
-    expose:
-      - "5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_NAME=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-    restart: unless-stopped
-    command: postgres -c 'max_connections=315' -c 'shared_buffers=256MB'
+    influxdb:
+        image: influxdb:2.7.1
+        expose:
+            - "8086"
+        volumes:
+            - influxdb_data:/var/lib/influxdb2
+            - influxdb_config:/etc/influxdb2
+        environment:
+            - DOCKER_INFLUXDB_INIT_MODE=setup
+            - DOCKER_INFLUXDB_INIT_USERNAME=${INFLUXDB_USERNAME:-admin}
+            - DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUXDB_PASSWORD:-12345678}
+            - DOCKER_INFLUXDB_INIT_ORG=${INFLUXDB_ORG:-digma}
+            - DOCKER_INFLUXDB_INIT_BUCKET=${INFLUXDB_BUCKET:-errors}
+            - DOCKER_INFLUXDB_INIT_RETENTION=${INFLUXDB_BUCKET_RETENTION:-4w}
+            - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${INFLUXDB_ADMIN_TOKEN:-dc61908e-05bc-411a-9fe2-e3356b8dc7c0}
+            - INFLUXD_QUERY_CONCURRENCY=15
+            - INFLUXD_QUERY_QUEUE_SIZE=200
+        restart: unless-stopped
 
-  redis:
-    image: redis:7.0.11-alpine
-    volumes:
-      - redis_data:/data
-    restart: unless-stopped
+    jaeger:
+        image: jaegertracing/all-in-one:1.45.0
+        ports:
+            - "17686:16686"
+            - "5317:4317"
+        command: |
+            --query.additional-headers "Access-Control-Allow-Origin: *"
+        volumes:
+            - "jaeger_data:/badger"
+        environment:
+            - SPAN_STORAGE_TYPE=badger
+            - COLLECTOR_OTLP_ENABLED=true
+            - BADGER_EPHEMERAL=false
+            - BADGER_DIRECTORY_VALUE=/badger/data
+            - BADGER_DIRECTORY_KEY=/badger/key
+            - BADGER_SPAN_STORE_TTL=336h0m0s
+        restart: unless-stopped
+    digma-ds:
+        image: digmatic/ds:0.0.18
+        restart: unless-stopped
 
-  influxdb:
-    image: influxdb:2.7.1
-    expose:
-      - "8086"
-    volumes:
-      - influxdb_data:/var/lib/influxdb2
-      - influxdb_config:/etc/influxdb2
-    environment:
-      - DOCKER_INFLUXDB_INIT_MODE=setup
-      - DOCKER_INFLUXDB_INIT_USERNAME=${INFLUXDB_USERNAME:-admin}
-      - DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUXDB_PASSWORD:-12345678}
-      - DOCKER_INFLUXDB_INIT_ORG=${INFLUXDB_ORG:-digma}
-      - DOCKER_INFLUXDB_INIT_BUCKET=${INFLUXDB_BUCKET:-errors}
-      - DOCKER_INFLUXDB_INIT_RETENTION=${INFLUXDB_BUCKET_RETENTION:-4w}
-      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${INFLUXDB_ADMIN_TOKEN:-dc61908e-05bc-411a-9fe2-e3356b8dc7c0}
-      - INFLUXD_QUERY_CONCURRENCY=15
-      - INFLUXD_QUERY_QUEUE_SIZE=200
-    restart: unless-stopped
+    digma-compound:
+        image: digmatic/digma-compound:0.2.179
+        ports:
+            - "5049:5049"
+            - "5050:5050"
+            - "5051:5051"
+        environment:
+            - BACKEND_DEPLOYMENT_TYPE=DockerExtension
+            - CacheSettings__RedisConnection=${REDIS_CONNECTION:-redis}
+            - ConnectionStrings__Postgres=Server=${POSTGRES_SERVER:-postgres};Port=${POSTGRES_SERVER_PORT:-5432};Database=digma-compound;User Id=${POSTGRES_USER:-postgres};Password=${POSTGRES_PWD:-postgres};
+            - influx2__Url=http://${INFLUXDB_URL:-influxdb}:8086
+            - Ds__Url=http://${DS_URL:-digma-ds}:5054
+            - Ds__TimeoutInSeconds=0.2
+            - OtlpExporterUrl=
+            - Jaeger__OtlpUrl=http://jaeger:4317
+            - ThresholdOptions__RecentActivityUpdateThresholdSeconds=5
+            - ThresholdOptions__UpsertEndpointThresholdSeconds=5
+            - ThresholdOptions__UpsertSpanFlowMetadataThresholdSeconds=5
+            - ThresholdOptions__UpsertSpansThresholdSeconds=5
+            - GlobalExceptionSettings__ExposeInternalDetails=true
+            - ApplicationVersion=0.2.179
+        depends_on:
+            - redis
+            - postgres
+            - influxdb
+        restart: unless-stopped
 
-  jaeger:
-    image: jaegertracing/all-in-one:1.45.0
-    ports:
-      - "17686:16686"
-      - "5317:4317"
-    command: |
-      --query.additional-headers "Access-Control-Allow-Origin: *"
-    volumes:
-      - "jaeger_data:/badger"
-    environment:
-      - SPAN_STORAGE_TYPE=badger
-      - COLLECTOR_OTLP_ENABLED=true
-      - BADGER_EPHEMERAL=false
-      - BADGER_DIRECTORY_VALUE=/badger/data
-      - BADGER_DIRECTORY_KEY=/badger/key
-      - BADGER_SPAN_STORE_TTL=336h0m0s
-    restart: unless-stopped
-
-  digma-ds:
-    image: digmaai/ds:0.0.18
-    restart: unless-stopped
-    
-  digma-compound:
-    image: digmatic/digma-compound:0.2.176
-    ports:
-    - "5049:5049"
-    - "5050:5050"
-    - "5051:5051"
-    environment:
-    - BACKEND_DEPLOYMENT_TYPE=DockerExtension
-    - CacheSettings__RedisConnection=${REDIS_CONNECTION:-redis}
-    - ConnectionStrings__Postgres=Server=${POSTGRES_SERVER:-postgres};Port=${POSTGRES_SERVER_PORT:-5432};Database=digma-compound;User Id=${POSTGRES_USER:-postgres};Password=${POSTGRES_PWD:-postgres};
-    - RabbitMq__Host=${RabbitMq_Host:-rabbitmq}
-    - RabbitMq__Username=${RabbitMq_Username:-admin}
-    - RabbitMq__Password=${RabbitMq_Password:-admin}
-    - influx2__Url=http://${INFLUXDB_URL:-influxdb}:8086
-    - Ds__Url=http://${DS_URL:-digma-ds}:5054
-    - Ds__TimeoutInSeconds=0.2
-    - OtlpExporterUrl=
-    - Kafka__Urls__0=kafka:9092
-    - Jaeger__OtlpUrl=http://jaeger:4317
-    - ThresholdOptions__RecentActivityUpdateThresholdSeconds=5
-    - ThresholdOptions__UpsertEndpointThresholdSeconds=5
-    - ThresholdOptions__UpsertSpanFlowMetadataThresholdSeconds=5
-    - ThresholdOptions__UpsertSpansThresholdSeconds=5
-    - GlobalExceptionSettings__ExposeInternalDetails=true
-    - ApplicationVersion=0.2.176
-    depends_on:
-    - redis
-    - rabbitmq
-    - postgres
-    - influxdb
-    - kafka
-    restart: unless-stopped
 volumes:
-  rabbitmq_data:
-  rabbitmq_log:
-  postgres_data:
-  redis_data:
-  influxdb_data:
-  influxdb_config:
-  jaeger_data:
-  kafka_data:
+    postgres_data:
+    redis_data:
+    influxdb_data:
+    influxdb_config:
+    jaeger_data:
 
 networks:
-  default:
-    name: digma-network
+    default:
+        name: digma-network
