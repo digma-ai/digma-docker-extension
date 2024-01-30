@@ -56,7 +56,7 @@ services:
             - BADGER_SPAN_STORE_TTL=336h0m0s
         restart: unless-stopped
     digma-ds:
-        image: digmatic/ds:0.0.18
+        image: digmatic/ds:0.0.21
         restart: unless-stopped
     digma-compound:
         image: digmatic/digma-compound:0.2.211
