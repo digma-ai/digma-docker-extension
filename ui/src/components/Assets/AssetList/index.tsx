@@ -31,7 +31,7 @@ const AssetListComponent = (
   return (
     <s.List ref={ref}>
       {props.entries.map((entry) => {
-        const id = entry.spanCodeObjectId;
+        const id = `${entry.spanCodeObjectId}__${entry.services.join(",")}`;
 
         return (
           <AssetEntryComponent
