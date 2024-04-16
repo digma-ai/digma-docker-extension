@@ -1,4 +1,5 @@
 import MuiLaunchIcon from "@mui/icons-material/Launch";
+import Button from "@mui/material/Button";
 import MuiLink from "@mui/material/Link";
 import MuiTab from "@mui/material/Tab";
 import MuiTabs from "@mui/material/Tabs";
@@ -142,4 +143,34 @@ export const SectionDivider = styled(Typography)`
 
 export const JetBrainsPluginThumbnail = styled.img`
   width: 100%;
+`;
+
+export const PromoContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-grow: 1;
+  padding: 15px;
+`;
+
+export const PromoContentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  max-width: 403px;
+`;
+
+export const PromoTextContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: center;
+`;
+
+export const PromoIllustration = styled.img`
+  width: 100%;
+`;
+
+export const InstallButton = styled(Button)`
+  margin-top: 12px;
 `;
