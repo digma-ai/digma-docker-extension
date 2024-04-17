@@ -44,7 +44,7 @@ export const App = () => {
   const [assetTypes, setAssetTypes] = useState<AssetTypeData[]>();
   const [environments, setEnvironments] = useState<string[]>();
   const [selectedEnvironment, setSelectedEnvironment] = useState<string>();
-  const [currentPage, setCurrentPage] = useState<string>();
+  const [currentPage, setCurrentPage] = useState<string>(PAGES.GETTING_STARTED);
   const previousPage = usePrevious(currentPage);
   const [isRedirectedToAssets, setIsRedirectedToAssets] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState<AssetEntry | string>();
@@ -109,13 +109,13 @@ export const App = () => {
     []
   );
 
-  useEffect(() => {
-    void fetchEnvironments();
+  // useEffect(() => {
+  //   void fetchEnvironments();
 
-    return () => {
-      window.clearTimeout(refreshTimerId.current);
-    };
-  }, []);
+  //   return () => {
+  //     window.clearTimeout(refreshTimerId.current);
+  //   };
+  // }, []);
 
   useEffect(() => {
     if (

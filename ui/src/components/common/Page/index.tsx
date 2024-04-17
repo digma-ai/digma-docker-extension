@@ -87,7 +87,7 @@ export const Page = (props: PageProps) => {
       <s.Header>
         {props.header}
         {renderLinks()}
-        <s.Divider orientation={"vertical"} flexItem />
+        {/* <s.Divider orientation={"vertical"} flexItem />
         <s.NavigationButtonGroup variant={"contained"} disableElevation>
           {pageButtons.map((x) => {
             const isSelected = props.currentPage === x.pageId;
@@ -108,7 +108,7 @@ export const Page = (props: PageProps) => {
               </s.NavigationButton>
             );
           })}
-        </s.NavigationButtonGroup>
+        </s.NavigationButtonGroup> */}
       </s.Header>
       <s.Divider />
       <s.MainContainer>{props.main}</s.MainContainer>

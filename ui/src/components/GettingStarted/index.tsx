@@ -1,14 +1,14 @@
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import { DefaultTheme, useTheme } from "styled-components";
+import jetBrainsPluginPromoDark from "../../../assets/images/jetBrainsPluginPromo_dark.png";
+import jetBrainsPluginPromoLight from "../../../assets/images/jetBrainsPluginPromo_light.png";
 import jetBrainsPluginThumbnailDark from "../../../assets/images/jetBrainsPluginThumbnail_dark.png";
 import jetBrainsPluginThumbnailLight from "../../../assets/images/jetBrainsPluginThumbnail_light.png";
 import { ddClient } from "../../dockerDesktopClient";
 import { JETBRAINS_PLUGIN_URL } from "../App/constants";
-import { ContainerIcon } from "../common/icons/ContainerIcon";
 import { IntellijLogoFlatIcon } from "../common/icons/IntellijLogoFlatIcon";
 import { IntellijLogoIcon } from "../common/icons/IntellijLogoIcon";
-import { CodeSnippet } from "./CodeSnippet";
 import * as s from "./styles";
 
 const DOCKER_INSTRUMENTATION_COMMANDS = `curl --create-dirs -O -L --output-dir ./otel https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/download/v1.29.0/opentelemetry-javaagent.jar
@@ -33,6 +33,15 @@ const getCardTitleIconColor = (theme: DefaultTheme) => {
       return "#505968";
     case "dark":
       return "#fff";
+  }
+};
+
+const getJetBrainsPluginPromo = (theme: DefaultTheme) => {
+  switch (theme.palette.mode) {
+    case "light":
+      return jetBrainsPluginPromoLight;
+    case "dark":
+      return jetBrainsPluginPromoDark;
   }
 };
 
@@ -62,6 +71,10 @@ export const GettingStarted = () => {
   };
 
   const handleJetBrainsPluginLink = () => {
+    ddClient.host.openExternal(JETBRAINS_PLUGIN_URL);
+  };
+
+  const handleInstallButtonClick = () => {
     ddClient.host.openExternal(JETBRAINS_PLUGIN_URL);
   };
 
@@ -102,7 +115,24 @@ export const GettingStarted = () => {
         </s.CardIllustration>
       </s.Card>
       <s.Card>
-        <s.CardTextContent>
+        <s.PromoContainer>
+          <s.PromoContentContainer>
+            <s.PromoIllustration src={getJetBrainsPluginPromo(theme)} />
+            <s.PromoTextContainer>
+              <Typography variant={"subtitle1"}>
+                Install the Digma Plugin
+              </Typography>
+              <Typography variant={"body2"}>
+                Use the Digma Plugin to view observability metrics and traces
+                from your Java containers
+              </Typography>
+            </s.PromoTextContainer>
+            <s.InstallButton onClick={handleInstallButtonClick}>
+              Install now
+            </s.InstallButton>
+          </s.PromoContentContainer>
+        </s.PromoContainer>
+        {/* <s.CardTextContent>
           <s.SectionTitleContainer>
             <ContainerIcon color={iconColor} size={24} />
             <s.SectionTitle component={"h2"}>
@@ -133,7 +163,7 @@ export const GettingStarted = () => {
             <s.Link onClick={handleJavaSampleAppLinkClick}>here</s.Link> and
             install the Digma plugin into your IDE using the link above
           </s.SectionText>
-        </s.CardTextContent>
+        </s.CardTextContent> */}
       </s.Card>
     </s.Container>
   );
