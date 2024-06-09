@@ -23,7 +23,7 @@ jobs:
 
       - name: Set up Docker Desktop
         id: start_desktop
-        uses: asafchen-dig/desktop-action/start@v0.3.1
+        uses: asafchen-dig/desktop-action/start@main
 
       - name: Validate metadata
         run: docker extension validate ./metadata.json
