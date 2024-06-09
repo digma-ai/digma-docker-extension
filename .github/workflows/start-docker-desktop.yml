@@ -18,7 +18,7 @@ on:
         description: "env variables to pass when running Desktop, as a JSON string"
         required: false
         default: "{}"
-runs:
+jobs:
   using: "composite"
   steps:
     - name: Bloc calls to segment.io
