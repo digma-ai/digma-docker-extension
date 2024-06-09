@@ -23,7 +23,8 @@ jobs:
 
       - name: Set up Docker Desktop
         id: start_desktop
-        uses: digma-ai/digma-docker-extension/.github/workflows/start-docker-desktop.yml@bump-to-0.3.42
+        uses: docker/desktop-action/start@v0.3.6
+        # uses: docker/desktop-action/start@v0.3.1
 
       - name: Validate metadata
         run: docker extension validate ./metadata.json
