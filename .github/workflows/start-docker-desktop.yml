@@ -3,19 +3,21 @@
 # 
 name: "Docker Desktop action"
 description: "Start Docker Desktop on a Github Action node"
-inputs:
-  docker-desktop-build-url:
-    description: "Docker Desktop build url to use for installation"
-    required: false
-    default: "latest"
-  username:
-    description: "username on the node"
-    required: false
-    default: "runner"
-  env:
-    description: "env variables to pass when running Desktop, as a JSON string"
-    required: false
-    default: "{}"
+on:
+  workflow_call:
+    inputs:
+      docker-desktop-build-url:
+        description: "Docker Desktop build url to use for installation"
+        required: false
+        default: "latest"
+      username:
+        description: "username on the node"
+        required: false
+        default: "runner"
+      env:
+        description: "env variables to pass when running Desktop, as a JSON string"
+        required: false
+        default: "{}"
 runs:
   using: "composite"
   steps:
