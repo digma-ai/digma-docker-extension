@@ -19,7 +19,6 @@ on:
         required: false
         default: "{}"
 jobs:
-  using: "composite"
   steps:
     - name: Bloc calls to segment.io
       id: redirect-segment
