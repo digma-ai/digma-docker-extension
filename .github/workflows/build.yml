@@ -37,6 +37,8 @@ jobs:
           echo '{"settingsVersion": 30, "experimental": true, "extensions": {"allow-non-distributable-artifacts": true}}' | sudo tee /etc/docker/daemon.json 
           cat /etc/docker/daemon.json 
           sudo systemctl restart docker
+          sleep 5
+          journalctl -xeu docker.service
 
       - name: Install extension
         run: docker extension install digma-docker-extension -f
