@@ -23,22 +23,19 @@ jobs:
 
       - name: Set up Docker Desktop
         id: start_desktop
-        uses: asafchen-dig/desktop-action/start@main
+        uses: docker/desktop-action/start@v0.3.1
+
+      - name: Edit Docker Desktop setting file
+        shell: bash
+        run: |
+          echo $(jq '. += {onlyMarketplaceExtensions: false}' ~/.docker/desktop/settings.json) > ~/.docker/desktop/settings.json
+          echo ~/.docker/desktop/settings.json
 
       - name: Validate metadata
         run: docker extension validate ./metadata.json
 
       - name: Build extension
         run: docker build -t digma-docker-extension .
-
-      # - name: Allow non-marketplace extensions
-      #   run: |
-      #     sudo mkdir -p /etc/docker 
-      #     echo '{"settingsVersion": 30, "experimental": true, "extensions": {"allow-non-distributable-artifacts": true}}' | sudo tee /etc/docker/daemon.json 
-      #     cat /etc/docker/daemon.json 
-      #     sudo systemctl restart docker
-      #     sleep 5
-      #     journalctl -xeu docker.service
 
       - name: Install extension
         run: docker extension install digma-docker-extension -f
