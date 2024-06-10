@@ -34,8 +34,8 @@ jobs:
       - name: Allow non-marketplace extensions
         run: | 
           sudo mkdir -p /etc/docker 
-          echo '{"experimental": true, "extensions": {"allow-non-distributable-artifacts": true}}' | sudo tee /etc/docker/daemon.json 
-          cat /etc/docker/daemon.json
+          echo '{"settingsVersion": 30, "experimental": true, "extensions": {"allow-non-distributable-artifacts": true}}' | sudo tee /etc/docker/daemon.json 
+          cat /etc/docker/daemon.json 
           sudo systemctl restart docker
 
       - name: Install extension
