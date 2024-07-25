@@ -69,6 +69,7 @@ services:
     - CacheSettings__RedisConnection=${REDIS_CONNECTION:-digma-persistence}
     - ConnectionStrings__Postgres=Server=${POSTGRES_SERVER:-digma-persistence};Port=${POSTGRES_SERVER_PORT:-5432};Database=digma_analytics;User
       Id=${POSTGRES_USER:-postgres};Password=${POSTGRES_PWD:-postgres};
+    - ExternalLogging__ConnectionString=${REDIS_CONNECTION:-digma-persistence}
     - influx2__Url=http://${INFLUXDB_URL:-digma-persistence}:8086
     - Ds__Url=http://${DS_URL:-digma-ds}:5054
     - Ds__TimeoutInSeconds=0.2
