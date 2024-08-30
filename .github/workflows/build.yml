@@ -40,11 +40,11 @@ jobs:
         run: |
           cat ~/.docker/desktop/settings.json
           
-      - name: Stop Docker Desktop
-        uses: docker/desktop-action/stop@v0.3.1
-
-      - name: Start Docker Desktop Again
-        uses: docker/desktop-action/start@v0.3.1    
+      - name: Restart Docker Daemon to Apply Settings
+        shell: bash
+        run: |
+          sudo systemctl daemon-reload
+          sudo systemctl restart docker
 
       - name: Validate metadata
         run: docker extension validate ./metadata.json
