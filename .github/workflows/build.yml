@@ -39,8 +39,7 @@ jobs:
       - name: Edit Docker Desktop setting file
         shell: bash
         run: |
-          echo $(jq '. += {onlyMarketplaceExtensions: false}' ~/.docker/desktop/settings.json) > ~/.docker/desktop/settings.json
-          echo ~/.docker/desktop/settings.json
+          jq '.onlyMarketplaceExtensions = false' ~/.docker/desktop/settings.json > tmp.$$.json && mv tmp.$$.json ~/.docker/desktop/settings.json
 
       - name: Print Docker Desktop settings file after update
         shell: bash
