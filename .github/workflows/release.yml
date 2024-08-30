@@ -23,18 +23,12 @@ jobs:
 
       - name: Set up Docker Desktop
         id: start_desktop
-        uses: docker/desktop-action/start@v0.3.6
+        uses: docker/desktop-action/start@v0.3.1
 
       - name: Print Docker Desktop settings file before update
         shell: bash
         run: |
-          SETTINGS_FILE="$HOME/.docker/desktop/settings.json"
-          echo "Settings file before update:"
-          if [ -f "$SETTINGS_FILE" ]; then
-            cat "$SETTINGS_FILE"
-          else
-            echo "Settings file does not exist, it will be created."
-          fi
+          cat ~/.docker/desktop/settings.json
 
       - name: Edit Docker Desktop setting file
         shell: bash
@@ -44,14 +38,14 @@ jobs:
       - name: Print Docker Desktop settings file after update
         shell: bash
         run: |
-          SETTINGS_FILE="$HOME/.docker/desktop/settings.json"
-          echo "Settings file after update:"
-          if [ -f "$SETTINGS_FILE" ]; then
-            cat "$SETTINGS_FILE"
-          else
-            echo "Settings file does not exist, it will be created."
-          fi
+          cat ~/.docker/desktop/settings.json
+          
+      - name: Stop Docker Desktop
+        uses: docker/desktop-action/stop@v0.3.1
 
+      - name: Start Docker Desktop Again
+        uses: docker/desktop-action/start@v0.3.1
+      
       - name: Verify settings change
         shell: bash
         run: |
