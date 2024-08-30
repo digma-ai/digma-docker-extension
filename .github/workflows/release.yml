@@ -23,13 +23,14 @@ jobs:
 
       - name: Set up Docker Desktop
         id: start_desktop
-        uses: docker/desktop-action/start@v0.3.1
+        uses: docker/desktop-action/start@v0.3.6
+        with:
+          docker-desktop-build-url: "https://desktop.docker.com/linux/main/amd64/160616/docker-desktop-amd64.deb"
 
       - name: Edit Docker Desktop setting file
         shell: bash
         run: |
-          echo $(jq '. += {onlyMarketplaceExtensions: false}' ~/.docker/desktop/settings.json) > ~/.docker/desktop/settings.json
-          echo ~/.docker/desktop/settings.json
+          jq '.onlyMarketplaceExtensions = false' ~/.docker/desktop/settings.json > tmp.$$.json && mv tmp.$$.json ~/.docker/desktop/settings.json  
           
       - name: Validate metadata
         run: docker extension validate ./metadata.json
