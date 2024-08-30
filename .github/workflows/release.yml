@@ -45,6 +45,18 @@ jobs:
         run: |
           sudo systemctl daemon-reload
           sudo systemctl restart docker
+          
+      - name: Verify settings after restart
+        shell: bash
+        run: |
+          SETTINGS_FILE="$HOME/.docker/desktop/settings.json"
+          cat "$SETTINGS_FILE" | grep '"onlyMarketplaceExtensions": false'
+          if [ $? -eq 0 ]; then
+            echo "Settings are correctly applied."
+          else
+            echo "Settings were not applied correctly."
+            exit 1
+          fi    
       
       - name: Verify settings change
         shell: bash
