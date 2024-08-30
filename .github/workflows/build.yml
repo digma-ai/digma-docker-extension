@@ -25,6 +25,16 @@ jobs:
         id: start_desktop
         uses: docker/desktop-action/start@v0.3.6
 
+      - name: Locate and Print All Docker Settings Files
+        shell: bash
+        run: |
+          echo "Searching for all Docker settings.json files..."
+          find $HOME ~/.docker /etc /var/lib ~/Library ~/AppData -name "settings.json" -type f 2>/dev/null | while read settings_file; do
+            echo "Found settings file: $settings_file"
+            cat "$settings_file"
+            echo "----------------------------------------"
+          done
+
       - name: Print Docker Desktop settings file before update
         shell: bash
         run: |
