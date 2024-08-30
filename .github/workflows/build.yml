@@ -25,11 +25,42 @@ jobs:
         id: start_desktop
         uses: docker/desktop-action/start@v0.3.6
 
-      - name: Edit Docker Desktop setting file
+      - name: Set up Docker Desktop
+        id: start_desktop
+        uses: docker/desktop-action/start@v0.3.1
+
+      - name: Print Docker Desktop settings file before update
         shell: bash
         run: |
-          echo $(jq '. += {onlyMarketplaceExtensions: false}' ~/.docker/desktop/settings.json) > ~/.docker/desktop/settings.json
-          echo ~/.docker/desktop/settings.json
+          SETTINGS_FILE="$HOME/.docker/desktop/settings.json"
+          echo "Settings file before update:"
+          if [ -f "$SETTINGS_FILE" ]; then
+            cat "$SETTINGS_FILE"
+          else
+            echo "Settings file does not exist, it will be created."
+          fi
+
+      - name: Edit Docker Desktop settings file
+        shell: bash
+        run: |
+          SETTINGS_FILE="$HOME/.docker/desktop/settings.json"
+          # Ensure directory exists
+          mkdir -p "$(dirname "$SETTINGS_FILE")"
+          # Create the file if it doesn't exist
+          if [ ! -f "$SETTINGS_FILE" ]; then
+            echo "{}" > "$SETTINGS_FILE"
+          fi
+          # Modify the settings to allow non-Marketplace extensions
+          echo $(jq '. += {onlyMarketplaceExtensions: false}' "$SETTINGS_FILE") > "$SETTINGS_FILE"
+          echo "Modified settings file:"
+          cat "$SETTINGS_FILE"
+
+      - name: Restart Docker Desktop
+        run: |
+          docker-compose down
+          sleep 10  # Give it a moment to fully stop
+          docker-compose up -d
+          sleep 10  # Give it time to fully start up again
 
       - name: Validate metadata
         run: docker extension validate ./metadata.json
