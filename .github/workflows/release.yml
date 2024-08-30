@@ -25,10 +25,6 @@ jobs:
         id: start_desktop
         uses: docker/desktop-action/start@v0.3.6
 
-      - name: Set up Docker Desktop
-        id: start_desktop
-        uses: docker/desktop-action/start@v0.3.1
-
       - name: Print Docker Desktop settings file before update
         shell: bash
         run: |
