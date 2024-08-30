@@ -27,43 +27,10 @@ jobs:
         with:
           docker-desktop-build-url: "https://desktop.docker.com/linux/main/amd64/160616/docker-desktop-amd64.deb"
 
-      - name: Print Docker Desktop settings file before update
-        shell: bash
-        run: |
-          cat ~/.docker/desktop/settings.json
-
       - name: Edit Docker Desktop setting file
         shell: bash
         run: |
-          jq '.onlyMarketplaceExtensions = false' ~/.docker/desktop/settings.json > tmp.$$.json && mv tmp.$$.json ~/.docker/desktop/settings.json
-
-      - name: Edit Docker Desktop setting file
-        shell: bash
-        run: |
-          jq '.onlyMarketplaceExtensions = false' /home/runner/.docker/desktop/settings.json > tmp.$$.json && mv tmp.$$.json /home/runner/.docker/desktop/settings.json    
-
-      - name: Print Docker Desktop settings file after update
-        shell: bash
-        run: |
-          cat ~/.docker/desktop/settings.json
-          
-      - name: Restart Docker Daemon to Apply Settings
-        shell: bash
-        run: |
-          sudo systemctl daemon-reload
-          sudo systemctl restart docker
-          
-      - name: Verify settings after restart
-        shell: bash
-        run: |
-          SETTINGS_FILE="$HOME/.docker/desktop/settings.json"
-          cat "$SETTINGS_FILE" | grep '"onlyMarketplaceExtensions": false'
-          if [ $? -eq 0 ]; then
-            echo "Settings are correctly applied."
-          else
-            echo "Settings were not applied correctly."
-            exit 1
-          fi
+          jq '.onlyMarketplaceExtensions = false' ~/.docker/desktop/settings.json > tmp.$$.json && mv tmp.$$.json ~/.docker/desktop/settings.json 
 
       - name: Validate metadata
         run: docker extension validate ./metadata.json

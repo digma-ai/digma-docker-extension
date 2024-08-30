@@ -31,17 +31,6 @@ jobs:
         shell: bash
         run: |
           jq '.onlyMarketplaceExtensions = false' ~/.docker/desktop/settings.json > tmp.$$.json && mv tmp.$$.json ~/.docker/desktop/settings.json  
-      
-      - name: Verify settings change
-        shell: bash
-        run: |
-          SETTINGS_FILE="$HOME/.docker/desktop/settings.json"
-          if grep -q '"onlyMarketplaceExtensions": false' "$SETTINGS_FILE"; then
-            echo "Settings are correct."
-          else
-            echo "Settings are NOT correct!"
-            exit 1
-          fi
           
       - name: Validate metadata
         run: docker extension validate ./metadata.json
