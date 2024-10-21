@@ -55,9 +55,6 @@ services:
     - BADGER_DIRECTORY_KEY=/badger/key
     - BADGER_SPAN_STORE_TTL=336h0m0s
     restart: unless-stopped
-  digma-ds:
-    image: digmatic/ds:0.0.22
-    restart: unless-stopped
   digma-compound:
     image: digmatic/digma-compound:0.3.140
     ports:
@@ -71,8 +68,6 @@ services:
     - ConnectionStrings__Postgres=Server=${POSTGRES_SERVER:-digma-persistence};Port=${POSTGRES_SERVER_PORT:-5432};Database=digma_analytics;User
       Id=${POSTGRES_USER:-postgres};Password=${POSTGRES_PWD:-postgres};
     - influx2__Url=http://${INFLUXDB_URL:-digma-persistence}:8086
-    - Ds__Url=http://${DS_URL:-digma-ds}:5054
-    - Ds__TimeoutInSeconds=0.2
     - OtlpExporterUrl=
     - Jaeger__OtlpUrl=http://jaeger:4317
     - ThresholdOptions__RecentActivityUpdateThresholdSeconds=5
