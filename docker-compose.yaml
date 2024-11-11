@@ -91,4 +91,4 @@ volumes:
 
 networks:
   default:
-    name: digma-network
+    name: digma-extension-network
