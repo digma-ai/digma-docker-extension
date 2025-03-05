@@ -13,7 +13,7 @@ permissions:
 jobs:
   install:
     name: Test installation
-    runs-on: ubuntu-latest-m
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout
