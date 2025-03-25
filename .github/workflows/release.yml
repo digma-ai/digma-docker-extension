@@ -13,7 +13,7 @@ permissions:
 jobs:
   install:
     name: Test the installation
-    runs-on: ubuntu-latest-m
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout
@@ -44,7 +44,7 @@ jobs:
   build-and-push:
     name: Build and push to the DockerHub
     needs: [install]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout
